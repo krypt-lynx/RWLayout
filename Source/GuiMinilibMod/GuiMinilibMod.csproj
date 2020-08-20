@@ -71,7 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestWindow_WindowResize.cs" />
-    <Compile Include="Class2.cs" />
+    <Compile Include="TestWindow_ListingStandard.cs" />
     <Compile Include="GuiMinilib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestsListWindow.cs" />

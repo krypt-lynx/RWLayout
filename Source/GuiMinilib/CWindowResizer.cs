@@ -14,8 +14,6 @@ namespace GuiMinilib
 
         public Rect override_DoResizeControl(Rect winRect)
         {
-           // Log.Message($"override_DoResizeControl");
-
             Vector2 mousePosition = Event.current.mousePosition;
             Rect rect = new Rect(winRect.width - 24f, winRect.height - 24f, 24f, 24f);
             if (Event.current.type == EventType.MouseDown && Mouse.IsOver(rect))
@@ -26,25 +24,18 @@ namespace GuiMinilib
             if (this.isResizing)
             {
                 Vector2 size = new Vector2(
-                    this.resizeStart.width + (mousePosition.x - this.resizeStart.x),
-                    this.resizeStart.height + (mousePosition.y - this.resizeStart.y)
+                    resizeStart.width + (mousePosition.x - this.resizeStart.x),
+                    resizeStart.height + (mousePosition.y - this.resizeStart.y)
                     );
 
+                size = new Vector2(
+                    Mathf.Min(size.x, UI.screenWidth - winRect.xMin),
+                    Mathf.Min(size.y, UI.screenHeight - winRect.yMin));
 
-                Log.Message($"size before: {size}");
                 UpdateSize(ref size);
-                Log.Message($"size after: {size}");
 
-                /*if (winRect.width < this.minWindowSize.x)
-                {
-                    winRect.width = this.minWindowSize.x;
-                }
-                if (winRect.height < this.minWindowSize.y)
-                {
-                    winRect.height = this.minWindowSize.y;
-                }*/
-                 winRect.xMax = Mathf.Min((float)UI.screenWidth, winRect.xMin + size.x);
-                 winRect.yMax = Mathf.Min((float)UI.screenHeight, winRect.yMin + size.y);
+                winRect.xMax = winRect.xMin + size.x;
+                winRect.yMax = winRect.yMin + size.y;
 
 
                 if (Event.current.type == EventType.MouseUp ||

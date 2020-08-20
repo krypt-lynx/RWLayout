@@ -30,6 +30,10 @@ namespace GuiMinilibMod
             var btn1 = buttonsColumn1.AddElement(new CButton
             {
                 Title = "List_Standart",
+                Action = (_) =>
+                {
+                    Find.WindowStack.Add(new TestWindow_ListingStandard());
+                }
             });
             var btn2 = buttonsColumn1.AddElement(new CButton
             {

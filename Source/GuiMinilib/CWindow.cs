@@ -17,12 +17,7 @@ namespace GuiMinilib
         private ClStayConstraint widthConstraint_;
         public ClVariable height = new ClVariable("CWindow_H");
         private ClStayConstraint heightConstraint_;
-
-        /*
-        public WindowResizer Resizer()
-        {
-            return (WindowResizer)typeof(Window).GetField("resizer", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(this);
-        }*/
+           
         CWindowResizer resizer;
 
         public override void WindowOnGUI()
@@ -48,7 +43,7 @@ namespace GuiMinilib
         }
 
         public CGuiRoot Gui { get; private set; }
-        Vector2 initSize = new Vector2(100, 100);
+        public Vector2 initSize = new Vector2(100, 100);
         public override Vector2 InitialSize
         {
             get
@@ -59,7 +54,21 @@ namespace GuiMinilib
 
         private Vector2 MarginSize()
         {
-            return new Vector2(Margin * 2, Margin * 2);
+            var size = new Vector2(Margin * 2, Margin * 2 + (optionalTitle == null ? 0 : Margin + 25f)); 
+            return size;
+        }
+
+        public Vector2 InnerSize
+        {
+            get
+            {
+                return windowRect.size - MarginSize();
+            }
+            set
+            {
+                initSize = value;
+                windowRect = new Rect(windowRect.position, value + MarginSize());
+            }
         }
 
         public CWindow() : this(new Vector2(100, 100)) { }
@@ -70,23 +79,18 @@ namespace GuiMinilib
             Gui.FlexableHeight = true; 
             Gui.FlexableWidth = true;
             initSize = estimatedSize;
+            
+            ConstructGui();
 
             widthConstraint_ = Gui.solver.CreateStayConstrait(width, initSize.x, ClStrength.Required);
             heightConstraint_ = Gui.solver.CreateStayConstrait(height, initSize.y, ClStrength.Required);
 
-            ConstructGui();
-
-            Gui.InRect = new Rect(Vector2.zero, estimatedSize);
+            Gui.InRect = new Rect(Vector2.zero, initSize);
             initSize = Gui.bounds.size;
             Gui.LayoutUpdated = () =>
             {
                 //Log.Message($"CWindow new Gui size: {Gui.bounds.size}");
-                //windowRect = new Rect(windowRect.position, Gui.bounds.size + MarginSize());
-               
-                if (resizer != null)
-                {
-                    resizer.minWindowSize = Gui.bounds.size + MarginSize();
-                }
+                InnerSize = Gui.bounds.size;
             };
         }
 
@@ -101,6 +105,7 @@ namespace GuiMinilib
             Gui.solver.UpdateStayConstrait(ref heightConstraint_, inRect.height);
 
             Gui.InRect = inRect;
+            
             Gui.DoElementContent();
         }
     }
