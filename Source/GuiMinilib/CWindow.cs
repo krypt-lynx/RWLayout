@@ -17,7 +17,11 @@ namespace GuiMinilib
         private ClStayConstraint widthConstraint_;
         public ClVariable height = new ClVariable("CWindow_H");
         private ClStayConstraint heightConstraint_;
-           
+        public ClVariable screenWidth = new ClVariable("screen_W");
+        private ClStayConstraint screenWidthConstraint_;
+        public ClVariable screenHeight = new ClVariable("screen_H");
+        private ClStayConstraint screenHeightConstraint_;
+
         CWindowResizer resizer;
 
         public override void WindowOnGUI()
@@ -52,7 +56,7 @@ namespace GuiMinilib
             }
         }
 
-        private Vector2 MarginSize()
+        public Vector2 MarginSize()
         {
             var size = new Vector2(Margin * 2, Margin * 2 + (optionalTitle == null ? 0 : Margin + 25f)); 
             return size;
@@ -78,12 +82,17 @@ namespace GuiMinilib
             Gui = new CGuiRoot();
             Gui.FlexableHeight = true; 
             Gui.FlexableWidth = true;
-            initSize = estimatedSize;
-            
+            initSize = estimatedSize;        
+        }
+
+        public override void PreOpen()
+        {
             ConstructGui();
 
             widthConstraint_ = Gui.solver.CreateStayConstrait(width, initSize.x, ClStrength.Required);
             heightConstraint_ = Gui.solver.CreateStayConstrait(height, initSize.y, ClStrength.Required);
+            screenWidthConstraint_ = Gui.solver.CreateStayConstrait(screenWidth, UI.screenWidth, ClStrength.Required);
+            screenHeightConstraint_ = Gui.solver.CreateStayConstrait(screenHeight, UI.screenHeight, ClStrength.Required);
 
             Gui.InRect = new Rect(Vector2.zero, initSize);
             initSize = Gui.bounds.size;
@@ -92,6 +101,8 @@ namespace GuiMinilib
                 //Log.Message($"CWindow new Gui size: {Gui.bounds.size}");
                 InnerSize = Gui.bounds.size;
             };
+
+            base.PreOpen();
         }
 
         public virtual void ConstructGui()
@@ -107,6 +118,15 @@ namespace GuiMinilib
             Gui.InRect = inRect;
             
             Gui.DoElementContent();
+        }
+
+        public override void Notify_ResolutionChanged()
+        {
+            Gui.solver.UpdateStayConstrait(ref screenWidthConstraint_, UI.screenWidth);
+            Gui.solver.UpdateStayConstrait(ref screenHeightConstraint_, UI.screenHeight);
+            Gui.solver.Solve();
+            Gui.UpdateLayout();
+            base.Notify_ResolutionChanged();
         }
     }
 }

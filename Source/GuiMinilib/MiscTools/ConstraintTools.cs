@@ -92,10 +92,10 @@ namespace GuiMinilib
             {
                 strength = ClStrength.Strong;
             }
-            parent.solver.AddConstraint(new ClLinearEquation(parent.top, new ClLinearExpression(child.top), strength));
-            parent.solver.AddConstraint(new ClLinearEquation(parent.right, new ClLinearExpression(child.right), strength));
-            parent.solver.AddConstraint(new ClLinearEquation(parent.bottom, new ClLinearExpression(child.bottom), strength));
-            parent.solver.AddConstraint(new ClLinearEquation(parent.left, new ClLinearExpression(child.left), strength));
+            parent.solver.AddConstraint(new ClLinearEquation(parent.top, child.top, strength));
+            parent.solver.AddConstraint(new ClLinearEquation(parent.right, child.right, strength));
+            parent.solver.AddConstraint(new ClLinearEquation(parent.bottom, child.bottom, strength));
+            parent.solver.AddConstraint(new ClLinearEquation(parent.left, child.left, strength));
         }
         
         public static void Embed(this CElement parent, CElement child, EdgeInsets insets, ClStrength strength = null)
@@ -104,10 +104,10 @@ namespace GuiMinilib
             {
                 strength = ClStrength.Strong;
             }
-            parent.solver.AddConstraint(new ClLinearEquation(parent.top, Cl.Minus(child.top, insets.top), strength));
-            parent.solver.AddConstraint(new ClLinearEquation(parent.right, Cl.Plus(child.right, insets.right), strength));
-            parent.solver.AddConstraint(new ClLinearEquation(parent.bottom, Cl.Plus(child.bottom, insets.bottom), strength));
-            parent.solver.AddConstraint(new ClLinearEquation(parent.left, Cl.Minus(child.left, insets.left), strength));
+            parent.solver.AddConstraint(new ClLinearEquation(parent.top, child.top - insets.top, strength));
+            parent.solver.AddConstraint(new ClLinearEquation(parent.right, child.right + insets.right, strength));
+            parent.solver.AddConstraint(new ClLinearEquation(parent.bottom, child.bottom + insets.bottom, strength));
+            parent.solver.AddConstraint(new ClLinearEquation(parent.left, child.left - insets.left, strength));
         }
 
         public static void ConstrainSize(this CElement element, double width, double height, ClStrength strength = null)
@@ -143,15 +143,9 @@ namespace GuiMinilib
 
         private static void Stack(CElement parent, AnchorMapper mapper, IEnumerable<object> items, bool constrainEnd, bool constrainSides, ClStrength strength)
         {
-            Log.Message($"Stack direction {mapper.debug}");
-
-
             ClLinearExpression trailing = new ClLinearExpression(mapper.Leading(parent));
             foreach (var item in items)
             {
-                Log.Message($"item: {item}");
-
-
                 CElement element = null;
                 ClLinearExpression size = null;
                 
@@ -185,27 +179,21 @@ namespace GuiMinilib
                     }
                     if (constrainSides)
                     {
-                        parent.solver.AddConstraint(mapper.SideA(parent), mapper.SideB(parent), mapper.SideA(child), mapper.SideB(child),
-                            (pa, pb, ca, cb) => pa == ca && pb == cb, strength);
+                        parent.solver.AddConstraints(strength,
+                            mapper.SideA(parent) ^ mapper.SideA(child),
+                            mapper.SideB(parent) ^ mapper.SideB(child)
+                        );
                     }
                 }
                 else 
                 {
-                    var expression = toLinearExpression(item);
-                    Log.Message($"expression: {expression}");
-                    var multiplied = Cl.Times(expression, mapper.multipler);
-                    Log.Message($"multiplied: {multiplied}");
-                    trailing = Cl.Plus(trailing, multiplied);
-                    Log.Message($"trailing: {trailing}");
-
-                    
+                    trailing = trailing + toLinearExpression(item) * mapper.multipler;
                 }
             }
 
             if (constrainEnd)
             {
-                var c = new ClLinearEquation(trailing, new ClLinearExpression(mapper.Trailing(parent)), strength);
-                Log.Message($"finalizing stack: {c}");
+                var c = new ClLinearEquation(trailing, mapper.Trailing(parent), strength);
 
                 parent.solver.AddConstraint(c);
             }

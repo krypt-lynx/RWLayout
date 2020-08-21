@@ -25,14 +25,14 @@ namespace GuiMinilibMod
             InnerSize = new Vector2(400, 200);
 
             //  Gui.ConstrainSize(500, 300);
-            Gui.solver.AddConstraint(Gui.width, (a) => a >= 200, ClStrength.Strong);
-            Gui.solver.AddConstraint(Gui.height, (a) => a >= 100, ClStrength.Strong);
+            Gui.solver.AddConstraint(Gui.width >= 200);
+            Gui.solver.AddConstraint(Gui.height >= 100);
 
-            Gui.solver.AddConstraint(Gui.width, (a) => a <= 800, ClStrength.Strong);
-            Gui.solver.AddConstraint(Gui.height, (a) => a <= 400, ClStrength.Strong);
+            Gui.solver.AddConstraint(Gui.width <= 800);
+            Gui.solver.AddConstraint(Gui.height <= 400);
 
-            Gui.solver.AddConstraint(Gui.width, this.width, (a, b) => a == b, ClStrength.Weak);
-            Gui.solver.AddConstraint(Gui.height, this.height, (a, b) => a == b, ClStrength.Weak);
+            Gui.solver.AddConstraint(ClStrength.Weak, Gui.width ^ this.width);
+            Gui.solver.AddConstraint(ClStrength.Weak, Gui.height ^ this.height);
 
 
             //Gui.solver.AddConstraint(this.width, (a) => a == 400, ClStrength.Medium);
@@ -45,13 +45,13 @@ namespace GuiMinilibMod
                 Font = GameFont.Medium
             });
 
-            Gui.solver.AddConstraint(Gui.centerX, label.centerX, (a, b) => a == b, ClStrength.Strong);
-            Gui.solver.AddConstraint(Gui.centerY, label.centerY, (a, b) => a == b, ClStrength.Strong);
+            Gui.solver.AddConstraint(Gui.centerX ^ label.centerX);
+            Gui.solver.AddConstraint(Gui.centerY ^ label.centerY);
 
-            Gui.solver.AddConstraint(label.width, label.intrinsicWidth, (a, b) => a == b, ClStrength.Strong);
-            Gui.solver.AddConstraint(label.height, label.intrinsicHeight, (a, b) => a == b, ClStrength.Strong);
+            Gui.solver.AddConstraint(label.width ^ label.intrinsicWidth);
+            Gui.solver.AddConstraint(label.height ^ label.intrinsicHeight);
 
-
+            
             var titleCkeck = Gui.AddElement(new CCheckBox
             {
                 Title = "show title",
@@ -61,8 +61,8 @@ namespace GuiMinilibMod
                     optionalTitle = sender.Checked ? "window resize test" : null;
                 }
             });
-            Gui.solver.AddConstraint(Gui.left, titleCkeck.left, (a, b) => a == b, ClStrength.Strong);
-            Gui.solver.AddConstraint(Gui.bottom, titleCkeck.bottom, (a, b) => a == b, ClStrength.Strong);
+            Gui.solver.AddConstraint(Gui.left ^ titleCkeck.left);
+            Gui.solver.AddConstraint(Gui.bottom ^ titleCkeck.bottom);
             titleCkeck.ConstrainSize(100, 24);
 
             var resetBtn = Gui.AddElement(new CButton
@@ -73,8 +73,8 @@ namespace GuiMinilibMod
                     InnerSize = new Vector2(400, 200);
                 }
             });
-            Gui.solver.AddConstraint(Gui.right, resetBtn.right, (a, b) => a == b, ClStrength.Strong);
-            Gui.solver.AddConstraint(Gui.bottom, resetBtn.bottom, (a, b) => a == b, ClStrength.Strong);
+            Gui.solver.AddConstraint(Gui.right ^ resetBtn.right);
+            Gui.solver.AddConstraint(Gui.bottom ^ resetBtn.bottom);
             resetBtn.ConstrainSize(100, 24);
 
             var lockWidth = Gui.AddElement(new CCheckBox
@@ -96,8 +96,8 @@ namespace GuiMinilibMod
                     }
                 }
             });
-            Gui.solver.AddConstraint(Gui.left, lockWidth.left, (a, b) => a == b, ClStrength.Strong);
-            Gui.solver.AddConstraint(Gui.top, lockWidth.top, (a, b) => a == b, ClStrength.Strong);
+            Gui.solver.AddConstraint(Gui.left ^ lockWidth.left);
+            Gui.solver.AddConstraint(Gui.top ^ lockWidth.top);
             lockWidth.ConstrainSize(100, 24);
 
             var lockHeight = Gui.AddElement(new CCheckBox
@@ -119,11 +119,11 @@ namespace GuiMinilibMod
                     }
                 }
             });
-            Gui.solver.AddConstraint(Gui.right, lockHeight.right, (a, b) => a == b, ClStrength.Strong);
-            Gui.solver.AddConstraint(Gui.top, lockHeight.top, (a, b) => a == b, ClStrength.Strong);
+            Gui.solver.AddConstraint(Gui.right ^ lockHeight.right);
+            Gui.solver.AddConstraint(Gui.top ^ lockHeight.top);
             lockHeight.ConstrainSize(100, 24);
 
-
+            
         }
         //   CLabel label;
         public override void DoWindowContents(Rect inRect)

@@ -62,7 +62,8 @@ namespace GuiMinilibMod
             buttonsColumn2.StackTop(true, false, ClStrength.Strong,
                 (debugCheck, 30));
 
-            Gui.solver.AddConstraint(Gui.height, (a) => a == 300, ClStrength.Strong);
+            
+            Gui.solver.AddConstraints(Gui.height ^ 300);
         }
     }
 }

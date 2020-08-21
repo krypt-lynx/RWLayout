@@ -41,21 +41,6 @@ namespace GuiMinilib
             }
         }
 
-        static Texture2D debugBg = SolidColorMaterials.NewSolidColorTexture(new Color(1f, 1f, 1f, 0.3f));
-        static Color debugTextColor = new Color(0, 0, 0, 0.5f);
-
         public virtual string debugDesc() { return ""; }
-
-        public virtual void DoDebugOverlay()
-        {
-
-            GUI.DrawTexture(bounds, debugBg);
-            GuiTools.UsingFont(GameFont.Small, () => GuiTools.UsingColor(debugTextColor, () => Widgets.Label(bounds, NamePrefix())));
-            TooltipHandler.TipRegion(bounds, $"{NamePrefix()}{debugDesc()}:\n{bounds}");
-            foreach (var element in elements)
-            {
-                element.DoDebugOverlay();
-            }
-        }
     }
 }

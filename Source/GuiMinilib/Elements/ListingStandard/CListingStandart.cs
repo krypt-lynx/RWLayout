@@ -47,13 +47,15 @@ namespace GuiMinilib
             base.PostConstraintsUpdate();
 
             float y = 0;
+            float w = bounds.width - (IsScrollBarVisible() ? 20 : 0);
             foreach (var row in rows)
             {
-                row.solver.AddConstraint(row.height, h => h == 20, ClStrength.Weak);
-                row.InRect = new Rect(0, y, bounds.width - (IsScrollBarVisible() ? 20 : 0), float.NaN);
+                row.solver.AddConstraints(ClStrength.Weak, row.height ^ 20);
+                row.InRect = new Rect(0, y, w, float.NaN);
                 y += row.bounds.height;
             }
             contentHeight = y;
+            innerRect = new Rect(0, 0, w, contentHeight);
         }
 
         /*
@@ -109,19 +111,7 @@ namespace GuiMinilib
             }
         }
 
-        public override void DoDebugOverlay()
-        {
-            base.DoDebugOverlay();
-
-            GUI.BeginGroup(bounds);
-            foreach (var row in rows)
-            {
-                row.DoDebugOverlay();
-            }
-            GUI.EndGroup();
-        }
-
-        internal CElement NewRow()
+        public CElement NewRow()
         {
             var row = new CListingRow();
             rows.Add(row);

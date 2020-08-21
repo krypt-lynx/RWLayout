@@ -27,19 +27,19 @@ namespace GuiMinilib
         {
             if (width_ != null)
             {
-                solver.AddConstraint(new ClLinearEquation(right, Cl.Plus(left, new ClLinearExpression(width))));
+                solver.AddConstraint(new ClLinearEquation(right, left + width, ClStrength.Required));
             }
             if (height_ != null)
             {
-                solver.AddConstraint(new ClLinearEquation(bottom, Cl.Plus(top, new ClLinearExpression(height))));
+                solver.AddConstraint(new ClLinearEquation(bottom, top + height, ClStrength.Required));
             }
             if (centerX_ != null)
             {
-                solver.AddConstraint(new ClLinearEquation(centerX, Cl.Divide(Cl.Plus(left, new ClLinearExpression(right)), new ClLinearExpression(2))));
+                solver.AddConstraint(new ClLinearEquation(centerX, (left + right) / 2, ClStrength.Required));
             }
             if (centerY_ != null)
             {
-                solver.AddConstraint(new ClLinearEquation(centerY, Cl.Divide(Cl.Plus(top, new ClLinearExpression(bottom)), new ClLinearExpression(2))));
+                solver.AddConstraint(new ClLinearEquation(centerY, (top + bottom) / 2, ClStrength.Required));
             }
         }
 

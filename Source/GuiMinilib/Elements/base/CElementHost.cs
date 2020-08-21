@@ -41,7 +41,7 @@ namespace GuiMinilib
         public CElementHost() : base()
         {
             solver_ = new ClSimplexSolver();
-            solver_.DebugName = NamePrefix() + "_solver";
+            //solver_.DebugName = NamePrefix() + "_solver";
             solver.AutoSolve = false;
         }
 

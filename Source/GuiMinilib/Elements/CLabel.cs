@@ -15,7 +15,7 @@ namespace GuiMinilib
     {
         public string Title;
         public GameFont Font = GameFont.Small;
-        internal Color? Color = null;
+        public Color? Color = null;
         public bool Multiline = false;
 
         public override Vector2 tryFit(Vector2 size)

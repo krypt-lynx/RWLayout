@@ -16,8 +16,8 @@ namespace GuiMinilibMod
             optionalTitle = "Listing_Standard";
             //resizeable = true;
 
-            Gui.solver.AddConstraint(Gui.width, this.width, (a, b) => a == b, ClStrength.Weak);
-            Gui.solver.AddConstraint(Gui.height, this.height, (a, b) => a == b, ClStrength.Weak);
+            Gui.solver.AddConstraints(ClStrength.Weak, Gui.width ^ this.width);
+            Gui.solver.AddConstraints(ClStrength.Weak, Gui.height ^ this.height);
 
             var listing = Gui.AddElement(new CListingStandart {
 
