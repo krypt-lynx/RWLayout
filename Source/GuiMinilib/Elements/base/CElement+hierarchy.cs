@@ -16,6 +16,8 @@ namespace GuiMinilib
         {
             elements.Add(element);
             element.parent_ = new WeakReference(this, false);
+
+            element.PostAdd();
             return element;
         }
 
@@ -26,5 +28,10 @@ namespace GuiMinilib
         }
 
         // todo: RemoveElement
+
+        public virtual void PostAdd()
+        {
+
+        }
     }
 }

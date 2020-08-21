@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -87,7 +88,12 @@ namespace GuiMinilib
 
         public override void PreOpen()
         {
+            var timer = new Stopwatch();
+            timer.Start();
             ConstructGui();
+            timer.Stop();
+
+            Log.Message($"{this.GetType().Name}: gui constructed in: {timer.Elapsed}");
 
             widthConstraint_ = Gui.solver.CreateStayConstrait(width, initSize.x, ClStrength.Required);
             heightConstraint_ = Gui.solver.CreateStayConstrait(height, initSize.y, ClStrength.Required);
