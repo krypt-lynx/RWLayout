@@ -42,14 +42,14 @@ namespace GuiMinilib
         {
             AddImpliedConstraints(solver);
 
-            foreach (var element in elements)
+            foreach (var element in Elements)
             {
                 element.UpdateLayoutConstraints(solver);
             }
         }
         public virtual void PostConstraintsUpdate()
         {
-            foreach (var element in elements)
+            foreach (var element in Elements)
             {
                 element.PostConstraintsUpdate();
             }
@@ -71,7 +71,7 @@ namespace GuiMinilib
                     Solver.UpdateStayConstrait(ref intrinsicHeightConstraint_, intrinsicSize.y);
                 }
             }
-            foreach (var element in elements)
+            foreach (var element in Elements)
             {
                 element.UpdateLayout();
             }
@@ -81,7 +81,7 @@ namespace GuiMinilib
             bounds = Rect.MinMaxRect((float)left.Value, (float)top.Value, (float)right.Value, (float)bottom.Value);
             boundsRounded = bounds.Rounded2();
 
-            foreach (var element in elements)
+            foreach (var element in Elements)
             {
                 element.PostLayoutUpdate();
             }

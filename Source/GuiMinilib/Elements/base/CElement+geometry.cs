@@ -25,7 +25,7 @@ namespace GuiMinilib
                 DoContent();
             }
 
-            foreach (var element in elements)
+            foreach (var element in Elements)
             {
                 element.DoElementContent();
             }

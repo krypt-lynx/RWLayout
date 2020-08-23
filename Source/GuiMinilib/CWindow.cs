@@ -15,9 +15,9 @@ namespace GuiMinilib
     public class CWindow : Window, IElement
     {
         public ClVariable guideWidth = new ClVariable("CWindow_W");
-        private ClStayConstraint widthConstraint_;
+        private ClStayConstraint guideWidthConstraint_;
         public ClVariable guideHeight = new ClVariable("CWindow_H");
-        private ClStayConstraint heightConstraint_;
+        private ClStayConstraint guideHeightConstraint_;
         public ClVariable adjustedScreenWidth = new ClVariable("screen_W");
         private ClStayConstraint screenWidthConstraint_;
         public ClVariable adjustedScreenHeight = new ClVariable("screen_H");
@@ -36,8 +36,8 @@ namespace GuiMinilib
                 { 
                     var fixedSize = winSize - MarginSize();
 
-                    Gui.Solver.UpdateStayConstrait(ref widthConstraint_, fixedSize.x);
-                    Gui.Solver.UpdateStayConstrait(ref heightConstraint_, fixedSize.y);
+                    Gui.Solver.UpdateStayConstrait(ref guideWidthConstraint_, fixedSize.x);
+                    Gui.Solver.UpdateStayConstrait(ref guideHeightConstraint_, fixedSize.y);
 
                     Gui.InRect = new Rect(Vector2.zero, fixedSize);
                     winSize = Gui.bounds.size + MarginSize();
@@ -95,8 +95,10 @@ namespace GuiMinilib
 
             Log.Message($"{this.GetType().Name}: gui constructed in: {timer.Elapsed}");
 
-            widthConstraint_ = Gui.Solver.CreateStayConstrait(guideWidth, initSize.x, ClStrength.Required);
-            heightConstraint_ = Gui.Solver.CreateStayConstrait(guideHeight, initSize.y, ClStrength.Required);
+            //Gui.Solver.Remove
+
+            guideWidthConstraint_ = Gui.Solver.CreateStayConstrait(guideWidth, initSize.x, ClStrength.Required);
+            guideHeightConstraint_ = Gui.Solver.CreateStayConstrait(guideHeight, initSize.y, ClStrength.Required);
 
             var margins = MarginSize();
             screenWidthConstraint_ = Gui.Solver.CreateStayConstrait(adjustedScreenWidth, UI.screenWidth - margins.x, ClStrength.Required);
@@ -120,8 +122,8 @@ namespace GuiMinilib
 
         public override void DoWindowContents(Rect inRect)
         {
-            Gui.Solver.UpdateStayConstrait(ref widthConstraint_, inRect.width);
-            Gui.Solver.UpdateStayConstrait(ref heightConstraint_, inRect.height);
+            Gui.Solver.UpdateStayConstrait(ref guideWidthConstraint_, inRect.width);
+            Gui.Solver.UpdateStayConstrait(ref guideHeightConstraint_, inRect.height);
 
             Gui.InRect = inRect;
             

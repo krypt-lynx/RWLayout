@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,14 @@ namespace GuiMinilib
 {
     public partial class CElement : IElement
     {
-        public List<CElement> elements = new List<CElement>();
+        private List<CElement> elements = new List<CElement>(); // "readonly"
+        public IReadOnlyList<CElement> Elements
+        {
+            get
+            {
+                return elements;
+            }
+        }
         public T AddElement<T>(T element) where T : CElement
         {
             elements.Add(element);
@@ -19,6 +27,37 @@ namespace GuiMinilib
 
             element.PostAdd();
             return element;
+        }
+
+        public void BringToFront(CElement element)
+        {
+            if (!elements.Remove(element))
+            {
+                throw new InvalidOperationException($"view {element} in not a subview of {this}");
+            }
+            elements.Add(element);
+        }
+
+        public void SendToBack(CElement element)
+        {
+            if (!elements.Remove(element))
+            {
+                throw new InvalidOperationException($"view {element} in not a subview of {this}");
+            }
+            elements.Insert(0, element);
+        }
+
+        public void MoveToPosition(CElement element, int position)
+        {
+            if (position < 0 && position >= elements.Count())
+            {
+                throw new ArgumentException("position is out of bouds", "position");
+            }
+            if (!elements.Remove(element))
+            {
+                throw new InvalidOperationException($"view {element} in not a subview of {this}");
+            }
+            elements.Insert(position, element);
         }
 
         WeakReference parent_ = null;
@@ -30,7 +69,23 @@ namespace GuiMinilib
 
         public void RemoveElement(CElement element)
         {
-            throw new NotImplementedException();
+            if (!elements.Remove(element))
+            {
+                throw new InvalidOperationException($"view {element} in not a subview of {this}");
+            }
+
+            element.RemoveAnchors(Solver);
+            elements.Remove(element);
+            //throw new NotImplementedException();
+        }
+
+        public void RemoveAllElements()
+        {
+            var views = new List<CElement>(Elements);
+            foreach (var view in views)
+            {
+                this.RemoveElement(view);
+            }
         }
 
         public virtual void PostAdd()

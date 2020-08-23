@@ -43,6 +43,20 @@ namespace GuiMinilib
             }
         }
 
+        private void RemoveAnchors(ClSimplexSolver solver)
+        {
+            solver.RemoveVariable(left);
+            solver.RemoveVariable(top);
+            solver.RemoveVariable(right);
+            solver.RemoveVariable(bottom);
+
+            if (width_ != null) solver.RemoveVariable(width_);
+            if (height_ != null) solver.RemoveVariable(height_);
+            if (centerX_ != null) solver.RemoveVariable(centerX_);
+            if (centerY_ != null) solver.RemoveVariable(centerY_);
+            if (intrinsicWidth_ != null) solver.RemoveVariable(intrinsicWidth_);
+            if (intrinsicHeight_ != null) solver.RemoveVariable(intrinsicHeight_);
+        }
 
         public ClVariable left;
         public ClVariable top;

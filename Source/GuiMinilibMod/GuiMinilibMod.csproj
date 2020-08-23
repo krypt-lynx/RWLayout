@@ -67,7 +67,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestWindow_Tetris.cs" />
+    <Compile Include="TestWindow_Tetris\Figure.cs" />
+    <Compile Include="TestWindow_Tetris\TestWindow_Tetris.cs" />
     <Compile Include="TestWindow_WindowResize.cs" />
     <Compile Include="TestWindow_ListingStandard.cs" />
     <Compile Include="GuiMinilib.cs" />
