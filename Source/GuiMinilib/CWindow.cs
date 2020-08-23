@@ -12,15 +12,15 @@ using Verse;
 namespace GuiMinilib
 {
 
-    public class CWindow : Window
+    public class CWindow : Window, IElement
     {
-        public ClVariable width = new ClVariable("CWindow_W");
+        public ClVariable guideWidth = new ClVariable("CWindow_W");
         private ClStayConstraint widthConstraint_;
-        public ClVariable height = new ClVariable("CWindow_H");
+        public ClVariable guideHeight = new ClVariable("CWindow_H");
         private ClStayConstraint heightConstraint_;
-        public ClVariable screenWidth = new ClVariable("screen_W");
+        public ClVariable adjustedScreenWidth = new ClVariable("screen_W");
         private ClStayConstraint screenWidthConstraint_;
-        public ClVariable screenHeight = new ClVariable("screen_H");
+        public ClVariable adjustedScreenHeight = new ClVariable("screen_H");
         private ClStayConstraint screenHeightConstraint_;
 
         CWindowResizer resizer;
@@ -36,8 +36,8 @@ namespace GuiMinilib
                 { 
                     var fixedSize = winSize - MarginSize();
 
-                    Gui.solver.UpdateStayConstrait(ref widthConstraint_, fixedSize.x);
-                    Gui.solver.UpdateStayConstrait(ref heightConstraint_, fixedSize.y);
+                    Gui.Solver.UpdateStayConstrait(ref widthConstraint_, fixedSize.x);
+                    Gui.Solver.UpdateStayConstrait(ref heightConstraint_, fixedSize.y);
 
                     Gui.InRect = new Rect(Vector2.zero, fixedSize);
                     winSize = Gui.bounds.size + MarginSize();
@@ -95,10 +95,12 @@ namespace GuiMinilib
 
             Log.Message($"{this.GetType().Name}: gui constructed in: {timer.Elapsed}");
 
-            widthConstraint_ = Gui.solver.CreateStayConstrait(width, initSize.x, ClStrength.Required);
-            heightConstraint_ = Gui.solver.CreateStayConstrait(height, initSize.y, ClStrength.Required);
-            screenWidthConstraint_ = Gui.solver.CreateStayConstrait(screenWidth, UI.screenWidth, ClStrength.Required);
-            screenHeightConstraint_ = Gui.solver.CreateStayConstrait(screenHeight, UI.screenHeight, ClStrength.Required);
+            widthConstraint_ = Gui.Solver.CreateStayConstrait(guideWidth, initSize.x, ClStrength.Required);
+            heightConstraint_ = Gui.Solver.CreateStayConstrait(guideHeight, initSize.y, ClStrength.Required);
+
+            var margins = MarginSize();
+            screenWidthConstraint_ = Gui.Solver.CreateStayConstrait(adjustedScreenWidth, UI.screenWidth - margins.x, ClStrength.Required);
+            screenHeightConstraint_ = Gui.Solver.CreateStayConstrait(adjustedScreenHeight, UI.screenHeight - margins.y, ClStrength.Required);
 
             Gui.InRect = new Rect(Vector2.zero, initSize);
             initSize = Gui.bounds.size;
@@ -118,8 +120,8 @@ namespace GuiMinilib
 
         public override void DoWindowContents(Rect inRect)
         {
-            Gui.solver.UpdateStayConstrait(ref widthConstraint_, inRect.width);
-            Gui.solver.UpdateStayConstrait(ref heightConstraint_, inRect.height);
+            Gui.Solver.UpdateStayConstrait(ref widthConstraint_, inRect.width);
+            Gui.Solver.UpdateStayConstrait(ref heightConstraint_, inRect.height);
 
             Gui.InRect = inRect;
             
@@ -128,11 +130,39 @@ namespace GuiMinilib
 
         public override void Notify_ResolutionChanged()
         {
-            Gui.solver.UpdateStayConstrait(ref screenWidthConstraint_, UI.screenWidth);
-            Gui.solver.UpdateStayConstrait(ref screenHeightConstraint_, UI.screenHeight);
-            Gui.solver.Solve();
+            var margins = MarginSize();
+            Gui.Solver.UpdateStayConstrait(ref screenWidthConstraint_, UI.screenWidth - margins.x);
+            Gui.Solver.UpdateStayConstrait(ref screenHeightConstraint_, UI.screenHeight - margins.y);
+
+            Gui.Solver.Solve();
             Gui.UpdateLayout();
             base.Notify_ResolutionChanged();
+        }
+
+        public ClSimplexSolver Solver
+        {
+            get
+            {
+                return Gui.Solver;
+            }
+        }
+
+        public CElement Parent
+        {
+            get
+            {
+                return null;
+            }
+        }
+
+        public T AddElement<T>(T element) where T : CElement
+        {
+            return Gui.AddElement(element);
+        }
+
+        public void RemoveElement(CElement element)
+        {
+            Gui.RemoveElement(element);
         }
     }
 }

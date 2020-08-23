@@ -111,7 +111,7 @@ namespace GuiMinilib
                 if (intrinsicWidth_ == null)
                 {
                     intrinsicWidth_ = new ClVariable(NamePrefix() + "_iW");
-                    intrinsicWidthConstraint_ = solver.CreateStayConstrait(intrinsicWidth_, 0, ClStrength.Required);
+                    intrinsicWidthConstraint_ = Solver.CreateStayConstrait(intrinsicWidth_, 0, ClStrength.Required);
                 }
                 return intrinsicWidth_;
             }
@@ -123,7 +123,7 @@ namespace GuiMinilib
                 if (intrinsicHeight_ == null)
                 {
                     intrinsicHeight_ = new ClVariable(NamePrefix() + "_iH");
-                    intrinsicHeightConstraint_ = solver.CreateStayConstrait(intrinsicHeight_, 0, ClStrength.Required);
+                    intrinsicHeightConstraint_ = Solver.CreateStayConstrait(intrinsicHeight_, 0, ClStrength.Required);
                 }
                 return intrinsicHeight_;
             }

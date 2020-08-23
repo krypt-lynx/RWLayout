@@ -12,7 +12,15 @@ using Verse;
 
 namespace GuiMinilib
 {
-    public partial class CElement
+    public interface IElement
+    {
+        ClSimplexSolver Solver { get; }
+        T AddElement<T>(T element) where T : CElement;
+        void RemoveElement(CElement element);
+        CElement Parent { get; }
+    }
+
+    public partial class CElement : IElement
     {
         public static int nextId = 0;
         public string NamePrefix()
@@ -28,7 +36,7 @@ namespace GuiMinilib
             CreateAnchors();
         }
 
-        public virtual ClSimplexSolver solver { get { return parent?.solver; } }
+        public virtual ClSimplexSolver Solver { get { return Parent?.Solver; } }
 
         public virtual void UpdateLayoutConstraints(ClSimplexSolver solver)
         {
@@ -56,11 +64,11 @@ namespace GuiMinilib
 
                 if (intrinsicWidth_ != null)
                 {
-                    solver.UpdateStayConstrait(ref intrinsicWidthConstraint_, intrinsicSize.x);
+                    Solver.UpdateStayConstrait(ref intrinsicWidthConstraint_, intrinsicSize.x);
                 }
                 if (intrinsicHeight_ != null)
                 {
-                    solver.UpdateStayConstrait(ref intrinsicHeightConstraint_, intrinsicSize.y);
+                    Solver.UpdateStayConstrait(ref intrinsicHeightConstraint_, intrinsicSize.y);
                 }
             }
             foreach (var element in elements)
@@ -71,6 +79,7 @@ namespace GuiMinilib
         public virtual void PostLayoutUpdate()
         {
             bounds = Rect.MinMaxRect((float)left.Value, (float)top.Value, (float)right.Value, (float)bottom.Value);
+            boundsRounded = bounds.Rounded2();
 
             foreach (var element in elements)
             {
@@ -78,7 +87,7 @@ namespace GuiMinilib
             }
         }
 
-
+        public bool Hidden = false;
 
         // todo: intristic size
     }

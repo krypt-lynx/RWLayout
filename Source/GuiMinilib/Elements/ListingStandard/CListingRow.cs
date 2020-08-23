@@ -32,13 +32,13 @@ namespace GuiMinilib
 
         public override void UpdateLayout()
         {
-            solver.UpdateStayConstrait(ref leftStay, InRect.xMin);
-            solver.UpdateStayConstrait(ref rightStay, InRect.xMax);
-            solver.UpdateStayConstrait(ref topStay, InRect.yMin);
+            Solver.UpdateStayConstrait(ref leftStay, InRect.xMin);
+            Solver.UpdateStayConstrait(ref rightStay, InRect.xMax);
+            Solver.UpdateStayConstrait(ref topStay, InRect.yMin);
 
             base.UpdateLayout();
 
-            solver.Solve();
+            Solver.Solve();
         }
     }
 }

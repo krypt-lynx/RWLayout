@@ -50,7 +50,7 @@ namespace GuiMinilib
             float w = bounds.width - (IsScrollBarVisible() ? 20 : 0);
             foreach (var row in rows)
             {
-                row.solver.AddConstraints(ClStrength.Weak, row.height ^ 20);
+                row.Solver.AddConstraints(ClStrength.Weak, row.height ^ 20);
                 row.InRect = new Rect(0, y, w, float.NaN);
                 y += row.bounds.height;
             }

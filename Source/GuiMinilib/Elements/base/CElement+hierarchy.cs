@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GuiMinilib
 {
-    public partial class CElement
+    public partial class CElement : IElement
     {
         public List<CElement> elements = new List<CElement>();
         public T AddElement<T>(T element) where T : CElement
@@ -22,16 +22,21 @@ namespace GuiMinilib
         }
 
         WeakReference parent_ = null;
-        public CElement parent
+
+        public CElement Parent
         {
             get { return parent_?.IsAlive ?? false ? parent_.Target as CElement : null; }
         }
 
-        // todo: RemoveElement
+        public void RemoveElement(CElement element)
+        {
+            throw new NotImplementedException();
+        }
 
         public virtual void PostAdd()
         {
 
         }
+
     }
 }

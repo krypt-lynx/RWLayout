@@ -40,9 +40,6 @@
       <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Cassowary, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -70,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestWindow_Tetris.cs" />
     <Compile Include="TestWindow_WindowResize.cs" />
     <Compile Include="TestWindow_ListingStandard.cs" />
     <Compile Include="GuiMinilib.cs" />
@@ -77,6 +75,10 @@
     <Compile Include="TestsListWindow.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\..\..\Repo\Cassowary.net\Cassowary\Cassowary.csproj">
+      <Project>{f01578a3-ba19-47e6-b333-40e41158658b}</Project>
+      <Name>Cassowary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GuiMinilib\GuiMinilib.csproj">
       <Project>{859869af-24c5-4aba-a111-f95a794ed7a3}</Project>
       <Name>GuiMinilib</Name>

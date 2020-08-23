@@ -35,25 +35,6 @@ namespace GuiMinilib
             return result;
         }
 
-        public override string debugDesc()
-        {
-            if (Title == null)
-            {
-                return "";
-            }
-            else
-            {
-                if (Title.Length <= 10)
-                {
-                    return $" ({Title})";
-                }
-                else
-                {
-                    return $" ({Title.Substring(0, 10)}…)";
-                }
-            }
-        }
-
         public override void DoContent()
         {
             base.DoContent();

@@ -30,7 +30,7 @@ namespace GuiMinilib
         }
 
         ClSimplexSolver solver_;
-        public override ClSimplexSolver solver
+        public override ClSimplexSolver Solver
         {
             get
             {
@@ -42,7 +42,7 @@ namespace GuiMinilib
         {
             solver_ = new ClSimplexSolver();
             //solver_.DebugName = NamePrefix() + "_solver";
-            solver.AutoSolve = false;
+            Solver.AutoSolve = false;
         }
 
         protected bool needsUpdateLayoutConstraints = true;
@@ -88,8 +88,8 @@ namespace GuiMinilib
                 return;
             }
 
-            UpdateLayoutConstraints(solver);
-            solver.Solve();
+            UpdateLayoutConstraints(Solver);
+            Solver.Solve();
 
         }
 

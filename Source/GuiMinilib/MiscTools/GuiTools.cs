@@ -103,5 +103,9 @@ namespace GuiMinilib
             GUI.DrawTexture(new Rect(left + (float)insets.left, bottom - (float)insets.bottom, width - (float)insets.left - (float)insets.right, (float)insets.bottom), BaseContent.WhiteTex);
         }
 
+        public static Rect Rounded2(this Rect rect)
+        {
+            return Rect.MinMaxRect((int)rect.xMin, (int)rect.yMin, (int)rect.xMax, (int)rect.yMax);
+        }
     }
 }

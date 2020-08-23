@@ -25,14 +25,24 @@ namespace GuiMinilibMod
                 postfix: new HarmonyMethod(typeof(HarmonyPatches), "DevToolStarterOnGUI_postfix"));
             harmony.Patch(AccessTools.Method(typeof(DebugWindowsOpener), "DrawButtons"),
                 postfix: new HarmonyMethod(typeof(HarmonyPatches), "DrawButtons_postfix"));
+
+
             harmony.Patch(AccessTools.Method(typeof(WindowResizer), "DoResizeControl"),
                 prefix: new HarmonyMethod(typeof(HarmonyPatches), "DoResizeControl_prefix"));
-            //harmony.Patch(AccessTools.Constructor(typeof(DebugWindowsOpener)),
-            //    postfix: new HarmonyMethod(typeof(HarmonyPatches), "ctor_postfix"));
+
+            //harmony.Patch(AccessTools.Method(typeof(GenUI), "Rounded", new Type[] { typeof(Rect) }),
+            //    prefix: new HarmonyMethod(typeof(HarmonyPatches), "Rounded_prefix"));
         }
 
         static class HarmonyPatches
         {
+            static bool Rounded_prefix(Rect r, ref Rect __result)
+            {
+                __result = Rect.MinMaxRect(r.xMin, r.yMin, r.xMax, r.yMax);
+
+                return false;
+            }
+
             static bool DoResizeControl_prefix(WindowResizer __instance, ref Rect __result, Rect winRect)
             {
                 if (typeof(CWindowResizer).IsAssignableFrom(__instance.GetType()))

@@ -43,6 +43,14 @@ namespace GuiMinilibMod
                     Find.WindowStack.Add(new TestWindow_WindowResize());
                 }
             });
+            var btn3 = buttonsColumn1.AddElement(new CButton
+            {
+                Title = "Add/remove elements demo",
+                Action = (_) =>
+                {
+                    Find.WindowStack.Add(new TestWindow_Tetris());
+                }
+            });
 
             var debugCheck = buttonsColumn2.AddElement(new CCheckBox
             {
@@ -58,12 +66,12 @@ namespace GuiMinilibMod
             buttonsPanel.StackLeft(true, true, ClStrength.Strong,
                 (buttonsColumn1, 200), 10, (buttonsColumn2, 200));
             buttonsColumn1.StackTop(true, false, ClStrength.Strong,
-                (btn1, 30), (btn2, 30));
+                (btn1, 30), (btn2, 30), (btn3, 30));
             buttonsColumn2.StackTop(true, false, ClStrength.Strong,
                 (debugCheck, 30));
 
             
-            Gui.solver.AddConstraints(Gui.height ^ 300);
+            Gui.Solver.AddConstraints(Gui.height ^ 300);
         }
     }
 }

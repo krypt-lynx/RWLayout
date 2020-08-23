@@ -14,12 +14,16 @@ namespace GuiMinilib
     public partial class CElement
     {
         public Rect bounds { get; private set; }
+        public Rect boundsRounded { get; private set; }
 
         public virtual Vector2 tryFit(Vector2 size) { return Vector2.zero; }
 
         public void DoElementContent()
         {
-            DoContent();
+            if (!Hidden)
+            {
+                DoContent();
+            }
 
             foreach (var element in elements)
             {
@@ -40,7 +44,5 @@ namespace GuiMinilib
                 }));
             }
         }
-
-        public virtual string debugDesc() { return ""; }
     }
 }

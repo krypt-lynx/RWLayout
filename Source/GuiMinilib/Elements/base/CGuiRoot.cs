@@ -41,14 +41,14 @@ namespace GuiMinilib
         {
             Debug.WriteLine(InRect.width);
 
-            solver.UpdateStayConstrait(ref leftStay, InRect.xMin);
-            solver.UpdateStayConstrait(ref rightStay, InRect.xMax);
-            solver.UpdateStayConstrait(ref topStay, InRect.yMin);
-            solver.UpdateStayConstrait(ref bottomStay, InRect.yMax);
+            Solver.UpdateStayConstrait(ref leftStay, InRect.xMin);
+            Solver.UpdateStayConstrait(ref rightStay, InRect.xMax);
+            Solver.UpdateStayConstrait(ref topStay, InRect.yMin);
+            Solver.UpdateStayConstrait(ref bottomStay, InRect.yMax);
 
             base.UpdateLayout();
 
-            solver.Solve();
+            Solver.Solve();
             //Log.Message(solver.ToString());
 
         }
