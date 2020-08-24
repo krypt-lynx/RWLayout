@@ -131,7 +131,7 @@ namespace RWLayoutMod.BrickDemo
 
             figures.Add(figure);
 
-            figure.UpdateLayoutConstraints(Gui.Solver);
+            figure.UpdateLayoutConstraints();
             Gui.UpdateLayout();
             Gui.PostLayoutUpdate();
 
@@ -189,9 +189,16 @@ namespace RWLayoutMod.BrickDemo
             curtain.Hidden = true;
         }
 
-        int tick = 0;
 
         public override void DoWindowContents(Rect inRect)
+        {
+            DoAnimations();
+
+            base.DoWindowContents(inRect);
+        }
+
+        int tick = 0;
+        private void DoAnimations()
         {
             if (tick > 1)
             {
@@ -223,9 +230,6 @@ namespace RWLayoutMod.BrickDemo
                 tick = 0;
             }
             tick++;
-
-            base.DoWindowContents(inRect);
-
         }
     }
 }

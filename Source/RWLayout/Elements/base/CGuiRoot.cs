@@ -21,20 +21,20 @@ namespace RWLayout
         private ClStayConstraint topStay = null;
         private ClStayConstraint bottomStay = null;
 
-        public override void UpdateLayoutConstraints(ClSimplexSolver solver)
+        public override void UpdateLayoutConstraints()
         {
-            leftStay = solver.CreateStayConstrait(left, InRect.xMin, ClStrength.Required);
+            leftStay = Solver.CreateStayConstrait(left, InRect.xMin, ClStrength.Required);
             if (!FlexableWidth)
             {
-                rightStay = solver.CreateStayConstrait(right, InRect.xMax, ClStrength.Required);
+                rightStay = Solver.CreateStayConstrait(right, InRect.xMax, ClStrength.Required);
             }
-            topStay = solver.CreateStayConstrait(top, InRect.yMin, ClStrength.Required);
+            topStay = Solver.CreateStayConstrait(top, InRect.yMin, ClStrength.Required);
             if (!FlexableHeight)
             {
-                bottomStay = solver.CreateStayConstrait(bottom, InRect.yMax, ClStrength.Required);
+                bottomStay = Solver.CreateStayConstrait(bottom, InRect.yMax, ClStrength.Required);
             }
 
-            base.UpdateLayoutConstraints(solver);
+            base.UpdateLayoutConstraints();
         }
 
         public override void UpdateLayout()

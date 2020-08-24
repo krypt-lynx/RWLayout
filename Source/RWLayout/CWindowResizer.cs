@@ -12,7 +12,7 @@ namespace RWLayout
     {
         public delegate void VerifyWindowSizeDelegate(ref Vector2 winSize);
 
-        public Rect override_DoResizeControl(Rect winRect)
+        public Rect override_DoResizeControl(Rect winRect) // hooked by Harmony, original method is not virtual
         {
             Vector2 mousePosition = Event.current.mousePosition;
             Rect rect = new Rect(winRect.width - 24f, winRect.height - 24f, 24f, 24f);
@@ -24,13 +24,9 @@ namespace RWLayout
             if (this.isResizing)
             {
                 Vector2 size = new Vector2(
-                    resizeStart.width + (mousePosition.x - this.resizeStart.x),
-                    resizeStart.height + (mousePosition.y - this.resizeStart.y)
+                     Mathf.Min(resizeStart.width + (mousePosition.x - this.resizeStart.x), UI.screenWidth - winRect.xMin),
+                     Mathf.Min(resizeStart.height + (mousePosition.y - this.resizeStart.y), UI.screenHeight - winRect.yMin)
                     );
-
-                size = new Vector2(
-                    Mathf.Min(size.x, UI.screenWidth - winRect.xMin),
-                    Mathf.Min(size.y, UI.screenHeight - winRect.yMin));
 
                 UpdateSize(ref size);
 
@@ -50,7 +46,7 @@ namespace RWLayout
             // base.DoResizeControl
         }
 
-        public VerifyWindowSizeDelegate UpdateSize;
+        public VerifyWindowSizeDelegate UpdateSize = (ref Vector2 size) => { };
 
         // Token: 0x040012A8 RID: 4776
         private bool isResizing;

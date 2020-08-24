@@ -74,7 +74,7 @@ namespace RWLayout
         }
 
         bool fuse = true;
-        public void UpdateLayoutConstraints()
+        public override void UpdateLayoutConstraints()
         {
             needsUpdateLayoutConstraints = false;
 
@@ -88,7 +88,7 @@ namespace RWLayout
                 return;
             }
 
-            UpdateLayoutConstraints(Solver);
+            base.UpdateLayoutConstraints();
             Solver.Solve();
 
         }

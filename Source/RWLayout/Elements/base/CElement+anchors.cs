@@ -23,23 +23,23 @@ namespace RWLayout
             bottom = new ClVariable(variableNameBase + "_B");
         }
 
-        private void AddImpliedConstraints(ClSimplexSolver solver)
+        private void AddImpliedConstraints()
         {
             if (width_ != null)
             {
-                solver.AddConstraint(new ClLinearEquation(right, left + width, ClStrength.Required));
+                Solver.AddConstraint(new ClLinearEquation(right, left + width, ClStrength.Required));
             }
             if (height_ != null)
             {
-                solver.AddConstraint(new ClLinearEquation(bottom, top + height, ClStrength.Required));
+                Solver.AddConstraint(new ClLinearEquation(bottom, top + height, ClStrength.Required));
             }
             if (centerX_ != null)
             {
-                solver.AddConstraint(new ClLinearEquation(centerX, (left + right) / 2, ClStrength.Required));
+                Solver.AddConstraint(new ClLinearEquation(centerX, (left + right) / 2, ClStrength.Required));
             }
             if (centerY_ != null)
             {
-                solver.AddConstraint(new ClLinearEquation(centerY, (top + bottom) / 2, ClStrength.Required));
+                Solver.AddConstraint(new ClLinearEquation(centerY, (top + bottom) / 2, ClStrength.Required));
             }
         }
 

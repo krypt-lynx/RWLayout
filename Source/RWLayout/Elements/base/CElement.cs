@@ -38,13 +38,13 @@ namespace RWLayout
 
         public virtual ClSimplexSolver Solver { get { return Parent?.Solver; } }
 
-        public virtual void UpdateLayoutConstraints(ClSimplexSolver solver)
+        public virtual void UpdateLayoutConstraints()
         {
-            AddImpliedConstraints(solver);
+            AddImpliedConstraints();
 
             foreach (var element in Elements)
             {
-                element.UpdateLayoutConstraints(solver);
+                element.UpdateLayoutConstraints();
             }
         }
         public virtual void PostConstraintsUpdate()
