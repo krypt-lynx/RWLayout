@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Cassowary;
 using Verse;
 
-namespace GuiMinilib
+namespace RWLayout
 {
     public class CGuiRoot : CElementHost
     {

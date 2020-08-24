@@ -10,7 +10,7 @@ using Cassowary;
 using UnityEngine;
 using Verse;
 
-namespace GuiMinilib
+namespace RWLayout
 {
     public enum CScrollBarMode
     {

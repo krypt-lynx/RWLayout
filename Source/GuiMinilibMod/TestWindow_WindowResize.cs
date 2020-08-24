@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cassowary;
-using GuiMinilib;
+using RWLayout;
 using UnityEngine;
 using Verse;
 
-namespace GuiMinilibMod
+namespace RWLayoutMod
 {
     class TestWindow_WindowResize : CWindow
     {

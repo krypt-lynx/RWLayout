@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cassowary;
 
-namespace GuiMinilib
+namespace RWLayout
 {
     static class CHelpers
     {

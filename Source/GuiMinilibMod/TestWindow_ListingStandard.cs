@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cassowary;
-using GuiMinilib;
+using RWLayout;
 
-namespace GuiMinilibMod
+namespace RWLayoutMod
 {
     class TestWindow_ListingStandard : CWindow
     {

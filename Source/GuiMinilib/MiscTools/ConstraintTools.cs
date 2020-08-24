@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Cassowary;
 using Verse;
 
-namespace GuiMinilib
+namespace RWLayout
 {
     struct AnchorMapper
     {

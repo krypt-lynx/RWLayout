@@ -7,7 +7,7 @@ using Cassowary;
 using UnityEngine;
 using Verse;
 
-namespace GuiMinilib
+namespace RWLayout
 {
     public class CScrollView : CElement
     {

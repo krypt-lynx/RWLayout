@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cassowary;
-using GuiMinilib;
+using RWLayout;
 using Verse;
 
-namespace GuiMinilibMod
+namespace RWLayoutMod
 {
     class TestsListWindow : CWindow
     {
@@ -19,7 +19,7 @@ namespace GuiMinilibMod
             var titleLabel = Gui.AddElement(new CLabel
             {
                 Font = GameFont.Medium,
-                Title = "GuiMinilib tests"
+                Title = "RWLayout tests"
             });
 
             var buttonsPanel = Gui.AddElement(new CElement());
@@ -48,7 +48,7 @@ namespace GuiMinilibMod
                 Title = "Add/Remove Elements Demo",
                 Action = (_) =>
                 {
-                    Find.WindowStack.Add(new TestWindow_Tetris());
+                    Find.WindowStack.Add(new BrickDemo.TestWindow_Brick());
                 }
             });
 
@@ -66,7 +66,7 @@ namespace GuiMinilibMod
             buttonsPanel.StackLeft(true, true, ClStrength.Strong,
                 (buttonsColumn1, 220), 20, (buttonsColumn2, 150));
             buttonsColumn1.StackTop(true, false, ClStrength.Strong,
-                (btn1, 30), (btn2, 30), (btn3, 30));
+                /*(btn1, 30),*/ (btn2, 30), (btn3, 30));
             buttonsColumn2.StackTop(true, false, ClStrength.Strong,
                 (debugCheck, 30));
 

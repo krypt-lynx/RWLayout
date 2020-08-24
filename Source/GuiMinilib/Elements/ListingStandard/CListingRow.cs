@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace GuiMinilib
+namespace RWLayout
 {
 
     public class CListingRow : CElementHost

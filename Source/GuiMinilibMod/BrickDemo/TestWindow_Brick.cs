@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cassowary;
-using GuiMinilib;
+using RWLayout;
 using UnityEngine;
 using Verse;
 
-namespace GuiMinilibMod
+namespace RWLayoutMod.BrickDemo
 {
-
-    class TestWindow_Tetris : CWindow
+    class TestWindow_Brick : CWindow
     {
         enum TetrisState
         {
@@ -194,8 +193,6 @@ namespace GuiMinilibMod
 
         public override void DoWindowContents(Rect inRect)
         {
-            Log.Message($"{state}: {animationStep}");
-
             if (tick > 1)
             {
                 switch (state)

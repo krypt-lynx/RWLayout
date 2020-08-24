@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-	<name>GuiMinilib</name>
+	<name>RWLayout</name>
 	<author>Krypt</author>
 	<supportedVersions>
 		<li>1.1</li>
 		<li>1.2</li>
 	</supportedVersions>
-	<packageId>name.krypt.rimworld.guiminilib</packageId>
+	<packageId>name.krypt.rimworld.rwlayout</packageId>
 	<description>bla-bla-bla</description>
 	<modDependencies>
 		<li>
