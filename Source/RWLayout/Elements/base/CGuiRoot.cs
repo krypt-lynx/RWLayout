@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Cassowary;
 using Verse;
 
-namespace RWLayout
+namespace RWLayout.Alpha1
 {
     public class CGuiRoot : CElementHost
     {

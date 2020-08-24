@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RWLayout
+namespace RWLayout.Alpha1
 {
     public partial class CElement : IElement
     {

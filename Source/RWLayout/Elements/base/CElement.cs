@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace RWLayout
+namespace RWLayout.Alpha1
 {
     public interface IElement
     {
