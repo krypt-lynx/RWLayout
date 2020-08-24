@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RWLayout", "GuiMinilib\RWLayout.csproj", "{859869AF-24C5-4ABA-A111-F95A794ED7A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RWLayout", "RWLayout\RWLayout.csproj", "{859869AF-24C5-4ABA-A111-F95A794ED7A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RWLayoutMod", "GuiMinilibMod\RWLayoutMod.csproj", "{120E555E-8B0C-4AAE-8FEF-7A9E643DC0FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RWLayoutMod", "RWLayoutMod\RWLayoutMod.csproj", "{120E555E-8B0C-4AAE-8FEF-7A9E643DC0FB}"
 EndProject
 Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "RimWorldWin64", "..\..\..\RimWorldWin64.exe", "{22771E56-F35D-495E-9646-9E117ECE5689}"
 	ProjectSection(DebuggerProjectSystem) = preProject
@@ -20,7 +20,7 @@ Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "RimWorldWin64", "..\..\..\R
 		AttachLaunchAction = No
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cassowary", "..\..\..\..\..\..\..\..\Repo\Cassowary.net\Cassowary\Cassowary.csproj", "{F01578A3-BA19-47E6-B333-40E41158658B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cassowary", "D:\Repo\Cassowary.net\Cassowary\Cassowary.csproj", "{F01578A3-BA19-47E6-B333-40E41158658B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
