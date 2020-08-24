@@ -11,13 +11,6 @@ using Verse;
 
 namespace RWLayout.Alpha1
 {
-    public enum CTextAlignment
-    {
-        Left = 0, 
-        Center,
-        Right
-    }
-
     public class CLabel : CElement
     {
         public string Title;
@@ -34,23 +27,13 @@ namespace RWLayout.Alpha1
         /// <remarks>
         /// Placeholde implementation. Works only for single line labels
         /// </remarks>
-        public CTextAlignment TextAlignment = CTextAlignment.Left;
+        public TextAnchor TextAlignment = TextAnchor.UpperLeft;
 
+        static GUIContent contentForTesting = new GUIContent();
         public override Vector2 tryFit(Vector2 size)
         {
-            Vector2 result;
-            if (Multiline)
-            {
-                var y = GuiTools.UsingFont(Font, () => Text.CalcHeight(Title, size.x));
-                result = new Vector2(size.x, y);
-            }
-            else
-            {
-                result = GuiTools.UsingFont(Font, () => Text.CalcSize(Title));
-            }
-
-            //Log.Message($"fitting size of {NamePrefix()} (\"{Title}\"): {result} for {size}");
-            return result;
+            contentForTesting.text = Title;
+            return GuiTools.UsingFont(Font, () => Text.CurFontStyle.CalcSize(contentForTesting));
         }
 
         public override void DoContent()
@@ -58,29 +41,11 @@ namespace RWLayout.Alpha1
             base.DoContent();
             GuiTools.FontPush(Font);
             GuiTools.ColorPush(Color);
+            GuiTools.TextAnchorPush(TextAlignment);
 
-            switch (TextAlignment)
-                {
-                case CTextAlignment.Left:
-                    Widgets.Label(bounds, Title);
-                    break;
-                case CTextAlignment.Center:
-                    {
-                        var size = tryFit(bounds.size);
-                        var left = (bounds.width - size.x) / 2;
-                        Widgets.Label(Rect.MinMaxRect(bounds.xMin + left, bounds.yMin, bounds.xMax, bounds.yMax), Title);
-                    } break;
-                case CTextAlignment.Right:
-                    {
-                        var size = tryFit(bounds.size);
-                        var left = bounds.width - size.x;
-                        Widgets.Label(Rect.MinMaxRect(bounds.xMin + left, bounds.yMin, bounds.xMax, bounds.yMax), Title);
-                    } break;
-                default:
-                    Widgets.Label(bounds, Title);
-                    break;
-                }
+            Widgets.Label(bounds, Title);
 
+            GuiTools.TextAnchorPop();
             GuiTools.ColorPop();
             GuiTools.FontPop();
         }

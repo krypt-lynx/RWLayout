@@ -63,11 +63,11 @@ namespace RWLayoutMod
             var versionInfo = Gui.AddElement(new CLabel
             {
                 Title = $"RWLayout version: {RWLayoutMod.commitInfo}",
-                //Multiline = true,
+                Multiline = true,
                 Color = new Color(1, 1, 1, 0.5f),
                 Font = GameFont.Tiny,
-                TextAlignment = CTextAlignment.Right,
-            }); 
+                TextAlignment = TextAnchor.UpperRight,
+            });
 
             Gui.StackTop(true, true, ClStrength.Strong, 
                 (titleLabel, 42), buttonsPanel, (versionInfo, versionInfo.intrinsicHeight));

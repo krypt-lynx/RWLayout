@@ -77,7 +77,12 @@
     <Compile Include="TestsListWindow.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\Repo\Cassowary.net\Cassowary\Cassowary.csproj">
+    <EmbeddedResource Include="git.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\..\..\Repo\Cassowary.net\Cassowary\Cassowary.csproj">
       <Project>{f01578a3-ba19-47e6-b333-40e41158658b}</Project>
       <Name>Cassowary</Name>
     </ProjectReference>
@@ -85,11 +90,6 @@
       <Project>{859869af-24c5-4aba-a111-f95a794ed7a3}</Project>
       <Name>RWLayout</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="git.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

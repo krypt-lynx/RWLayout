@@ -58,7 +58,6 @@ namespace RWLayout.Alpha1
             action();
             ColorPop();
         }
-
         public static T UsingColor<T>(Color? color, Func<T> func)
         {
             ColorPush(color);
@@ -66,6 +65,32 @@ namespace RWLayout.Alpha1
             ColorPop();
             return result;
         }
+
+
+        static Stack<TextAnchor> textAnchors = new Stack<TextAnchor>();
+        public static void TextAnchorPush(TextAnchor anchor)
+        {
+            textAnchors.Push(Text.Anchor);
+            Text.Anchor = anchor;
+        }
+        public static void TextAnchorPop()
+        {
+            Text.Anchor = textAnchors.Pop();
+        }
+        public static void UsingTextAnchor(TextAnchor anchor, Action action)
+        {
+            TextAnchorPush(anchor);
+            action();
+            TextAnchorPop();
+        }
+        public static T UsingTextAnchor<T>(TextAnchor anchor, Func<T> func)
+        {
+            TextAnchorPush(anchor);
+            T result = func();
+            TextAnchorPop();
+            return result;
+        }
+
 
         public static void Box(Rect rect, EdgeInsets insets)
         {            
