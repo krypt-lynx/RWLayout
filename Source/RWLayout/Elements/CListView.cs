@@ -9,7 +9,7 @@ using Verse;
 
 namespace RWLayout
 {
-    public class CScrollView : CElement
+    public class CListView : CElement
     {
         Rect innerRect;
         Vector2 scrollPosition = Vector2.zero;

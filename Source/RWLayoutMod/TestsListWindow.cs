@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cassowary;
 using RWLayout;
+using UnityEngine;
 using Verse;
 
 namespace RWLayoutMod
@@ -14,12 +15,12 @@ namespace RWLayoutMod
         public override void ConstructGui()
         {
             doCloseX = true;
-
+            draggable = true;
             //gui = new CGuiRoot();
             var titleLabel = Gui.AddElement(new CLabel
             {
                 Font = GameFont.Medium,
-                Title = $"RWLayout tests ({RWLayoutMod.commitInfo})"
+                Title = "RWLayout tests"
             });
 
             var buttonsPanel = Gui.AddElement(new CElement());
@@ -59,8 +60,17 @@ namespace RWLayoutMod
                 Changed = (x) => CElement.DebugDraw = x.Checked,
             });
 
+            var versionInfo = Gui.AddElement(new CLabel
+            {
+                Title = $"RWLayout version: {RWLayoutMod.commitInfo}",
+                //Multiline = true,
+                Color = new Color(1, 1, 1, 0.5f),
+                Font = GameFont.Tiny,
+                TextAlignment = CTextAlignment.Right,
+            }); 
+
             Gui.StackTop(true, true, ClStrength.Strong, 
-                (titleLabel, 42), buttonsPanel);
+                (titleLabel, 42), buttonsPanel, (versionInfo, versionInfo.intrinsicHeight));
 
             
             buttonsPanel.StackLeft(true, true, ClStrength.Strong,

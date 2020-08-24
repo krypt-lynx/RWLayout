@@ -79,7 +79,7 @@
     <Compile Include="Elements\CButton.cs" />
     <Compile Include="Elements\CCheckBox.cs" />
     <Compile Include="Elements\CLabel.cs" />
-    <Compile Include="Elements\CScrollView.cs" />
+    <Compile Include="Elements\CListView.cs" />
     <Compile Include="Elements\CWidget.cs" />
     <Compile Include="Elements\ListingStandard\CListingRow.cs" />
     <Compile Include="Elements\ListingStandard\CListingStandart.cs" />

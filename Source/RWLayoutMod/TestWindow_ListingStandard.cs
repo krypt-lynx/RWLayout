@@ -27,8 +27,6 @@ namespace RWLayoutMod
             Gui.Embed(listing);
 
 
-
-
             //base.ConstructGui();
         }
     }

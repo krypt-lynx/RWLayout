@@ -12,14 +12,14 @@ namespace RWLayout
 {
     public struct EdgeInsets
     {
-        public EdgeInsets(double top, double right, double bottom, double left)
+        public EdgeInsets(float top, float right, float bottom, float left)
         {
             this.top = top;
             this.right = right;
             this.bottom = bottom;
             this.left = left;
         }
-        public EdgeInsets(double margin)
+        public EdgeInsets(float margin)
         {
             top = margin;
             right = margin;
@@ -28,7 +28,7 @@ namespace RWLayout
         }
         public static EdgeInsets Zero = new EdgeInsets(0);
 
-        public double top, right, bottom, left;
+        public float top, right, bottom, left;
 
         public override string ToString()
         {

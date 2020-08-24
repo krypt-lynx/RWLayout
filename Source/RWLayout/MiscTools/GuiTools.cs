@@ -67,7 +67,6 @@ namespace RWLayout
             return result;
         }
 
-
         public static void Box(Rect rect, EdgeInsets insets)
         {            
             float left = rect.xMin;
@@ -101,6 +100,17 @@ namespace RWLayout
             GUI.DrawTexture(new Rect(right - (float)insets.right, top, (float)insets.right, height), BaseContent.WhiteTex);
             GUI.DrawTexture(new Rect(left + (float)insets.left, top, width - (float)insets.left - (float)insets.right, (float)insets.top), BaseContent.WhiteTex);
             GUI.DrawTexture(new Rect(left + (float)insets.left, bottom - (float)insets.bottom, width - (float)insets.left - (float)insets.right, (float)insets.bottom), BaseContent.WhiteTex);
+        }
+
+        public static Rect ExpandedBy(this Rect rect, EdgeInsets insets)
+        {
+            return Rect.MinMaxRect(rect.xMin - insets.left, rect.yMin - insets.top, rect.xMax + insets.right, rect.yMax + insets.bottom);
+        }
+
+        // Token: 0x06001CF4 RID: 7412 RVA: 0x000B0312 File Offset: 0x000AE512
+        public static Rect ContractedBy(this Rect rect, EdgeInsets insets)
+        {
+            return Rect.MinMaxRect(rect.xMin + insets.left, rect.yMin + insets.top, rect.xMax - insets.right, rect.yMax - insets.bottom);
         }
 
         public static Rect Rounded2(this Rect rect)

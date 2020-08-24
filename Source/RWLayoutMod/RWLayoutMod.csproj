@@ -93,6 +93,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>git describe --tag --always &gt; "$(ProjectDir)\git.txt"</PreBuildEvent>
+    <PreBuildEvent>git describe --tag  --dirty --always &gt; "$(ProjectDir)\git.txt"</PreBuildEvent>
   </PropertyGroup>
 </Project>
