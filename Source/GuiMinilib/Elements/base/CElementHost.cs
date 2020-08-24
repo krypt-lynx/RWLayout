@@ -1,7 +1,7 @@
 ﻿// This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
-using Cassowary;
+using Cassowary_moddiff;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace RWLayout
+namespace RWLayout_moddiff
 {
     public class CElementHost : CElement
     {

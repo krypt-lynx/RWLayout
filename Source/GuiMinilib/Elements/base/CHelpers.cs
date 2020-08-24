@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Cassowary;
+using Cassowary_moddiff;
 
-namespace RWLayout
+namespace RWLayout_moddiff
 {
     static class CHelpers
     {

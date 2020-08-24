@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RWLayout
+namespace RWLayout_moddiff
 {
     public partial class CElement : IElement
     {

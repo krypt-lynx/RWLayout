@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Cassowary;
+using Cassowary_moddiff;
 using UnityEngine;
 using Verse;
 
-namespace RWLayout
+namespace RWLayout_moddiff
 {
     public enum CScrollBarMode
     {

@@ -5,11 +5,11 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Cassowary;
+using Cassowary_moddiff;
 using UnityEngine;
 using Verse;
 
-namespace RWLayout
+namespace RWLayout_moddiff
 {
 
     public class CWindow : Window, IElement

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace RWLayout
+namespace RWLayout_moddiff
 {
     public static class GuiTools
     {

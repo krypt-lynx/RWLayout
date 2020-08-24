@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace RWLayout
+namespace RWLayout_moddiff
 {
     public class CWidget : CElement
     {

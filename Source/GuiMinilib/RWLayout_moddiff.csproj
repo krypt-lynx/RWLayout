@@ -7,8 +7,8 @@
     <ProjectGuid>{859869AF-24C5-4ABA-A111-F95A794ED7A3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RWLayout</RootNamespace>
-    <AssemblyName>RWLayout</AssemblyName>
+    <RootNamespace>RWLayout_moddiff</RootNamespace>
+    <AssemblyName>0RWLayout_moddiff</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -79,7 +79,7 @@
     <Compile Include="Elements\CButton.cs" />
     <Compile Include="Elements\CCheckBox.cs" />
     <Compile Include="Elements\CLabel.cs" />
-    <Compile Include="Elements\CScrollView.cs" />
+    <Compile Include="Elements\CListView.cs" />
     <Compile Include="Elements\CWidget.cs" />
     <Compile Include="Elements\ListingStandard\CListingRow.cs" />
     <Compile Include="Elements\ListingStandard\CListingStandart.cs" />
@@ -89,7 +89,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\..\..\..\Repo\Cassowary.net\Cassowary\Cassowary.csproj">
+    <ProjectReference Include="D:\Repo\Cassowary.net\Cassowary\Cassowary.csproj">
       <Project>{f01578a3-ba19-47e6-b333-40e41158658b}</Project>
       <Name>Cassowary</Name>
     </ProjectReference>
