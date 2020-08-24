@@ -86,5 +86,13 @@
       <Name>RWLayout</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="git.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>git describe --long --always &gt; "$(ProjectDir)\git.txt"</PreBuildEvent>
+  </PropertyGroup>
 </Project>

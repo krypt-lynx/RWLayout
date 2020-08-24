@@ -19,7 +19,7 @@ namespace RWLayoutMod
             var titleLabel = Gui.AddElement(new CLabel
             {
                 Font = GameFont.Medium,
-                Title = "RWLayout tests"
+                Title = $"RWLayout tests ({RWLayoutMod.commitInfo})"
             });
 
             var buttonsPanel = Gui.AddElement(new CElement());

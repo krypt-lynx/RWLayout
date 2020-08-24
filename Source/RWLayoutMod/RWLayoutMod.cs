@@ -8,16 +8,35 @@ using RWLayout;
 using HarmonyLib;
 using UnityEngine;
 using Verse;
+using System.IO;
 
 namespace RWLayoutMod
 {
     public class RWLayoutMod : Mod
     {
         public static string packageIdOfMine = null;
+        public static string commitInfo = null;
 
         public RWLayoutMod(ModContentPack content) : base(content)
         {
             packageIdOfMine = content.PackageId;
+
+            var name = Assembly.GetExecutingAssembly().GetName().Name;
+
+            try
+            {
+                using (Stream stream = Assembly.GetExecutingAssembly()
+                        .GetManifestResourceStream(name + ".git.txt"))
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    commitInfo = reader.ReadToEnd()?.TrimEndNewlines();
+                }
+            } catch
+            {
+                commitInfo = null;
+            }
+
+
 
             Harmony harmony = new Harmony(packageIdOfMine);
 
