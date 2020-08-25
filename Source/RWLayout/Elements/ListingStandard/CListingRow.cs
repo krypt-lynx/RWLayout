@@ -20,14 +20,12 @@ namespace RWLayout.Alpha1
         private ClStayConstraint rightStay = null;
         private ClStayConstraint topStay = null;
 
-
-        public override void UpdateLayoutConstraints()
+        public override void AddImpliedConstraints()
         {
+            base.AddImpliedConstraints();
             leftStay = Solver.CreateStayConstrait(left, InRect.xMin, ClStrength.Required);
             rightStay = Solver.CreateStayConstrait(right, InRect.xMax, ClStrength.Required);
             topStay = Solver.CreateStayConstrait(top, InRect.yMin, ClStrength.Required);
-
-            base.UpdateLayoutConstraints();
         }
 
         public override void UpdateLayout()

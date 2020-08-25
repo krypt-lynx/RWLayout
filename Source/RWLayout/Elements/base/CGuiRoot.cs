@@ -21,8 +21,10 @@ namespace RWLayout.Alpha1
         private ClStayConstraint topStay = null;
         private ClStayConstraint bottomStay = null;
 
-        public override void UpdateLayoutConstraints()
+        public override void AddImpliedConstraints()
         {
+            base.AddImpliedConstraints();
+
             leftStay = Solver.CreateStayConstrait(left, InRect.xMin, ClStrength.Required);
             if (!FlexableWidth)
             {
@@ -33,9 +35,8 @@ namespace RWLayout.Alpha1
             {
                 bottomStay = Solver.CreateStayConstrait(bottom, InRect.yMax, ClStrength.Required);
             }
-
-            base.UpdateLayoutConstraints();
         }
+
 
         public override void UpdateLayout()
         {

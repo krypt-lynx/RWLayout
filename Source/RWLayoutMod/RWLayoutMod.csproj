@@ -32,6 +32,10 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\..\Repo\Cassowary.net\Cassowary\bin\Release\0Cassowary.dll</HintPath>
+    </Reference>
     <Reference Include="0Harmony">
       <HintPath>D:\Program Files (x86)\Steam\steamapps\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
       <Private>False</Private>
@@ -44,7 +48,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.CSharp">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
@@ -70,7 +76,7 @@
     <Compile Include="BrickDemo\Curtain.cs" />
     <Compile Include="BrickDemo\Figure.cs" />
     <Compile Include="BrickDemo\TestWindow_Brick.cs" />
-    <Compile Include="TestWindow_WindowResize.cs" />
+    <Compile Include="ResizeDemo\TestWindow_WindowResize.cs" />
     <Compile Include="TestWindow_ListingStandard.cs" />
     <Compile Include="RWLayoutMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -82,10 +88,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\..\..\..\Repo\Cassowary.net\Cassowary\Cassowary.csproj">
-      <Project>{f01578a3-ba19-47e6-b333-40e41158658b}</Project>
-      <Name>Cassowary</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RWLayout\RWLayout.csproj">
       <Project>{859869af-24c5-4aba-a111-f95a794ed7a3}</Project>
       <Name>RWLayout</Name>

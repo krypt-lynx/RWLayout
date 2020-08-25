@@ -26,6 +26,7 @@ namespace RWLayout.Alpha1
             element.parent_ = new WeakReference(this, false);
 
             element.PostAdd();
+
             return element;
         }
 
@@ -74,7 +75,7 @@ namespace RWLayout.Alpha1
                 throw new InvalidOperationException($"view {element} in not a subview of {this}");
             }
 
-            element.RemoveAnchors(Solver);
+            element.RemoveImpliedConstraints(Solver);
             elements.Remove(element);
             //throw new NotImplementedException();
         }

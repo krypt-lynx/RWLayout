@@ -41,7 +41,6 @@ namespace RWLayout.Alpha1
         public virtual void UpdateLayoutConstraints()
         {
             AddImpliedConstraints();
-
             foreach (var element in Elements)
             {
                 element.UpdateLayoutConstraints();
@@ -57,20 +56,22 @@ namespace RWLayout.Alpha1
 
         public virtual void UpdateLayout()
         {
+            AddImpliedConstraints();
 
-            if (intrinsicWidth_ != null || intrinsicHeight_ != null)
+            if (intrinsicWidth_.cn != null || intrinsicHeight_.cn != null)
             {
                 var intrinsicSize = this.tryFit(bounds.size);
 
-                if (intrinsicWidth_ != null)
+                if (intrinsicWidth_.cn != null)
                 {
-                    Solver.UpdateStayConstrait(ref intrinsicWidthConstraint_, intrinsicSize.x);
+                    UpdateStayConstrait(ref intrinsicWidth_, intrinsicSize.x);
                 }
-                if (intrinsicHeight_ != null)
+                if (intrinsicHeight_.cn != null)
                 {
-                    Solver.UpdateStayConstrait(ref intrinsicHeightConstraint_, intrinsicSize.y);
+                    UpdateStayConstrait(ref intrinsicHeight_, intrinsicSize.y);
                 }
             }
+
             foreach (var element in Elements)
             {
                 element.UpdateLayout();

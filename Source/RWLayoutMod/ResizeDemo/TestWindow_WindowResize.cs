@@ -8,7 +8,7 @@ using RWLayout.Alpha1;
 using UnityEngine;
 using Verse;
 
-namespace RWLayoutMod
+namespace RWLayoutMod.ResizeDemo
 {
     class TestWindow_WindowResize : CWindow
     {
@@ -41,7 +41,7 @@ namespace RWLayoutMod
 
             // if your window is square you can use this:
             //      Solver.AddConstraint(ClStrength.Weak, Gui.width ^ (this.guideWidth + this.guideHeight) / 2);
-
+            
             // "Resize me" label
             var label = Gui.AddElement(new CLabel
             {
@@ -57,7 +57,7 @@ namespace RWLayoutMod
             // set size of label to its minimal fitting size
             Solver.AddConstraint(label.width ^ label.intrinsicWidth);
             Solver.AddConstraint(label.height ^ label.intrinsicHeight);
-
+            
             // show/hide window title switch
             var titleCkeck = Gui.AddElement(new CCheckBox
             {
@@ -70,8 +70,12 @@ namespace RWLayoutMod
 
             });
             // set location and size
-            Solver.AddConstraints(Gui.left ^ titleCkeck.left, Gui.bottom ^ titleCkeck.bottom, titleCkeck.width ^ 100, titleCkeck.height ^ 24);
-
+            Solver.AddConstraints(
+                Gui.left ^ titleCkeck.left,
+                Gui.bottom ^ titleCkeck.bottom,
+                titleCkeck.width ^ 100,
+                titleCkeck.height ^ 24);
+            
             // reset window size button
             var resetBtn = Gui.AddElement(new CButton
             {
@@ -82,8 +86,12 @@ namespace RWLayoutMod
                 }
             });
             // set location and size
-            Solver.AddConstraints(Gui.right ^ resetBtn.right, Gui.bottom ^ resetBtn.bottom, resetBtn.width ^ 100, resetBtn.height ^ 24);
-
+            Solver.AddConstraints(
+                Gui.right ^ resetBtn.right, 
+                Gui.bottom ^ resetBtn.bottom, 
+                resetBtn.width ^ 100,
+                resetBtn.height ^ 24);
+            
             // lock window width switch
             var lockWidth = Gui.AddElement(new CCheckBox
             {
@@ -105,7 +113,11 @@ namespace RWLayoutMod
                 }
             });
             // set location and size
-            Solver.AddConstraints(Gui.left ^ lockWidth.left, Gui.top ^ lockWidth.top, lockWidth.width ^ 100, lockWidth.height ^ 24);
+            Solver.AddConstraints(
+                Gui.left ^ lockWidth.left,
+                Gui.top ^ lockWidth.top,
+                lockWidth.width ^ 100, 
+                lockWidth.height ^ 24);
 
             // lock window height switch
             var lockHeight = Gui.AddElement(new CCheckBox
@@ -128,7 +140,12 @@ namespace RWLayoutMod
                 }
             });
             // set location and size
-            Solver.AddConstraints(Gui.right ^ lockHeight.right, Gui.top ^ lockHeight.top, lockHeight.width ^ 100, lockHeight.height ^ 24);            
+            Solver.AddConstraints(
+                Gui.right ^ lockHeight.right, 
+                Gui.top ^ lockHeight.top,
+                lockHeight.width ^ 100,
+                lockHeight.height ^ 24);     
+            
         }
     }
 }

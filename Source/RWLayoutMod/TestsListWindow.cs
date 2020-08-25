@@ -41,7 +41,7 @@ namespace RWLayoutMod
                 Title = "Window Resize",
                 Action = (_) =>
                 {
-                    Find.WindowStack.Add(new TestWindow_WindowResize());
+                    Find.WindowStack.Add(new ResizeDemo.TestWindow_WindowResize());
                 }
             });
             var btn3 = buttonsColumn1.AddElement(new CButton
@@ -82,6 +82,11 @@ namespace RWLayoutMod
 
             
             Solver.AddConstraints(Gui.height ^ 300);
+        }
+
+        public override void DoWindowContents(Rect inRect)
+        {
+            base.DoWindowContents(inRect);
         }
     }
 }

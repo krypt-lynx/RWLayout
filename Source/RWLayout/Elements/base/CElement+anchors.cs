@@ -23,39 +23,31 @@ namespace RWLayout.Alpha1
             bottom = new ClVariable(variableNameBase + "_B");
         }
 
-        private void AddImpliedConstraints()
+        public virtual void AddImpliedConstraints()
         {
-            if (width_ != null)
-            {
-                Solver.AddConstraint(new ClLinearEquation(right, left + width, ClStrength.Required));
-            }
-            if (height_ != null)
-            {
-                Solver.AddConstraint(new ClLinearEquation(bottom, top + height, ClStrength.Required));
-            }
-            if (centerX_ != null)
-            {
-                Solver.AddConstraint(new ClLinearEquation(centerX, (left + right) / 2, ClStrength.Required));
-            }
-            if (centerY_ != null)
-            {
-                Solver.AddConstraint(new ClLinearEquation(centerY, (top + bottom) / 2, ClStrength.Required));
-            }
+            AddImpliedConstraint(width_, () => left + width ^ right);
+            AddImpliedConstraint(height_, () => top + height ^ bottom);
+
+            AddImpliedConstraint(centerX_, () => centerX ^ (left + right) / 2);
+            AddImpliedConstraint(centerY_, () => centerY ^ (top + bottom) / 2);
+
+            AddImpliedConstraint(intrinsicWidth_, () => CreateStayConstrait(intrinsicWidth, 0, ClStrength.Required));
+            AddImpliedConstraint(intrinsicHeight_, () => CreateStayConstrait(intrinsicHeight, 0, ClStrength.Required));
         }
 
-        private void RemoveAnchors(ClSimplexSolver solver)
+        public void RemoveImpliedConstraints(ClSimplexSolver solver)
         {
             solver.RemoveVariable(left);
             solver.RemoveVariable(top);
             solver.RemoveVariable(right);
             solver.RemoveVariable(bottom);
 
-            if (width_ != null) solver.RemoveVariable(width_);
-            if (height_ != null) solver.RemoveVariable(height_);
-            if (centerX_ != null) solver.RemoveVariable(centerX_);
-            if (centerY_ != null) solver.RemoveVariable(centerY_);
-            if (intrinsicWidth_ != null) solver.RemoveVariable(intrinsicWidth_);
-            if (intrinsicHeight_ != null) solver.RemoveVariable(intrinsicHeight_);
+            if (width_.cn != null) solver.RemoveVariable(width_.var);
+            if (height_.cn != null) solver.RemoveVariable(height_.var);
+            if (centerX_.cn != null) solver.RemoveVariable(centerX_.var);
+            if (centerY_.cn != null) solver.RemoveVariable(centerY_.var);
+            if (intrinsicWidth_.cn != null) solver.RemoveVariable(intrinsicWidth_.var);
+            if (intrinsicHeight_.cn != null) solver.RemoveVariable(intrinsicHeight_.var);
         }
 
         public ClVariable left;
@@ -64,84 +56,60 @@ namespace RWLayout.Alpha1
         public ClVariable bottom;
 
         // non-esential variables
-        private ClVariable width_;
-        private ClVariable height_;
-        private ClVariable centerX_;
-        private ClVariable centerY_;
-        private ClVariable intrinsicWidth_;
-        private ClStayConstraint intrinsicWidthConstraint_;
-        private ClVariable intrinsicHeight_;
-        private ClStayConstraint intrinsicHeightConstraint_;
 
-        public ClVariable width
+        private (ClVariable var, ClConstraint cn) width_ = (null, null);
+        private (ClVariable var, ClConstraint cn) height_ = (null, null);
+        private (ClVariable var, ClConstraint cn) centerX_ = (null, null);
+        private (ClVariable var, ClConstraint cn) centerY_ = (null, null);
+        private (ClVariable var, ClConstraint cn) intrinsicWidth_ = (null, null);
+        private (ClVariable var, ClConstraint cn) intrinsicHeight_ = (null, null);
+
+
+        private void AddImpliedConstraint((ClVariable var, ClConstraint cn) pair, Func<ClConstraint> builder)
         {
-            get
-            {
-                if (width_ == null)
-                {
-                    width_ = new ClVariable(NamePrefix() + "_W");
-                }
-                return width_;
+            if (pair.var != null && pair.cn == null)
+            {                
+                Solver.AddConstraint(ClStrength.Required, pair.cn = builder());
             }
         }
-        public ClVariable height
+        private ClVariable GetVariable(ref (ClVariable var, ClConstraint cn) pair, string name)
         {
-            get
+            if (pair.var == null)
             {
-                if (height_ == null)
-                {
-                    height_ = new ClVariable(NamePrefix() + "_H");
-                }
-                return height_;
+                pair.var = new ClVariable($"{NamePrefix()}_{name}");
             }
+            return pair.var;
         }
 
-        public ClVariable centerX
+        static public ClStayConstraint CreateStayConstrait(ClVariable variable, double value, ClStrength strength = null)
         {
-            get
-            {
-                if (centerX_ == null)
-                {
-                    centerX_ = new ClVariable(NamePrefix() + "_cX");
-                }
-                return centerX_;
-            }
-        }
-        public ClVariable centerY
-        {
-            get
-            {
-                if (centerY_ == null)
-                {
-                    centerY_ = new ClVariable(NamePrefix() + "_cY");
-                }
-                return centerY_;
-            }
-        }
-        public ClVariable intrinsicWidth
-        {
-            get
-            {
-                if (intrinsicWidth_ == null)
-                {
-                    intrinsicWidth_ = new ClVariable(NamePrefix() + "_iW");
-                    intrinsicWidthConstraint_ = Solver.CreateStayConstrait(intrinsicWidth_, 0, ClStrength.Required);
-                }
-                return intrinsicWidth_;
-            }
-        }
-        public ClVariable intrinsicHeight
-        {
-            get
-            {
-                if (intrinsicHeight_ == null)
-                {
-                    intrinsicHeight_ = new ClVariable(NamePrefix() + "_iH");
-                    intrinsicHeightConstraint_ = Solver.CreateStayConstrait(intrinsicHeight_, 0, ClStrength.Required);
-                }
-                return intrinsicHeight_;
-            }
+            variable.Value = value;
+            var newStay = new ClStayConstraint(variable, strength == null ? ClStrength.Required : strength);
+            return newStay;
         }
 
+        public void UpdateStayConstrait(ref (ClVariable var, ClConstraint cn) pair, double value)
+        {
+            if (pair.cn == null)
+            {
+                return;
+            }
+            if (Cl.Approx(pair.var.Value, value))
+            {
+                return;
+            }
+
+            pair.var.Value = value;
+            var newStay = new ClStayConstraint(pair.var, pair.cn.Strength);
+            Solver.RemoveConstraint(pair.cn);
+            Solver.AddConstraint(pair.cn = newStay);
+        }
+
+        public ClVariable width => GetVariable(ref width_, "W");
+        public ClVariable height => GetVariable(ref height_, "H");
+        public ClVariable centerX => GetVariable(ref centerX_, "cX");
+        public ClVariable centerY => GetVariable(ref centerY_, "cY");
+        public ClVariable intrinsicWidth => GetVariable(ref intrinsicWidth_, "iW");
+        public ClVariable intrinsicHeight => GetVariable(ref intrinsicHeight_, "iH");
     }
 }
