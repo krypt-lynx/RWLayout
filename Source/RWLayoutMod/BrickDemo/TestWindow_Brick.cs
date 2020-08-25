@@ -129,7 +129,7 @@ namespace RWLayoutMod.BrickDemo
 
             var logCnsBtn = Gui.AddElement(new CButton
             {
-                Title = "log cn",
+                Title = "log cns",
                 Action = (sender) =>
                 {
                     Log.Warning("constraints:\n" + string.Join("\n", sender.Solver.AllConstraints().Select(c => c.ToString())));
@@ -141,22 +141,22 @@ namespace RWLayoutMod.BrickDemo
             Gui.Solver.AddConstraint(logCnsBtn.left ^ previewFrame.left);
             Gui.Solver.AddConstraint(logCnsBtn.right ^ previewFrame.right);
             Gui.Solver.AddConstraint(logCnsBtn.height ^ grid);
-            Gui.Solver.AddConstraint(logCnsBtn.bottom ^ Gui.bottom);
 
             var logVarsBtn = Gui.AddElement(new CButton
             {
-                Title = "log cn",
+                Title = "log vars",
                 Action = (sender) =>
                 {
-                    Log.Warning("constraints:\n" + string.Join("\n", sender.Solver.AllConstraints().Select(c => c.ToString())));
+                    Log.Warning("variables:\n" + string.Join("\n", sender.Solver.AllVariables().Select(c => c.ToString())));
                 },
             });
 
-            Gui.Solver.AddConstraint(debugInfoLabel.bottom + grid ^ logCnsBtn.top);
-            Gui.Solver.AddConstraint(logCnsBtn.left ^ previewFrame.left);
-            Gui.Solver.AddConstraint(logCnsBtn.right ^ previewFrame.right);
-            Gui.Solver.AddConstraint(logCnsBtn.height ^ grid);
-            Gui.Solver.AddConstraint(logCnsBtn.bottom ^ Gui.bottom);
+
+            Gui.Solver.AddConstraint(logCnsBtn.bottom ^ logVarsBtn.top);
+            Gui.Solver.AddConstraint(logVarsBtn.left ^ previewFrame.left);
+            Gui.Solver.AddConstraint(logVarsBtn.right ^ previewFrame.right);
+            Gui.Solver.AddConstraint(logVarsBtn.height ^ grid);
+            Gui.Solver.AddConstraint(logVarsBtn.bottom ^ Gui.bottom);
 
 
             InnerSize = new Vector2(400, 400);
