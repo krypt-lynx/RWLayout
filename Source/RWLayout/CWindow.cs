@@ -34,13 +34,13 @@ namespace RWLayout.Alpha1
 
                 resizer.UpdateSize = (ref Vector2 winSize) =>
                 { 
-                    var fixedSize = winSize - MarginSize();
+                    var fixedSize = winSize - MarginsSize();
 
                     Gui.Solver.UpdateStayConstrait(ref guideWidthConstraint_, fixedSize.x);
                     Gui.Solver.UpdateStayConstrait(ref guideHeightConstraint_, fixedSize.y);
 
                     Gui.InRect = new Rect(Vector2.zero, fixedSize);
-                    winSize = Gui.bounds.size + MarginSize();
+                    winSize = Gui.bounds.size + MarginsSize();
                 };
             }
 
@@ -53,11 +53,11 @@ namespace RWLayout.Alpha1
         {
             get
             {
-                return initSize + MarginSize();
+                return initSize + MarginsSize();
             }
         }
 
-        public Vector2 MarginSize()
+        public Vector2 MarginsSize()
         {
             var size = new Vector2(Margin * 2, Margin * 2 + (optionalTitle == null ? 0 : Margin + 25f)); 
             return size;
@@ -67,12 +67,12 @@ namespace RWLayout.Alpha1
         {
             get
             {
-                return windowRect.size - MarginSize();
+                return windowRect.size - MarginsSize();
             }
             set
             {
                 initSize = value;
-                windowRect = new Rect(windowRect.position, value + MarginSize());
+                windowRect = new Rect(windowRect.position, value + MarginsSize());
             }
         }
 
@@ -100,7 +100,7 @@ namespace RWLayout.Alpha1
             guideWidthConstraint_ = Gui.Solver.CreateStayConstrait(guideWidth, initSize.x, ClStrength.Required);
             guideHeightConstraint_ = Gui.Solver.CreateStayConstrait(guideHeight, initSize.y, ClStrength.Required);
 
-            var margins = MarginSize();
+            var margins = MarginsSize();
             screenWidthConstraint_ = Gui.Solver.CreateStayConstrait(adjustedScreenWidth, UI.screenWidth - margins.x, ClStrength.Required);
             screenHeightConstraint_ = Gui.Solver.CreateStayConstrait(adjustedScreenHeight, UI.screenHeight - margins.y, ClStrength.Required);
 
@@ -132,7 +132,7 @@ namespace RWLayout.Alpha1
 
         public override void Notify_ResolutionChanged()
         {
-            var margins = MarginSize();
+            var margins = MarginsSize();
             Gui.Solver.UpdateStayConstrait(ref screenWidthConstraint_, UI.screenWidth - margins.x);
             Gui.Solver.UpdateStayConstrait(ref screenHeightConstraint_, UI.screenHeight - margins.y);
 

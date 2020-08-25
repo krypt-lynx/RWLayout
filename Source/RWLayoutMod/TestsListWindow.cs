@@ -81,7 +81,7 @@ namespace RWLayoutMod
                 (debugCheck, 30));
 
             
-            Solver.AddConstraints(Gui.height ^ 300);
+            Solver.AddConstraints(Gui.height ^ 230-MarginsSize().x);
         }
 
         public override void DoWindowContents(Rect inRect)
