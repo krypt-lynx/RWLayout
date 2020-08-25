@@ -5,7 +5,7 @@
 	<supportedVersions>
 		<li>1.2</li>
 	</supportedVersions>
-	<packageId>name.krypt.rimworld.rwlayout</packageId>
+	<packageId>name.krypt.rimworld.rwlayout.alpha1</packageId>
 	<description>RWLayout Alpha 1
 Constraint based gui layout implementation for RimWorld
 This early alpha version. Everything is subject to change. Bugs are expected. Missing functionality is known.
