@@ -22,6 +22,7 @@ namespace RWLayoutMod.BrickDemo
         CElement bottle;
         Figure previewNext;
         Curtain curtain;
+        CLabel debugInfoLabel;
 
         ClVariable grid = null;
         List<Figure> figures = new List<Figure>();
@@ -96,14 +97,36 @@ namespace RWLayoutMod.BrickDemo
 
             // remove figure button
             var btnRemove = Gui.AddElement(new CButton {
-               Title = "Destroy",
-               Action = RemoveFigure,
+                Title = "Destroy",
+                Action = RemoveFigure,
             });
 
             Gui.Solver.AddConstraint(btnRemove.left ^ previewFrame.left);
             Gui.Solver.AddConstraint(btnRemove.right ^ previewFrame.right);
             Gui.Solver.AddConstraint(btnRemove.top ^ btnAdd.bottom + grid);
             Gui.Solver.AddConstraint(btnRemove.height ^ 2 * grid);
+
+            var btnTest = Gui.AddElement(new CButton
+            {
+                Title = "Stress test",
+                Action = RepeatTest,
+            });
+
+            Gui.Solver.AddConstraint(btnTest.left ^ previewFrame.left);
+            Gui.Solver.AddConstraint(btnTest.right ^ previewFrame.right);
+            Gui.Solver.AddConstraint(btnTest.top ^ btnRemove.bottom + grid);
+            Gui.Solver.AddConstraint(btnTest.height ^ 2 * grid);
+
+            debugInfoLabel = Gui.AddElement(new CLabel
+            {
+                Font = GameFont.Tiny,
+            });
+
+            Gui.Solver.AddConstraint(debugInfoLabel.left ^ previewFrame.left);
+            Gui.Solver.AddConstraint(debugInfoLabel.right ^ previewFrame.right);
+            Gui.Solver.AddConstraint(debugInfoLabel.top ^ btnTest.bottom + grid);
+            Gui.Solver.AddConstraint(debugInfoLabel.bottom ^ Gui.bottom - grid);
+
 
 
 
@@ -140,6 +163,13 @@ namespace RWLayoutMod.BrickDemo
                 ShowCurtain();
             }
         }
+
+        int testCounter = 0;
+        void RepeatTest(CElement sender)
+        {
+            testCounter = 1000;
+        }
+
 
         TetrisState state = TetrisState.Interactive;
         int animationStep = 0;
@@ -189,12 +219,31 @@ namespace RWLayoutMod.BrickDemo
             curtain.Hidden = true;
         }
 
-
         public override void DoWindowContents(Rect inRect)
         {
+            DoTest();
+
             DoAnimations();
 
+            DoDebug();
+
             base.DoWindowContents(inRect);
+        }
+
+        private void DoDebug()
+        {
+
+            debugInfoLabel.Title = 
+                $"Constrants: {Solver.AllConstraints().Length}\nVariables: {Solver.AllVariables().Count()}\nTest counter: {testCounter}";
+        }
+
+        private void DoTest()
+        {
+            if (state == TetrisState.Interactive && testCounter > 0)
+            {
+                AddFigure(null);
+                testCounter--;
+            }
         }
 
         int tick = 0;
@@ -208,7 +257,7 @@ namespace RWLayoutMod.BrickDemo
                         {
                             animationStep++;
                             curtain.Lines = animationStep;
-                            if (animationStep >= 20)
+                            if (animationStep >= 20 || testCounter > 0)
                             {
                                 state = TetrisState.CurtainDown;
                                 ClearBottle();
