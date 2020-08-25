@@ -3,11 +3,15 @@
 	<name>RWLayout</name>
 	<author>Krypt</author>
 	<supportedVersions>
-		<li>1.1</li>
 		<li>1.2</li>
 	</supportedVersions>
 	<packageId>name.krypt.rimworld.rwlayout</packageId>
-	<description>bla-bla-bla</description>
+	<description>RWLayout Alpha 1
+Constraint based gui layout implementation for RimWorld
+This early alpha version. Everything is subject to change. Bugs are expected. Missing functionality is known.
+Documentation: Under construction
+Git: https://github.com/krypt-lynx/RWLayout
+</description>
 	<modDependencies>
 		<li>
 			<packageId>brrainz.harmony</packageId>
