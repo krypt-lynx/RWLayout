@@ -25,13 +25,19 @@ namespace RWLayout.Alpha1
         {
             base.AddImpliedConstraints();
 
-            leftStay = Solver.CreateStayConstrait(left, InRect.xMin, ClStrength.Required);
-            if (!FlexableWidth)
+            if (leftStay == null)
+            {
+                leftStay = Solver.CreateStayConstrait(left, InRect.xMin, ClStrength.Required);
+            }
+            if (!FlexableWidth && rightStay == null)
             {
                 rightStay = Solver.CreateStayConstrait(right, InRect.xMax, ClStrength.Required);
             }
-            topStay = Solver.CreateStayConstrait(top, InRect.yMin, ClStrength.Required);
-            if (!FlexableHeight)
+            if (topStay == null)
+            {
+                topStay = Solver.CreateStayConstrait(top, InRect.yMin, ClStrength.Required);
+            }
+            if (!FlexableHeight && topStay == null)
             {
                 bottomStay = Solver.CreateStayConstrait(bottom, InRect.yMax, ClStrength.Required);
             }

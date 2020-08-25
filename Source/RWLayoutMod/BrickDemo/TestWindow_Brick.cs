@@ -125,9 +125,38 @@ namespace RWLayoutMod.BrickDemo
             Gui.Solver.AddConstraint(debugInfoLabel.left ^ previewFrame.left);
             Gui.Solver.AddConstraint(debugInfoLabel.right ^ previewFrame.right);
             Gui.Solver.AddConstraint(debugInfoLabel.top ^ btnTest.bottom + grid);
-            Gui.Solver.AddConstraint(debugInfoLabel.bottom ^ Gui.bottom - grid);
 
 
+            var logCnsBtn = Gui.AddElement(new CButton
+            {
+                Title = "log cn",
+                Action = (sender) =>
+                {
+                    Log.Warning("constraints:\n" + string.Join("\n", sender.Solver.AllConstraints().Select(c => c.ToString())));
+                },
+            });
+
+
+            Gui.Solver.AddConstraint(debugInfoLabel.bottom + grid ^ logCnsBtn.top);
+            Gui.Solver.AddConstraint(logCnsBtn.left ^ previewFrame.left);
+            Gui.Solver.AddConstraint(logCnsBtn.right ^ previewFrame.right);
+            Gui.Solver.AddConstraint(logCnsBtn.height ^ grid);
+            Gui.Solver.AddConstraint(logCnsBtn.bottom ^ Gui.bottom);
+
+            var logVarsBtn = Gui.AddElement(new CButton
+            {
+                Title = "log cn",
+                Action = (sender) =>
+                {
+                    Log.Warning("constraints:\n" + string.Join("\n", sender.Solver.AllConstraints().Select(c => c.ToString())));
+                },
+            });
+
+            Gui.Solver.AddConstraint(debugInfoLabel.bottom + grid ^ logCnsBtn.top);
+            Gui.Solver.AddConstraint(logCnsBtn.left ^ previewFrame.left);
+            Gui.Solver.AddConstraint(logCnsBtn.right ^ previewFrame.right);
+            Gui.Solver.AddConstraint(logCnsBtn.height ^ grid);
+            Gui.Solver.AddConstraint(logCnsBtn.bottom ^ Gui.bottom);
 
 
             InnerSize = new Vector2(400, 400);
@@ -235,6 +264,26 @@ namespace RWLayoutMod.BrickDemo
 
             debugInfoLabel.Title = 
                 $"Constrants: {Solver.AllConstraints().Length}\nVariables: {Solver.AllVariables().Count()}\nTest counter: {testCounter}";
+
+            Dictionary<string, int> varCounts = new Dictionary<string, int>();
+
+            foreach (var variable in Solver.AllVariables())
+            {
+                if (!varCounts.ContainsKey(variable.Name))
+                {
+                    varCounts[variable.Name] = 1;
+                } 
+                else
+                {
+                    varCounts[variable.Name] = varCounts[variable.Name] + 1;
+                }
+            }
+
+            var dups = varCounts.Where(kvp => kvp.Value > 1).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            if (dups.Count > 0)
+            {
+                Log.Warning("duplicated variables in solver:\n" + string.Join(", ", dups.Select(kvp => $"{{{kvp.Key}:{kvp.Value}}}")));
+            }
         }
 
         private void DoTest()

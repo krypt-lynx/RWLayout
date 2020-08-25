@@ -25,14 +25,14 @@ namespace RWLayout.Alpha1
 
         public virtual void AddImpliedConstraints()
         {
-            AddImpliedConstraint(width_, () => left + width ^ right);
-            AddImpliedConstraint(height_, () => top + height ^ bottom);
+            AddImpliedConstraint(ref width_, () => left + width ^ right);
+            AddImpliedConstraint(ref height_, () => top + height ^ bottom);
 
-            AddImpliedConstraint(centerX_, () => centerX ^ (left + right) / 2);
-            AddImpliedConstraint(centerY_, () => centerY ^ (top + bottom) / 2);
+            AddImpliedConstraint(ref centerX_, () => centerX ^ (left + right) / 2);
+            AddImpliedConstraint(ref centerY_, () => centerY ^ (top + bottom) / 2);
 
-            AddImpliedConstraint(intrinsicWidth_, () => CreateStayConstrait(intrinsicWidth, 0, ClStrength.Required));
-            AddImpliedConstraint(intrinsicHeight_, () => CreateStayConstrait(intrinsicHeight, 0, ClStrength.Required));
+            AddImpliedConstraint(ref intrinsicWidth_, () => CreateStayConstrait(intrinsicWidth, 0, ClStrength.Required));
+            AddImpliedConstraint(ref intrinsicHeight_, () => CreateStayConstrait(intrinsicHeight, 0, ClStrength.Required));
         }
 
         public void RemoveImpliedConstraints(ClSimplexSolver solver)
@@ -65,7 +65,7 @@ namespace RWLayout.Alpha1
         private (ClVariable var, ClConstraint cn) intrinsicHeight_ = (null, null);
 
 
-        private void AddImpliedConstraint((ClVariable var, ClConstraint cn) pair, Func<ClConstraint> builder)
+        private void AddImpliedConstraint(ref (ClVariable var, ClConstraint cn) pair, Func<ClConstraint> builder)
         {
             if (pair.var != null && pair.cn == null)
             {                
