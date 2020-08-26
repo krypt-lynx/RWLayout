@@ -29,6 +29,24 @@ namespace RWLayout.Alpha1
 
             return element;
         }
+        public void RemoveElement(CElement element)
+        {
+            if (!elements.Remove(element))
+            {
+                throw new InvalidOperationException($"view {element} in not a subview of {this}");
+            }
+
+            element.RemoveImpliedConstraints(Solver);
+            elements.Remove(element);
+        }
+        public void RemoveAllElements()
+        {
+            var views = new List<CElement>(Elements);
+            foreach (var view in views)
+            {
+                this.RemoveElement(view);
+            }
+        }
 
         public void BringToFront(CElement element)
         {
@@ -38,7 +56,6 @@ namespace RWLayout.Alpha1
             }
             elements.Add(element);
         }
-
         public void SendToBack(CElement element)
         {
             if (!elements.Remove(element))
@@ -47,7 +64,6 @@ namespace RWLayout.Alpha1
             }
             elements.Insert(0, element);
         }
-
         public void MoveToPosition(CElement element, int position)
         {
             if (position < 0 && position >= elements.Count())
@@ -62,32 +78,11 @@ namespace RWLayout.Alpha1
         }
 
         WeakReference parent_ = null;
-
         public CElement Parent
         {
             get { return parent_?.IsAlive ?? false ? parent_.Target as CElement : null; }
         }
 
-        public void RemoveElement(CElement element)
-        {
-            if (!elements.Remove(element))
-            {
-                throw new InvalidOperationException($"view {element} in not a subview of {this}");
-            }
-
-            element.RemoveImpliedConstraints(Solver);
-            elements.Remove(element);
-            //throw new NotImplementedException();
-        }
-
-        public void RemoveAllElements()
-        {
-            var views = new List<CElement>(Elements);
-            foreach (var view in views)
-            {
-                this.RemoveElement(view);
-            }
-        }
 
         public virtual void PostAdd()
         {

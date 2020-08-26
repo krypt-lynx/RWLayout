@@ -58,16 +58,6 @@ namespace RWLayout.Alpha1
             innerRect = new Rect(0, 0, w, contentHeight);
         }
 
-        /*
-        public override void UpdateLayout()
-        {
-            base.UpdateLayout();
-            foreach (var row in rows)
-            {
-                row.UpdateLayout();
-            }
-        }*/
-
         public override void PostLayoutUpdate()
         {
             base.PostLayoutUpdate();
@@ -110,6 +100,52 @@ namespace RWLayout.Alpha1
                 listing.End();
             }
         }
+
+        /*
+            public class Listing_Standard : Listing
+            {
+                public Listing_Standard();
+                public Listing_Standard(GameFont font);
+
+                public override void Begin(Rect rect);
+                public void BeginScrollView(Rect rect, ref Vector2 scrollPosition, ref Rect viewRect);
+                [Obsolete]
+                public Listing_Standard BeginSection(float height);
+                public Listing_Standard BeginSection_NewTemp(float height, float sectionBorder = 4, float bottomBorder = 4);
+                [Obsolete("Only used for mod compatibility")]
+                public bool ButtonDebug(string label);
+                public bool ButtonDebug_NewTmp(string label, bool highlight);
+                public bool ButtonImage(Texture2D tex, float width, float height);
+                public bool ButtonText(string label, string highlightTag = null);
+                public bool ButtonTextLabeled(string label, string buttonLabel);
+                public void CheckboxLabeled(string label, ref bool checkOn, string tooltip = null);
+                public bool CheckboxLabeledSelectable(string label, ref bool selected, ref bool checkOn);
+                public override void End();
+                public void EndScrollView(ref Rect viewRect);
+                public void EndSection(Listing_Standard listing);
+                public void IntAdjuster(ref int val, int countChange, int min = 0);
+                public void IntEntry(ref int val, ref string editBuffer, int multiplier = 1);
+                public void IntRange(ref IntRange range, int min, int max);
+                public void IntSetter(ref int val, int target, string label, float width = 42);
+                public Rect Label(TaggedString label, float maxHeight = -1, string tooltip = null);
+                public Rect Label(string label, float maxHeight = -1, string tooltip = null);
+                [Obsolete("Only used for mod compatibility")]
+                public void LabelCheckboxDebug(string label, ref bool checkOn);
+                public void LabelCheckboxDebug_NewTmp(string label, ref bool checkOn, bool highlight);
+                public void LabelDouble(string leftLabel, string rightLabel, string tip = null);
+                public void None();
+                [Obsolete]
+                public bool RadioButton(string label, bool active, float tabIn = 0, string tooltip = null);
+                public bool RadioButton_NewTemp(string label, bool active, float tabIn = 0, string tooltip = null, float? tooltipDelay = null);
+                public bool SelectableDef(string name, bool selected, Action deleteCallback);
+                public float Slider(float val, float min, float max);
+                public string TextEntry(string text, int lineCount = 1);
+                public string TextEntryLabeled(string label, string text, int lineCount = 1);
+                public void TextFieldNumeric<T>(ref T val, ref string buffer, float min = 0, float max = 1E+09F) where T : struct;
+                public void TextFieldNumericLabeled<T>(string label, ref T val, ref string buffer, float min = 0, float max = 1E+09F) where T : struct;
+            }
+         */
+
 
         public CElement NewRow()
         {

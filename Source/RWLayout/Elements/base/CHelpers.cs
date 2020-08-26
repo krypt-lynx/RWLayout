@@ -17,7 +17,6 @@ namespace RWLayout.Alpha1
             solver.AddConstraint(newStay);
             return newStay;
         }
-
         static public void UpdateStayConstrait(this ClSimplexSolver solver, ref ClStayConstraint constraint, double value)
         {
             if (constraint == null)
@@ -36,5 +35,9 @@ namespace RWLayout.Alpha1
             solver.AddConstraint(newStay);
             constraint = newStay;
         }
+
+
+
+
     }
 }

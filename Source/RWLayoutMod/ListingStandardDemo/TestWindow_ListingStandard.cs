@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Cassowary;
 using RWLayout.Alpha1;
 
-namespace RWLayoutMod
+namespace RWLayoutMod.ListingStandardDemo
 {
     class TestWindow_ListingStandard : CWindow
     {

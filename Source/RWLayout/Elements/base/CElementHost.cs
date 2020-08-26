@@ -59,9 +59,15 @@ namespace RWLayout.Alpha1
                 needsUpdateLayout = true;
             }
         }
+        public override void UpdateLayoutConstraints()
+        {
+            needsUpdateLayoutConstraints = false;
+
+            base.UpdateLayoutConstraints();
+            Solver.Solve();
+        }
 
         protected bool needsUpdateLayout = true;
-
         public void UpdateLayoutIfNeeded()
         {
             if (needsUpdateLayout)
@@ -72,27 +78,6 @@ namespace RWLayout.Alpha1
                 PostLayoutUpdate();
             }
         }
-
-        bool fuse = true;
-        public override void UpdateLayoutConstraints()
-        {
-            needsUpdateLayoutConstraints = false;
-
-            if (fuse)
-            {
-                fuse = false;
-            }
-            else
-            {
-                Log.Error("UpdateLayoutConstraints called more then once, layout constraint editing is not implemented yet");
-                return;
-            }
-
-            base.UpdateLayoutConstraints();
-            Solver.Solve();
-
-        }
-
         public override void UpdateLayout()
         {
             needsUpdateLayout = false;

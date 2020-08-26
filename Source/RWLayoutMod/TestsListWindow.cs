@@ -33,7 +33,7 @@ namespace RWLayoutMod
                 Title = "List_Standart",
                 Action = (_) =>
                 {
-                    Find.WindowStack.Add(new TestWindow_ListingStandard());
+                    Find.WindowStack.Add(new ListingStandardDemo.TestWindow_ListingStandard());
                 }
             });
             var btn2 = buttonsColumn1.AddElement(new CButton
