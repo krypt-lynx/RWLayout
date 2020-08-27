@@ -13,12 +13,6 @@ namespace RWLayout.Alpha1
     public partial class CElement
     {
 
-        private void CreateAnchors()
-        {
-            string variableNameBase = NamePrefix();
-
-        }
-
         public virtual void AddImpliedConstraints()
         {
             CreateConstraintIfNeeded(ref width_, () => left + width ^ right);

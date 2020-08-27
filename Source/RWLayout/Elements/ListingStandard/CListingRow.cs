@@ -16,23 +16,20 @@ namespace RWLayout.Alpha1
 
     public class CListingRow : CElementHost
     {
-        private ClStayConstraint leftStay = null;
-        private ClStayConstraint rightStay = null;
-        private ClStayConstraint topStay = null;
 
         public override void AddImpliedConstraints()
         {
             base.AddImpliedConstraints();
-            leftStay = Solver.CreateStayConstrait(left, InRect.xMin, ClStrength.Required);
-            rightStay = Solver.CreateStayConstrait(right, InRect.xMax, ClStrength.Required);
-            topStay = Solver.CreateStayConstrait(top, InRect.yMin, ClStrength.Required);
+            CreateConstraintIfNeeded(ref left_, () => new ClStayConstraint(left, ClStrength.Required));
+            CreateConstraintIfNeeded(ref right_, () => new ClStayConstraint(right, ClStrength.Required));
+            CreateConstraintIfNeeded(ref top_, () => new ClStayConstraint(top, ClStrength.Required));
         }
 
         public override void UpdateLayout()
         {
-            Solver.UpdateStayConstrait(ref leftStay, InRect.xMin);
-            Solver.UpdateStayConstrait(ref rightStay, InRect.xMax);
-            Solver.UpdateStayConstrait(ref topStay, InRect.yMin);
+            UpdateStayConstrait(ref left_, InRect.xMin);
+            UpdateStayConstrait(ref right_, InRect.xMax);
+            UpdateStayConstrait(ref top_, InRect.yMin);
 
             base.UpdateLayout();
 

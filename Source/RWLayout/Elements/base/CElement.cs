@@ -26,8 +26,6 @@ namespace RWLayout.Alpha1
         public CElement()
         {
             id = nextId++;
-
-            CreateAnchors();
         }
 
         public virtual ClSimplexSolver Solver { get { return Parent?.Solver; } }
@@ -85,13 +83,27 @@ namespace RWLayout.Alpha1
         public bool Hidden = false;
 
 
-
-        protected bool needsUpdateLayout = true;
-        public void UpdateLayoutIfNeeded()
+        //protected bool needsUpdateLayout = true;
+        public virtual bool NeedsUpdateLayout
         {
-            if (needsUpdateLayout)
+            get
             {
+                return Parent?.NeedsUpdateLayout ?? false;
+            }
+            set
+            {
+                if (Parent != null)
+                {
+                    Parent.NeedsUpdateLayout = value;
+                }
+            }
+        }
 
+
+        public virtual void UpdateLayoutIfNeeded()
+        {
+            if (NeedsUpdateLayout)
+            {
                 UpdateLayout();
 
                 PostLayoutUpdate();
