@@ -36,9 +36,9 @@ namespace RWLayoutMod.BrickDemo
             doCloseX = true;
             draggable = true;
             resizeable = true;
-            Gui.Solver.AddConstraint(Gui.height >= 200);
-            Gui.Solver.AddConstraint(Gui.height <= adjustedScreenHeight);
-            Gui.Solver.AddConstraint(ClStrength.Weak, Gui.width ^ guideWidth);
+            Gui.AddConstraint(Gui.height >= 200);
+            Gui.AddConstraint(Gui.height <= adjustedScreenHeight);
+            Gui.AddConstraint(ClStrength.Weak, Gui.width ^ guideWidth);
 
 
             // 12 x 20 bottle
@@ -50,12 +50,12 @@ namespace RWLayoutMod.BrickDemo
 
             grid = new ClVariable("grid");
 
-            Gui.Solver.AddConstraint(Gui.left ^ bottleFrame.left);
-            Gui.Solver.AddConstraint(Gui.top ^ bottleFrame.top);
-            Gui.Solver.AddConstraint(Gui.bottom ^ bottleFrame.bottom);
+            Gui.AddConstraint(Gui.left ^ bottleFrame.left);
+            Gui.AddConstraint(Gui.top ^ bottleFrame.top);
+            Gui.AddConstraint(Gui.bottom ^ bottleFrame.bottom);
 
-            Gui.Solver.AddConstraint(bottleFrame.width ^ 12 * grid);
-            Gui.Solver.AddConstraint(bottleFrame.height ^ 20 * grid);
+            Gui.AddConstraint(bottleFrame.width ^ 12 * grid);
+            Gui.AddConstraint(bottleFrame.height ^ 20 * grid);
 
             bottle = bottleFrame.AddElement(new CElement());
             bottleFrame.Embed(bottle);
@@ -74,11 +74,11 @@ namespace RWLayoutMod.BrickDemo
             });
 
 
-            Gui.Solver.AddConstraint(previewFrame.left ^ bottleFrame.right + grid);
-            Gui.Solver.AddConstraint(previewFrame.top ^ Gui.top);
-            Gui.Solver.AddConstraint(previewFrame.right ^ Gui.right);
-            Gui.Solver.AddConstraint(previewFrame.width ^ previewFrame.height);
-            Gui.Solver.AddConstraint(previewFrame.width ^ 4 * grid);
+            Gui.AddConstraint(previewFrame.left ^ bottleFrame.right + grid);
+            Gui.AddConstraint(previewFrame.top ^ Gui.top);
+            Gui.AddConstraint(previewFrame.right ^ Gui.right);
+            Gui.AddConstraint(previewFrame.width ^ previewFrame.height);
+            Gui.AddConstraint(previewFrame.width ^ 4 * grid);
 
 
             previewNext = previewFrame.AddElement(new Figure(((uint)Rand.Int) % 7, true));
@@ -92,10 +92,10 @@ namespace RWLayoutMod.BrickDemo
                 Action = AddFigure,
             });
 
-            Gui.Solver.AddConstraint(btnAdd.left ^ previewFrame.left);
-            Gui.Solver.AddConstraint(btnAdd.right ^ previewFrame.right);
-            Gui.Solver.AddConstraint(btnAdd.top ^ previewFrame.bottom + grid);
-            Gui.Solver.AddConstraint(btnAdd.height ^ 2 * grid);
+            Gui.AddConstraint(btnAdd.left ^ previewFrame.left);
+            Gui.AddConstraint(btnAdd.right ^ previewFrame.right);
+            Gui.AddConstraint(btnAdd.top ^ previewFrame.bottom + grid);
+            Gui.AddConstraint(btnAdd.height ^ 2 * grid);
 
             // remove figure button
             var btnRemove = Gui.AddElement(new CButton {
@@ -103,10 +103,10 @@ namespace RWLayoutMod.BrickDemo
                 Action = RemoveFigure,
             });
 
-            Gui.Solver.AddConstraint(btnRemove.left ^ previewFrame.left);
-            Gui.Solver.AddConstraint(btnRemove.right ^ previewFrame.right);
-            Gui.Solver.AddConstraint(btnRemove.top ^ btnAdd.bottom + grid);
-            Gui.Solver.AddConstraint(btnRemove.height ^ 2 * grid);
+            Gui.AddConstraint(btnRemove.left ^ previewFrame.left);
+            Gui.AddConstraint(btnRemove.right ^ previewFrame.right);
+            Gui.AddConstraint(btnRemove.top ^ btnAdd.bottom + grid);
+            Gui.AddConstraint(btnRemove.height ^ 2 * grid);
 
             var btnTest = Gui.AddElement(new CButton
             {
@@ -114,19 +114,19 @@ namespace RWLayoutMod.BrickDemo
                 Action = RepeatTest,
             });
 
-            Gui.Solver.AddConstraint(btnTest.left ^ previewFrame.left);
-            Gui.Solver.AddConstraint(btnTest.right ^ previewFrame.right);
-            Gui.Solver.AddConstraint(btnTest.top ^ btnRemove.bottom + grid);
-            Gui.Solver.AddConstraint(btnTest.height ^ 2 * grid);
+            Gui.AddConstraint(btnTest.left ^ previewFrame.left);
+            Gui.AddConstraint(btnTest.right ^ previewFrame.right);
+            Gui.AddConstraint(btnTest.top ^ btnRemove.bottom + grid);
+            Gui.AddConstraint(btnTest.height ^ 2 * grid);
 
             debugInfoLabel = Gui.AddElement(new CLabel
             {
                 Font = GameFont.Tiny,
             });
 
-            Gui.Solver.AddConstraint(debugInfoLabel.left ^ previewFrame.left);
-            Gui.Solver.AddConstraint(debugInfoLabel.right ^ previewFrame.right);
-            Gui.Solver.AddConstraint(debugInfoLabel.top ^ btnTest.bottom + grid);
+            Gui.AddConstraint(debugInfoLabel.left ^ previewFrame.left);
+            Gui.AddConstraint(debugInfoLabel.right ^ previewFrame.right);
+            Gui.AddConstraint(debugInfoLabel.top ^ btnTest.bottom + grid);
 
 
             var logCnsBtn = Gui.AddElement(new CButton
@@ -134,31 +134,31 @@ namespace RWLayoutMod.BrickDemo
                 Title = "log cns",
                 Action = (sender) =>
                 {
-                    Log.Warning("constraints:\n" + string.Join("\n", sender.Solver.AllConstraints().Select(c => c.ToString())));
+                    Log.Warning("constraints:\n" + string.Join("\n", sender.AllConstraintsDebug().Select(c => c.ToString())));
                 },
             });
 
 
-            Gui.Solver.AddConstraint(debugInfoLabel.bottom + grid ^ logCnsBtn.top);
-            Gui.Solver.AddConstraint(logCnsBtn.left ^ previewFrame.left);
-            Gui.Solver.AddConstraint(logCnsBtn.right ^ previewFrame.right);
-            Gui.Solver.AddConstraint(logCnsBtn.height ^ grid);
+            Gui.AddConstraint(debugInfoLabel.bottom + grid ^ logCnsBtn.top);
+            Gui.AddConstraint(logCnsBtn.left ^ previewFrame.left);
+            Gui.AddConstraint(logCnsBtn.right ^ previewFrame.right);
+            Gui.AddConstraint(logCnsBtn.height ^ grid);
 
             var logVarsBtn = Gui.AddElement(new CButton
             {
                 Title = "log vars",
                 Action = (sender) =>
                 {
-                    Log.Warning("variables:\n" + string.Join("\n", sender.Solver.AllVariables().Select(c => c.ToString())));
+                    Log.Warning("variables:\n" + string.Join("\n", sender.AllVariablesDebug().Select(c => c.ToString())));
                 },
             });
 
 
-            Gui.Solver.AddConstraint(logCnsBtn.bottom ^ logVarsBtn.top);
-            Gui.Solver.AddConstraint(logVarsBtn.left ^ previewFrame.left);
-            Gui.Solver.AddConstraint(logVarsBtn.right ^ previewFrame.right);
-            Gui.Solver.AddConstraint(logVarsBtn.height ^ grid);
-            Gui.Solver.AddConstraint(logVarsBtn.bottom ^ Gui.bottom);
+            Gui.AddConstraint(logCnsBtn.bottom ^ logVarsBtn.top);
+            Gui.AddConstraint(logVarsBtn.left ^ previewFrame.left);
+            Gui.AddConstraint(logVarsBtn.right ^ previewFrame.right);
+            Gui.AddConstraint(logVarsBtn.height ^ grid);
+            Gui.AddConstraint(logVarsBtn.bottom ^ Gui.bottom);
 
 
             InnerSize = new Vector2(400, 400);
@@ -178,10 +178,10 @@ namespace RWLayoutMod.BrickDemo
 
             var figure = bottle.AddElement(new Figure(addingIndex));
 
-            bottle.Solver.AddConstraint(figure.left ^ bottle.left);
-            bottle.Solver.AddConstraint(figure.right ^ bottle.right);
-            bottle.Solver.AddConstraint(figure.bottom ^ (figures.LastOrDefault()?.top ?? bottle.bottom));
-            bottle.Solver.AddConstraint(figure.height ^ figure.LinesCount() * grid);
+            bottle.AddConstraint(figure.left ^ bottle.left);
+            bottle.AddConstraint(figure.right ^ bottle.right);
+            bottle.AddConstraint(figure.bottom ^ (figures.LastOrDefault()?.top ?? bottle.bottom));
+            bottle.AddConstraint(figure.height ^ figure.LinesCount() * grid);
 
             figures.Add(figure);
 
@@ -223,7 +223,7 @@ namespace RWLayoutMod.BrickDemo
             if (indexToRemove < figures.Count())
             {
                 var bottom = indexToRemove == 0 ? bottle.bottom : figures[indexToRemove - 1].top;
-                bottle.Solver.AddConstraint(figures[indexToRemove].bottom ^ bottom);
+                bottle.AddConstraint(figures[indexToRemove].bottom ^ bottom);
             }
 
             Gui.UpdateLayout();
@@ -264,12 +264,12 @@ namespace RWLayoutMod.BrickDemo
         private void DoDebug()
         {
 
-            debugInfoLabel.Title = 
-                $"Constrants: {Solver.AllConstraints().Length}\nVariables: {Solver.AllVariables().Count()}\nTest counter: {testCounter}";
+            debugInfoLabel.Title =
+                $"Constrants: {Gui.AllConstraintsDebug().Length}\nVariables: {Gui.AllVariablesDebug().Count()}\nTest counter: {testCounter}";
 
             Dictionary<string, int> varCounts = new Dictionary<string, int>();
-
-            foreach (var variable in Solver.AllVariables())
+             // TODO: Regression
+            foreach (var variable in Gui.AllVariablesDebug())
             {
                 if (!varCounts.ContainsKey(variable.Name))
                 {
@@ -286,6 +286,7 @@ namespace RWLayoutMod.BrickDemo
             {
                 Log.Warning("duplicated variables in solver:\n" + string.Join(", ", dups.Select(kvp => $"{{{kvp.Key}:{kvp.Value}}}")));
             }
+            
         }
 
         private void DoTest()

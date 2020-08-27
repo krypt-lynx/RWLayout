@@ -14,21 +14,18 @@ namespace RWLayout.Alpha1
 {
     public interface IElement
     {
-        ClSimplexSolver Solver { get; }
         T AddElement<T>(T element) where T : CElement;
         void RemoveElement(CElement element);
         CElement Parent { get; }
     }
 
-    public partial class CElement : IElement
+    public partial class CElement
     {
         public int id { get; }
         public CElement()
         {
             id = nextId++;
         }
-
-        public virtual ClSimplexSolver Solver { get { return Parent?.Solver; } }
 
         public virtual void UpdateLayoutConstraints()
         {

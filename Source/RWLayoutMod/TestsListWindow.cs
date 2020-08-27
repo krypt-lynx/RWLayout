@@ -14,6 +14,7 @@ namespace RWLayoutMod
     {
         public override void ConstructGui()
         {
+
             doCloseX = true;
             draggable = true;
             //gui = new CGuiRoot();
@@ -81,7 +82,7 @@ namespace RWLayoutMod
                 (debugCheck, 30));
 
             
-            Solver.AddConstraints(Gui.height ^ 230-MarginsSize().x);
+            Gui.AddConstraint(Gui.height ^ 230-MarginsSize().x);
         }
 
         public override void DoWindowContents(Rect inRect)

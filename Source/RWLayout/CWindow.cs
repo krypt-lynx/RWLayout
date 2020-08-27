@@ -153,18 +153,9 @@ namespace RWLayout.Alpha1
             Gui.UpdateStayConstrait(ref adjustedScreenWidth_, UI.screenWidth - margins.x);
             Gui.UpdateStayConstrait(ref adjustedScreenHeight_, UI.screenHeight - margins.y);
 
-            Gui.Solver.Solve();
             Gui.UpdateLayout();
 
             base.Notify_ResolutionChanged();
-        }
-
-        public ClSimplexSolver Solver
-        {
-            get
-            {
-                return Gui.Solver;
-            }
         }
 
         public CElement Parent

@@ -77,7 +77,7 @@ namespace RWLayout.Alpha1
         {
             if (pair.var != null && pair.cn == null)
             {
-                Solver.AddConstraint(ClStrength.Required, pair.cn = builder());
+                Solver.AddConstraint(ClStrength.Required, pair.cn = builder()); // implied constrains going directly into solver
             }
         }
         public ClVariable GetVariable(ref Anchor pair, string name)
@@ -101,14 +101,14 @@ namespace RWLayout.Alpha1
 
             pair.var.Value = value;
             var newStay = new ClStayConstraint(pair.var, pair.cn.Strength);
-            Solver.RemoveConstraint(pair.cn);
-            Solver.AddConstraint(pair.cn = newStay);
+            Solver.RemoveConstraint(pair.cn); // implied constrains going directly into solver
+            Solver.AddConstraint(pair.cn = newStay); // implied constrains going directly into solver
         }
         public void RemoveVariableIfNeeded(ref Anchor pair)
         {
             if (pair.var != null)
             {
-                Solver.RemoveVariable(pair.var);
+                Solver.RemoveVariable(pair.var); // implied constrains going directly into solver
                 pair.cn = null;
             }
         }

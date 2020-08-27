@@ -64,10 +64,9 @@ namespace RWLayoutMod
 
             static bool DoResizeControl_prefix(WindowResizer __instance, ref Rect __result, Rect winRect)
             {
-                if (typeof(CWindowResizer).IsAssignableFrom(__instance.GetType()))
-                {
-                    
-                    __result = ((CWindowResizer)__instance).override_DoResizeControl(winRect);
+                if (__instance is CWindowResizer resizer)
+                {                    
+                    __result = resizer.override_DoResizeControl(winRect);
                     return false;
                 }
 

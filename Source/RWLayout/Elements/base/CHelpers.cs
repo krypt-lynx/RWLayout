@@ -14,7 +14,7 @@ namespace RWLayout.Alpha1
         {
             variable.Value = value;
             var newStay = new ClStayConstraint(variable, strength == null ? ClStrength.Required : strength);
-            solver.AddConstraint(newStay);
+            AddConstraint(newStay);
             return newStay;
         }
         static public void UpdateStayConstrait(this ClSimplexSolver solver, ref ClStayConstraint constraint, double value)
@@ -32,7 +32,7 @@ namespace RWLayout.Alpha1
             var.Value = value;
             var newStay = new ClStayConstraint(var, constraint.Strength);
             solver.RemoveConstraint(constraint);
-            solver.AddConstraint(newStay);
+            AddConstraint(newStay);
             constraint = newStay;
         }
 

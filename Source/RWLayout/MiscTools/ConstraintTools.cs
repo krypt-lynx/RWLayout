@@ -92,10 +92,10 @@ namespace RWLayout.Alpha1
             {
                 strength = ClStrength.Strong;
             }
-            parent.Solver.AddConstraint(new ClLinearEquation(parent.top, child.top, strength));
-            parent.Solver.AddConstraint(new ClLinearEquation(parent.right, child.right, strength));
-            parent.Solver.AddConstraint(new ClLinearEquation(parent.bottom, child.bottom, strength));
-            parent.Solver.AddConstraint(new ClLinearEquation(parent.left, child.left, strength));
+            parent.AddConstraint(new ClLinearEquation(parent.top, child.top, strength));
+            parent.AddConstraint(new ClLinearEquation(parent.right, child.right, strength));
+            parent.AddConstraint(new ClLinearEquation(parent.bottom, child.bottom, strength));
+            parent.AddConstraint(new ClLinearEquation(parent.left, child.left, strength));
         }
         
         public static void Embed(this CElement parent, CElement child, EdgeInsets insets, ClStrength strength = null)
@@ -104,10 +104,10 @@ namespace RWLayout.Alpha1
             {
                 strength = ClStrength.Strong;
             }
-            parent.Solver.AddConstraint(new ClLinearEquation(parent.top, child.top - insets.top, strength));
-            parent.Solver.AddConstraint(new ClLinearEquation(parent.right, child.right + insets.right, strength));
-            parent.Solver.AddConstraint(new ClLinearEquation(parent.bottom, child.bottom + insets.bottom, strength));
-            parent.Solver.AddConstraint(new ClLinearEquation(parent.left, child.left - insets.left, strength));
+            parent.AddConstraint(new ClLinearEquation(parent.top, child.top - insets.top, strength));
+            parent.AddConstraint(new ClLinearEquation(parent.right, child.right + insets.right, strength));
+            parent.AddConstraint(new ClLinearEquation(parent.bottom, child.bottom + insets.bottom, strength));
+            parent.AddConstraint(new ClLinearEquation(parent.left, child.left - insets.left, strength));
         }
 
         public static void ConstrainSize(this CElement element, double width, double height, ClStrength strength = null)
@@ -117,8 +117,8 @@ namespace RWLayout.Alpha1
                 strength = ClStrength.Strong;
             }
 
-            element.Solver.AddConstraint(new ClLinearEquation(element.width, toLinearExpression(width), strength));
-            element.Solver.AddConstraint(new ClLinearEquation(element.height, toLinearExpression(height), strength));
+            element.AddConstraint(new ClLinearEquation(element.width, toLinearExpression(width), strength));
+            element.AddConstraint(new ClLinearEquation(element.height, toLinearExpression(height), strength));
         }
 
         public static void StackLeft(this CElement parent, bool constrainSides, bool constrainEnd, ClStrength strength, params object[] items)
@@ -170,16 +170,16 @@ namespace RWLayout.Alpha1
                 if (element != null)
                 {
                     var child = element;
-                    parent.Solver.AddConstraint(new ClLinearEquation(trailing, new ClLinearExpression(mapper.Leading(child)), strength));
+                    parent.AddConstraint(new ClLinearEquation(trailing, new ClLinearExpression(mapper.Leading(child)), strength));
                     trailing = new ClLinearExpression(mapper.Trailing(child));
 
                     if (size != null)
                     {
-                        parent.Solver.AddConstraint(new ClLinearEquation(mapper.Size(child), size, strength));
+                        parent.AddConstraint(new ClLinearEquation(mapper.Size(child), size, strength));
                     }
                     if (constrainSides)
                     {
-                        parent.Solver.AddConstraints(strength,
+                        parent.AddConstraints(strength,
                             mapper.SideA(parent) ^ mapper.SideA(child),
                             mapper.SideB(parent) ^ mapper.SideB(child)
                         );
@@ -195,7 +195,7 @@ namespace RWLayout.Alpha1
             {
                 var c = new ClLinearEquation(trailing, mapper.Trailing(parent), strength);
 
-                parent.Solver.AddConstraint(c);
+                parent.AddConstraint(c);
             }
         }
     }

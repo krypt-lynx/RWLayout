@@ -30,7 +30,7 @@ namespace RWLayout.Alpha1
         }
 
         ClSimplexSolver solver_;
-        public override ClSimplexSolver Solver
+        protected override ClSimplexSolver Solver
         {
             get
             {

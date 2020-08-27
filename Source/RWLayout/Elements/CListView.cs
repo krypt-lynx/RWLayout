@@ -38,7 +38,7 @@ namespace RWLayout.Alpha1
             float y = 0;
             foreach (var row in rows)
             {
-                row.Solver.AddConstraints(ClStrength.Weak, row.height ^ 20);
+                row.AddConstraints(ClStrength.Weak, row.height ^ 20);
                 row.InRect = new Rect(0, y, bounds.width - (IsScrollBarVisible() ? 20 : 0), float.NaN);
                 y += row.bounds.height;
             }

@@ -74,6 +74,7 @@
     <Compile Include="CWindow.cs" />
     <Compile Include="CWindowResizer.cs" />
     <Compile Include="Elements\base\CElement+anchors.cs" />
+    <Compile Include="Elements\base\CElement+constraints.cs" />
     <Compile Include="Elements\base\CElement+content.cs" />
     <Compile Include="Elements\base\CElement+debug.cs" />
     <Compile Include="Elements\base\CElement+events.cs" />

@@ -48,10 +48,7 @@ namespace RWLayout.Alpha1
 
         public VerifyWindowSizeDelegate UpdateSize = (ref Vector2 size) => { };
 
-        // Token: 0x040012A8 RID: 4776
         private bool isResizing;
-
-        // Token: 0x040012A9 RID: 4777
         private Rect resizeStart;
     }
 
