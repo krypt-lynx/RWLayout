@@ -9,7 +9,7 @@ using Cassowary;
 using UnityEngine;
 using Verse;
 
-namespace RWLayout.Alpha1
+namespace RWLayout.alpha2
 {
 
     public class CWindow : Window, IElement

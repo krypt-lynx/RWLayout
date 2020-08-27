@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace RWLayout.Alpha1
+namespace RWLayout.alpha2
 {
     public class CWindowResizer : WindowResizer
     {
