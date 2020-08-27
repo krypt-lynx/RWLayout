@@ -6,6 +6,7 @@ $internalPath   = 'RWLayout'
 $pathsToRemove  = '.git', '.gitattributes', '.gitignore', 'Source', 'Deploy', '1.2/Assemblies/git.txt', 'Dependencies', '*.md'
 
 $packageId      = 'name.krypt.rimworld.rwlayout.alpha1'
+$packageName    = 'RWLayout'
 
 [Console]::ResetColor()
 
@@ -87,6 +88,9 @@ $about = $packingMod + "/About/About.xml"
 $xml = [xml](Get-Content $about)
 $xml.SelectNodes('/ModMetaData/packageId') | % { 
     $_."#text" = $packageId
+    }
+$xml.SelectNodes('/ModMetaData/name') | % { 
+    $_."#text" = $packageName
     }
 
 $xml.Save($about)
