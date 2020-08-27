@@ -6,7 +6,6 @@ $internalPath   = 'RWLayout'
 $pathsToRemove  = '.git', '.gitattributes', '.gitignore', 'Source', 'Deploy', '1.2/Assemblies/git.txt', 'Dependencies', '*.md'
 
 $packageId      = 'name.krypt.rimworld.rwlayout.alpha1'
-$modsDir        = 'F:\games\RimWorld\Mods\'
 
 [Console]::ResetColor()
 
@@ -27,7 +26,9 @@ $Step++
 
 $startupPath = Get-Location
 $7z = (GET-ItemProperty 'HKLM:\SOFTWARE\7-Zip').Path + '7z.exe'
+$rw = (GET-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 294100').InstallLocation
 $packingMod = $packing + "\" + $internalPath
+
 
 Push-Location -Path $repo
 
@@ -43,7 +44,7 @@ if ($version -eq "") {
 }
 
 $output = $outputFormat -f $version
-$mod = $modsDir + $internalPath
+$mod = $rw + '\Mods\' + $internalPath
 
 Pop-Location
 
@@ -129,8 +130,8 @@ $Task = "Cleanup..."
 $Step++
 Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -CurrentOperation " " -PercentComplete ($Step / $TotalSteps * 100)
 
-# if (Test-Path $packing) { Remove-Item -Recurse -Force $packing }
 Move-Item -Path $packingMod -Destination $mod
+if (Test-Path $packing) { Remove-Item -Recurse -Force $packing }
 
 Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -Completed
 
@@ -138,6 +139,6 @@ Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -Completed
 if ($Host.Name -eq "ConsoleHost")
 {
 	Write-Host "Done"
-    Write-Host "Press any key to continue..."
-    $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyUp") > $null
+#    Write-Host "Press any key to continue..."
+#    $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyUp") > $null
 }
