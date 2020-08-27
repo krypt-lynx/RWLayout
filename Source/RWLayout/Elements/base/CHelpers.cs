@@ -9,7 +9,7 @@ namespace RWLayout.Alpha1
 {
     static class CHelpers
     {
-
+        /*
         static public ClStayConstraint CreateStayConstrait(this ClSimplexSolver solver, ClVariable variable, double value, ClStrength strength = null)
         {
             variable.Value = value;
@@ -36,7 +36,7 @@ namespace RWLayout.Alpha1
             constraint = newStay;
         }
 
-
+        */
 
 
     }

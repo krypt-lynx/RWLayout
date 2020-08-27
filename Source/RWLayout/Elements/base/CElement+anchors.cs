@@ -10,6 +10,12 @@ using System.Threading.Tasks;
 
 namespace RWLayout.Alpha1
 {
+    public struct Anchor
+    {
+        public ClVariable var;
+        public ClConstraint cn;
+    }
+
     public partial class CElement
     {
 
@@ -27,24 +33,24 @@ namespace RWLayout.Alpha1
 
         public void RemoveImpliedConstraints(ClSimplexSolver solver)
         {
-            solver.RemoveVariable(left);
-            solver.RemoveVariable(top);
-            solver.RemoveVariable(right);
-            solver.RemoveVariable(bottom);
+            RemoveVariableIfNeeded(ref left_);
+            RemoveVariableIfNeeded(ref top_);
+            RemoveVariableIfNeeded(ref right_);
+            RemoveVariableIfNeeded(ref bottom_);
 
-            if (width_.cn != null) solver.RemoveVariable(width_.var);
-            if (height_.cn != null) solver.RemoveVariable(height_.var);
-            if (centerX_.cn != null) solver.RemoveVariable(centerX_.var);
-            if (centerY_.cn != null) solver.RemoveVariable(centerY_.var);
-            if (intrinsicWidth_.cn != null) solver.RemoveVariable(intrinsicWidth_.var);
-            if (intrinsicHeight_.cn != null) solver.RemoveVariable(intrinsicHeight_.var);
+            RemoveVariableIfNeeded(ref width_);
+            RemoveVariableIfNeeded(ref height_);
+            RemoveVariableIfNeeded(ref centerX_);
+            RemoveVariableIfNeeded(ref centerY_);
+            RemoveVariableIfNeeded(ref intrinsicWidth_);
+            RemoveVariableIfNeeded(ref intrinsicHeight_);
         }
 
         // core variables
-        protected (ClVariable var, ClConstraint cn) left_ = (null, null);
-        protected (ClVariable var, ClConstraint cn) top_ = (null, null);
-        protected (ClVariable var, ClConstraint cn) right_ = (null, null);
-        protected (ClVariable var, ClConstraint cn) bottom_ = (null, null);
+        protected Anchor left_ = new Anchor();
+        protected Anchor top_ = new Anchor();
+        protected Anchor right_ = new Anchor();
+        protected Anchor bottom_ = new Anchor();
 
         public ClVariable left => GetVariable(ref left_, "L");
         public ClVariable top => GetVariable(ref top_, "T");
@@ -52,12 +58,12 @@ namespace RWLayout.Alpha1
         public ClVariable bottom => GetVariable(ref bottom_, "B");
 
         // non-esential variables
-        protected (ClVariable var, ClConstraint cn) width_ = (null, null);
-        protected (ClVariable var, ClConstraint cn) height_ = (null, null);
-        protected (ClVariable var, ClConstraint cn) centerX_ = (null, null);
-        protected (ClVariable var, ClConstraint cn) centerY_ = (null, null);
-        protected (ClVariable var, ClConstraint cn) intrinsicWidth_ = (null, null);
-        protected (ClVariable var, ClConstraint cn) intrinsicHeight_ = (null, null);
+        protected Anchor width_ = new Anchor();
+        protected Anchor height_ = new Anchor();
+        protected Anchor centerX_ = new Anchor();
+        protected Anchor centerY_ = new Anchor();
+        protected Anchor intrinsicWidth_ = new Anchor();
+        protected Anchor intrinsicHeight_ = new Anchor();
 
         public ClVariable width => GetVariable(ref width_, "W");
         public ClVariable height => GetVariable(ref height_, "H");
@@ -66,15 +72,15 @@ namespace RWLayout.Alpha1
         public ClVariable intrinsicWidth => GetVariable(ref intrinsicWidth_, "iW");
         public ClVariable intrinsicHeight => GetVariable(ref intrinsicHeight_, "iH");
 
-
-        protected void CreateConstraintIfNeeded(ref (ClVariable var, ClConstraint cn) pair, Func<ClConstraint> builder)
+        // anchor helpers
+        public void CreateConstraintIfNeeded(ref Anchor pair, Func<ClConstraint> builder)
         {
             if (pair.var != null && pair.cn == null)
             {
                 Solver.AddConstraint(ClStrength.Required, pair.cn = builder());
             }
         }
-        protected ClVariable GetVariable(ref (ClVariable var, ClConstraint cn) pair, string name)
+        public ClVariable GetVariable(ref Anchor pair, string name)
         {
             if (pair.var == null)
             {
@@ -82,8 +88,7 @@ namespace RWLayout.Alpha1
             }
             return pair.var;
         }
-
-        protected void UpdateStayConstrait(ref (ClVariable var, ClConstraint cn) pair, double value)
+        public void UpdateStayConstrait(ref Anchor pair, double value)
         {
             if (pair.cn == null)
             {
@@ -98,6 +103,14 @@ namespace RWLayout.Alpha1
             var newStay = new ClStayConstraint(pair.var, pair.cn.Strength);
             Solver.RemoveConstraint(pair.cn);
             Solver.AddConstraint(pair.cn = newStay);
+        }
+        public void RemoveVariableIfNeeded(ref Anchor pair)
+        {
+            if (pair.var != null)
+            {
+                Solver.RemoveVariable(pair.var);
+                pair.cn = null;
+            }
         }
     }
 }
