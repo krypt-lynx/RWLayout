@@ -4,7 +4,9 @@ $packing        = 'packing'
 $outputFormat   = '..\..\RWLayout-{0}.zip'
 $internalPath   = 'RWLayout'
 $pathsToRemove  = '.git', '.gitattributes', '.gitignore', 'Source', 'Deploy', '1.2/Assemblies/git.txt', 'Dependencies', '*.md'
+
 $packageId      = 'name.krypt.rimworld.rwlayout.alpha1'
+$modsDir        = 'F:\games\RimWorld\Mods\'
 
 [Console]::ResetColor()
 
@@ -41,6 +43,7 @@ if ($version -eq "") {
 }
 
 $output = $outputFormat -f $version
+$mod = $modsDir + $internalPath
 
 Pop-Location
 
@@ -51,6 +54,8 @@ Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -CurrentOper
 
 if (Test-Path $packing) { Remove-Item -Recurse -Force $packing }
 if (Test-Path $output) { Remove-Item $output }
+if (Test-Path $mod) { Remove-Item -Recurse -Force $mod }
+
 
 # Prepating data
 $Task = "Copying..."
@@ -124,7 +129,8 @@ $Task = "Cleanup..."
 $Step++
 Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -CurrentOperation " " -PercentComplete ($Step / $TotalSteps * 100)
 
-if (Test-Path $packing) { Remove-Item -Recurse -Force $packing }
+# if (Test-Path $packing) { Remove-Item -Recurse -Force $packing }
+Move-Item -Path $packingMod -Destination $mod
 
 Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -Completed
 
