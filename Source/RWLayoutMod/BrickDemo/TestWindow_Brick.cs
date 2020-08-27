@@ -44,7 +44,8 @@ namespace RWLayoutMod.BrickDemo
             // 12 x 20 bottle
             var bottleFrame = Gui.AddElement(new CWidget
             {
-                DoWidgetContent = (sender) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.boundsRounded))
+                DoWidgetContent = (sender) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.boundsRounded)),
+                Name = "Bottle",
             });
 
             grid = new ClVariable("grid");
@@ -68,7 +69,8 @@ namespace RWLayoutMod.BrickDemo
 
             var previewFrame = Gui.AddElement(new CWidget
             {
-                DoWidgetContent = (sender) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.boundsRounded))
+                DoWidgetContent = (sender) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.boundsRounded)),
+                Name = "Preview",
             });
 
 

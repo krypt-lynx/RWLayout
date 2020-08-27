@@ -17,10 +17,6 @@ namespace RWLayout.Alpha1
         {
             string variableNameBase = NamePrefix();
 
-            left = new ClVariable(variableNameBase + "_L");
-            top = new ClVariable(variableNameBase + "_T");
-            right = new ClVariable(variableNameBase + "_R");
-            bottom = new ClVariable(variableNameBase + "_B");
         }
 
         public virtual void AddImpliedConstraints()
@@ -51,18 +47,23 @@ namespace RWLayout.Alpha1
         }
 
         // core variables
-        public ClVariable left;
-        public ClVariable top;
-        public ClVariable right;
-        public ClVariable bottom;
+        protected (ClVariable var, ClConstraint cn) left_ = (null, null);
+        protected (ClVariable var, ClConstraint cn) top_ = (null, null);
+        protected (ClVariable var, ClConstraint cn) right_ = (null, null);
+        protected (ClVariable var, ClConstraint cn) bottom_ = (null, null);
+
+        public ClVariable left => GetVariable(ref left_, "L");
+        public ClVariable top => GetVariable(ref top_, "T");
+        public ClVariable right => GetVariable(ref right_, "R");
+        public ClVariable bottom => GetVariable(ref bottom_, "B");
 
         // non-esential variables
-        private (ClVariable var, ClConstraint cn) width_ = (null, null);
-        private (ClVariable var, ClConstraint cn) height_ = (null, null);
-        private (ClVariable var, ClConstraint cn) centerX_ = (null, null);
-        private (ClVariable var, ClConstraint cn) centerY_ = (null, null);
-        private (ClVariable var, ClConstraint cn) intrinsicWidth_ = (null, null);
-        private (ClVariable var, ClConstraint cn) intrinsicHeight_ = (null, null);
+        protected (ClVariable var, ClConstraint cn) width_ = (null, null);
+        protected (ClVariable var, ClConstraint cn) height_ = (null, null);
+        protected (ClVariable var, ClConstraint cn) centerX_ = (null, null);
+        protected (ClVariable var, ClConstraint cn) centerY_ = (null, null);
+        protected (ClVariable var, ClConstraint cn) intrinsicWidth_ = (null, null);
+        protected (ClVariable var, ClConstraint cn) intrinsicHeight_ = (null, null);
 
         public ClVariable width => GetVariable(ref width_, "W");
         public ClVariable height => GetVariable(ref height_, "H");
@@ -71,14 +72,15 @@ namespace RWLayout.Alpha1
         public ClVariable intrinsicWidth => GetVariable(ref intrinsicWidth_, "iW");
         public ClVariable intrinsicHeight => GetVariable(ref intrinsicHeight_, "iH");
 
-        private void CreateConstraintIfNeeded(ref (ClVariable var, ClConstraint cn) pair, Func<ClConstraint> builder)
+
+        protected void CreateConstraintIfNeeded(ref (ClVariable var, ClConstraint cn) pair, Func<ClConstraint> builder)
         {
             if (pair.var != null && pair.cn == null)
             {
                 Solver.AddConstraint(ClStrength.Required, pair.cn = builder());
             }
         }
-        private ClVariable GetVariable(ref (ClVariable var, ClConstraint cn) pair, string name)
+        protected ClVariable GetVariable(ref (ClVariable var, ClConstraint cn) pair, string name)
         {
             if (pair.var == null)
             {
@@ -87,7 +89,7 @@ namespace RWLayout.Alpha1
             return pair.var;
         }
 
-        public void UpdateStayConstrait(ref (ClVariable var, ClConstraint cn) pair, double value)
+        protected void UpdateStayConstrait(ref (ClVariable var, ClConstraint cn) pair, double value)
         {
             if (pair.cn == null)
             {

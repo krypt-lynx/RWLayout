@@ -16,30 +16,21 @@ namespace RWLayout.Alpha1
 
         public Action LayoutUpdated;
 
-        private ClStayConstraint leftStay = null;
-        private ClStayConstraint rightStay = null;
-        private ClStayConstraint topStay = null;
-        private ClStayConstraint bottomStay = null;
-
         public override void AddImpliedConstraints()
         {
             base.AddImpliedConstraints();
 
-            if (leftStay == null)
+
+            CreateConstraintIfNeeded(ref left_, () => new ClStayConstraint(left, ClStrength.Required));
+            CreateConstraintIfNeeded(ref top_, () => new ClStayConstraint(top, ClStrength.Required));
+
+            if (!FlexableWidth)
             {
-                leftStay = Solver.CreateStayConstrait(left, InRect.xMin, ClStrength.Required);
+                CreateConstraintIfNeeded(ref right_, () => new ClStayConstraint(right, ClStrength.Required));
             }
-            if (!FlexableWidth && rightStay == null)
+            if (!FlexableHeight)
             {
-                rightStay = Solver.CreateStayConstrait(right, InRect.xMax, ClStrength.Required);
-            }
-            if (topStay == null)
-            {
-                topStay = Solver.CreateStayConstrait(top, InRect.yMin, ClStrength.Required);
-            }
-            if (!FlexableHeight && topStay == null)
-            {
-                bottomStay = Solver.CreateStayConstrait(bottom, InRect.yMax, ClStrength.Required);
+                CreateConstraintIfNeeded(ref bottom_, () => new ClStayConstraint(bottom, ClStrength.Required));
             }
         }
 
@@ -48,16 +39,14 @@ namespace RWLayout.Alpha1
         {
             Debug.WriteLine(InRect.width);
 
-            Solver.UpdateStayConstrait(ref leftStay, InRect.xMin);
-            Solver.UpdateStayConstrait(ref rightStay, InRect.xMax);
-            Solver.UpdateStayConstrait(ref topStay, InRect.yMin);
-            Solver.UpdateStayConstrait(ref bottomStay, InRect.yMax);
+            UpdateStayConstrait(ref left_, InRect.xMin);
+            UpdateStayConstrait(ref right_, InRect.xMax);
+            UpdateStayConstrait(ref top_, InRect.yMin);
+            UpdateStayConstrait(ref bottom_, InRect.yMax);
 
             base.UpdateLayout();
 
             Solver.Solve();
-            //Log.Message(solver.ToString());
-
         }
 
         public override void PostLayoutUpdate()

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RWLayout.Alpha1
 {
-    public partial class CElement : IElement
+    public partial class CElement
     {
         private List<CElement> elements = new List<CElement>(); // "readonly"
         public IReadOnlyList<CElement> Elements
@@ -47,6 +47,10 @@ namespace RWLayout.Alpha1
                 this.RemoveElement(view);
             }
         }
+        public virtual void PostAdd()
+        {
+
+        }
 
         public void BringToFront(CElement element)
         {
@@ -82,12 +86,16 @@ namespace RWLayout.Alpha1
         {
             get { return parent_?.IsAlive ?? false ? parent_.Target as CElement : null; }
         }
-
-
-        public virtual void PostAdd()
+        public CElement Root
         {
-
+            get {
+                var parent = this;
+                while (parent.Parent != null)
+                {
+                    parent = parent.Parent;
+                }
+                return parent;
+            }
         }
-
     }
 }

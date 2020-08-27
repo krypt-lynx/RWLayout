@@ -36,7 +36,7 @@
   <ItemGroup>
     <Reference Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\..\Repo\Cassowary.net\Cassowary\bin\Release\0Cassowary.dll</HintPath>
+      <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\Dependencies\1.2\0Cassowary.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -75,6 +75,8 @@
     <Compile Include="CWindowResizer.cs" />
     <Compile Include="Elements\base\CElement+anchors.cs" />
     <Compile Include="Elements\base\CElement+content.cs" />
+    <Compile Include="Elements\base\CElement+debug.cs" />
+    <Compile Include="Elements\base\CElement+events.cs" />
     <Compile Include="Elements\base\CElement+hierarchy.cs" />
     <Compile Include="Elements\base\CElement.cs" />
     <Compile Include="Elements\base\CElementHost.cs" />

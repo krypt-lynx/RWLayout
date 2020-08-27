@@ -89,11 +89,9 @@ namespace RWLayout.Alpha1
         public override void PreOpen()
         {
             var timer = new Stopwatch();
+
             timer.Start();
             ConstructGui();
-            timer.Stop();
-
-            Log.Message($"{this.GetType().Name}: gui constructed in: {timer.Elapsed}");
 
             //Gui.Solver.Remove
 
@@ -111,6 +109,9 @@ namespace RWLayout.Alpha1
                 //Log.Message($"CWindow new Gui size: {Gui.bounds.size}");
                 InnerSize = Gui.bounds.size;
             };
+
+            timer.Stop();
+            Log.Message($"{this.GetType().Name}: gui constructed in: {timer.Elapsed}");
 
             base.PreOpen();
         }

@@ -59,6 +59,7 @@ namespace RWLayout.Alpha1
                 needsUpdateLayout = true;
             }
         }
+
         public override void UpdateLayoutConstraints()
         {
             needsUpdateLayoutConstraints = false;
@@ -66,7 +67,7 @@ namespace RWLayout.Alpha1
             base.UpdateLayoutConstraints();
             Solver.Solve();
         }
-
+        /*
         protected bool needsUpdateLayout = true;
         public void UpdateLayoutIfNeeded()
         {
@@ -77,7 +78,7 @@ namespace RWLayout.Alpha1
 
                 PostLayoutUpdate();
             }
-        }
+        }*/
         public override void UpdateLayout()
         {
             needsUpdateLayout = false;

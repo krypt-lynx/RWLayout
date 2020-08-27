@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Cassowary">
-      <HintPath>..\RWLayout\bin\Debug\0Cassowary.dll</HintPath>
+      <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\Dependencies\1.2\0Cassowary.dll</HintPath>
     </Reference>
     <Reference Include="0Harmony">
       <HintPath>D:\Program Files (x86)\Steam\steamapps\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>

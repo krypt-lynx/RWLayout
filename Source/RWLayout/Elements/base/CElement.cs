@@ -22,12 +22,6 @@ namespace RWLayout.Alpha1
 
     public partial class CElement : IElement
     {
-        public static int nextId = 0;
-        public string NamePrefix()
-        {
-            return $"{GetType().Name}_{id}";
-        }
-
         public int id { get; }
         public CElement()
         {
@@ -89,6 +83,20 @@ namespace RWLayout.Alpha1
         }
 
         public bool Hidden = false;
+
+
+
+        protected bool needsUpdateLayout = true;
+        public void UpdateLayoutIfNeeded()
+        {
+            if (needsUpdateLayout)
+            {
+
+                UpdateLayout();
+
+                PostLayoutUpdate();
+            }
+        }
 
         // todo: intristic size
     }
