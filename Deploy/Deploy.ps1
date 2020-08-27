@@ -3,7 +3,7 @@ $repo           = '..'
 $packing        = 'packing'
 $outputFormat   = '..\..\RWLayout-{0}.zip'
 $internalPath   = 'RWLayout'
-$pathsToRemove  = '.git', '.gitattributes', '.gitignore', 'Source', 'Deploy', '1.2/Assemblies/git.txt'
+$pathsToRemove  = '.git', '.gitattributes', '.gitignore', 'Source', 'Deploy', '1.2/Assemblies/git.txt', 'Dependencies', '*.md'
 $packageId      = 'name.krypt.rimworld.rwlayout.alpha1'
 
 [Console]::ResetColor()
