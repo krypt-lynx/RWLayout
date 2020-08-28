@@ -16,8 +16,8 @@ namespace RWLayoutMod.ListingStandardDemo
             optionalTitle = "Listing_Standard";
             //resizeable = true;
 
-            Gui.AddConstraint(ClStrength.Weak, Gui.width ^ this.guideWidth);
-            Gui.AddConstraint(ClStrength.Weak, Gui.height ^ this.guideHeight);
+            Gui.AddConstraint(ClStrength.Weak, Gui.width ^ Gui.guideWidth);
+            Gui.AddConstraint(ClStrength.Weak, Gui.height ^ Gui.guideHeight);
 
             var listing = Gui.AddElement(new CListingStandart {
 

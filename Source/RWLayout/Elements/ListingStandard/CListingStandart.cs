@@ -42,6 +42,7 @@ namespace RWLayout.alpha2
                 (contentHeight > bounds.height);
         }
 
+        /* // TODO: Regression
         public override void PostConstraintsUpdate()
         {
             base.PostConstraintsUpdate();
@@ -56,7 +57,7 @@ namespace RWLayout.alpha2
             }
             contentHeight = y;
             innerRect = new Rect(0, 0, w, contentHeight);
-        }
+        }*/
 
         public override void PostLayoutUpdate()
         {

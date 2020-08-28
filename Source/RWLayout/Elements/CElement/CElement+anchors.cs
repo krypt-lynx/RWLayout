@@ -72,6 +72,33 @@ namespace RWLayout.alpha2
         public ClVariable intrinsicWidth => GetVariable(ref intrinsicWidth_, "iW");
         public ClVariable intrinsicHeight => GetVariable(ref intrinsicHeight_, "iH");
 
+        
+        private IEnumerable<ClVariable> enumerateAnchors()
+        {
+            yield return left_.var;
+            yield return top_.var;
+            yield return right_.var;
+            yield return bottom_.var;
+
+            yield return width_.var;
+            yield return height_.var;
+            yield return centerX_.var;
+            yield return centerY_.var;
+            yield return intrinsicWidth_.var;
+            yield return intrinsicHeight_.var;
+        }
+
+        protected virtual IEnumerable<ClVariable> allAnchors()
+        {
+            IEnumerable<ClVariable> allAnchors = enumerateAnchors().Where(x => x != null);
+            foreach (var element in elements)
+            {
+                allAnchors = allAnchors.Concat(element.allAnchors());
+            }
+
+            return allAnchors;
+        }
+
         // anchor helpers
         public void CreateConstraintIfNeeded(ref Anchor pair, Func<ClConstraint> builder)
         {

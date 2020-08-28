@@ -24,27 +24,12 @@ namespace RWLayout.alpha2
                 needsUpdateLayout = _inRect != value;
                 _inRect = value;
 
-                UpdateLayoutConstraintsIfNeeded();
+                //UpdateLayoutConstraintsIfNeeded();
                 UpdateLayoutIfNeeded();
             }
         }
 
-        ClSimplexSolver solver_;
-        protected override ClSimplexSolver Solver
-        {
-            get
-            {
-                return solver_;
-            }
-        }
-
-        public CElementHost() : base()
-        {
-            solver_ = new ClSimplexSolver();
-            //solver_.DebugName = NamePrefix() + "_solver";
-            Solver.AutoSolve = false;
-        }
-
+        /*
         protected bool needsUpdateLayoutConstraints = true;
         public void UpdateLayoutConstraintsIfNeeded()
         {
@@ -66,7 +51,7 @@ namespace RWLayout.alpha2
 
             base.UpdateLayoutConstraints();
             Solver.Solve();
-        }
+        }*/
 
         protected bool needsUpdateLayout = true;
 
@@ -85,7 +70,7 @@ namespace RWLayout.alpha2
         {
             needsUpdateLayout = true;
 
-            UpdateLayoutConstraintsIfNeeded();
+            //UpdateLayoutConstraintsIfNeeded();
 
             base.UpdateLayout();
 

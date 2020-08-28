@@ -37,8 +37,8 @@ namespace RWLayoutMod.BrickDemo
             draggable = true;
             resizeable = true;
             Gui.AddConstraint(Gui.height >= 200);
-            Gui.AddConstraint(Gui.height <= adjustedScreenHeight);
-            Gui.AddConstraint(ClStrength.Weak, Gui.width ^ guideWidth);
+            Gui.AddConstraint(Gui.height <= Gui.adjustedScreenHeight);
+            Gui.AddConstraint(ClStrength.Weak, Gui.width ^ Gui.guideWidth);
 
 
             // 12 x 20 bottle
@@ -185,7 +185,7 @@ namespace RWLayoutMod.BrickDemo
 
             figures.Add(figure);
 
-            figure.UpdateLayoutConstraints();
+            //figure.UpdateLayoutConstraints();
             Gui.UpdateLayout();
             Gui.PostLayoutUpdate();
 

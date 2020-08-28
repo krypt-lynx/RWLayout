@@ -36,7 +36,7 @@
   <ItemGroup>
     <Reference Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>F:\games\RimWorld\Mods\RWLayout_dev\Dependencies\1.2\0Cassowary.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\Repo\Cassowary.net\Cassowary\bin\Release\0Cassowary.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -71,23 +71,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CWindow.cs" />
-    <Compile Include="CWindowResizer.cs" />
-    <Compile Include="Elements\base\CElement+anchors.cs" />
-    <Compile Include="Elements\base\CElement+constraints.cs" />
-    <Compile Include="Elements\base\CElement+content.cs" />
-    <Compile Include="Elements\base\CElement+debug.cs" />
-    <Compile Include="Elements\base\CElement+events.cs" />
-    <Compile Include="Elements\base\CElement+hierarchy.cs" />
-    <Compile Include="Elements\base\CElement.cs" />
-    <Compile Include="Elements\base\CElementHost.cs" />
-    <Compile Include="Elements\base\CGuiRoot.cs" />
-    <Compile Include="Elements\base\CHelpers.cs" />
+    <Compile Include="CWindow\CWindow.cs" />
+    <Compile Include="CWindow\CWindowResizer.cs" />
+    <Compile Include="Elements\CElement\CElement+anchors.cs" />
+    <Compile Include="Elements\CElement\CElement+constraints.cs" />
+    <Compile Include="Elements\CElement\CElement+content.cs" />
+    <Compile Include="Elements\CElement\CElement+debug.cs" />
+    <Compile Include="Elements\CElement\CElement+events.cs" />
+    <Compile Include="Elements\CElement\CElement+hierarchy.cs" />
+    <Compile Include="Elements\CElement\CElement.cs" />
+    <Compile Include="Elements\CElement\CElementHost.cs" />
+    <Compile Include="Elements\CGuiRoot.cs" />
+    <Compile Include="Elements\CHelpers.cs" />
     <Compile Include="Elements\CButton.cs" />
     <Compile Include="Elements\CCheckBox.cs" />
     <Compile Include="Elements\CLabel.cs" />
     <Compile Include="Elements\CListView.cs" />
     <Compile Include="Elements\CWidget.cs" />
+    <Compile Include="CWindow\CWindowRoot.cs" />
     <Compile Include="Elements\ListingStandard\CListingRow.cs" />
     <Compile Include="Elements\ListingStandard\CListingStandart.cs" />
     <Compile Include="MiscTools\ConstraintTools.cs" />

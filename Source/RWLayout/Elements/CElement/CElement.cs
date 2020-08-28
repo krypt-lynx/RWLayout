@@ -25,24 +25,28 @@ namespace RWLayout.alpha2
         public CElement()
         {
             id = nextId++;
+            solver = new ClSimplexSolver();
+            solver.Name = NamePrefix();
+            Solver.AutoSolve = false;
         }
 
-        public virtual void UpdateLayoutConstraints()
+        /*public virtual void UpdateLayoutConstraints()
         {
             AddImpliedConstraints();
             foreach (var element in Elements)
             {
                 element.UpdateLayoutConstraints();
             }
-        }
-        public virtual void PostConstraintsUpdate()
+        }*/
+
+       /* public virtual void PostConstraintsUpdate()
         {
             foreach (var element in Elements)
             {
                 element.PostConstraintsUpdate();
             }
         }
-
+       */
         public virtual void UpdateLayout()
         {
             AddImpliedConstraints();

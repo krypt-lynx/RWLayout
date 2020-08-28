@@ -17,14 +17,17 @@ namespace RWLayoutMod
 
             doCloseX = true;
             draggable = true;
-            //gui = new CGuiRoot();
+
+            Gui.Name = "guiroot";
+
             var titleLabel = Gui.AddElement(new CLabel
             {
                 Font = GameFont.Medium,
                 Title = "RWLayout tests"
             });
 
-            var buttonsPanel = Gui.AddElement(new CElement());
+            var buttonsPanel = new CElement();
+            buttonsPanel.Name = "buttonsPanel";
             var buttonsColumn1 = buttonsPanel.AddElement(new CElement());
             var buttonsColumn2 = buttonsPanel.AddElement(new CElement());
 
@@ -70,8 +73,6 @@ namespace RWLayoutMod
                 TextAlignment = TextAnchor.UpperRight,
             });
 
-            Gui.StackTop(true, true, ClStrength.Strong, 
-                (titleLabel, 42), buttonsPanel, (versionInfo, versionInfo.intrinsicHeight));
 
             
             buttonsPanel.StackLeft(true, true, ClStrength.Strong,
@@ -81,7 +82,11 @@ namespace RWLayoutMod
             buttonsColumn2.StackTop(true, false, ClStrength.Strong,
                 (debugCheck, 30));
 
-            
+            Gui.AddElement(buttonsPanel);
+
+            Gui.StackTop(true, true, ClStrength.Strong,
+                (titleLabel, 42), buttonsPanel, (versionInfo, versionInfo.intrinsicHeight));
+
             Gui.AddConstraint(Gui.height ^ 230-MarginsSize().x);
         }
 

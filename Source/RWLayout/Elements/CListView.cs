@@ -31,6 +31,7 @@ namespace RWLayout.alpha2
                 (contentHeight > bounds.height);
         }
 
+        /* // TODO: Regression
         public override void PostConstraintsUpdate()
         {
             base.PostConstraintsUpdate();
@@ -43,7 +44,7 @@ namespace RWLayout.alpha2
                 y += row.bounds.height;
             }
             contentHeight = y;
-        }
+        }*/
 
         /*
         public override void UpdateLayout()

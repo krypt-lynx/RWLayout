@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Verse;
 
 namespace RWLayout.alpha2
 {
@@ -22,8 +23,14 @@ namespace RWLayout.alpha2
         }
         public T AddElement<T>(T element) where T : CElement
         {
+            if (element.Parent != null)
+            {
+                throw new InvalidOperationException($"Element {0} already in has parent");
+            }
+
             elements.Add(element);
             element.parent_ = new WeakReference(this, false);
+            Solver.MergeWith(element.solver);
 
             element.PostAdd();
 
@@ -89,12 +96,15 @@ namespace RWLayout.alpha2
         public CElement Root
         {
             get {
-                var parent = this;
-                while (parent.Parent != null)
+                var parent = Parent;
+                if (parent == null)
                 {
-                    parent = parent.Parent;
+                    return this;
                 }
-                return parent;
+                else
+                {
+                    return Parent.Root;
+                }
             }
         }
     }

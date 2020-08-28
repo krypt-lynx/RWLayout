@@ -16,12 +16,6 @@ namespace RWLayout.alpha2
 
         public Action<CCheckBox> Changed = null;
 
-        /*
-        CCheckBox(ref bool variable) : base()
-        {
-
-        }*/
-
         public override Vector2 tryFit(Vector2 size)
         {
             return base.tryFit(size);

@@ -15,16 +15,7 @@ namespace RWLayout.alpha2
     public class CWindow : Window, IElement
     {
 
-        private Anchor guideWidth_ = new Anchor();
-        private Anchor guideHeight_ = new Anchor();
-        private Anchor adjustedScreenWidth_ = new Anchor();
-        private Anchor adjustedScreenHeight_ = new Anchor();
 
-
-        public ClVariable guideWidth => Gui.GetVariable(ref guideWidth_, "wW");
-        public ClVariable guideHeight => Gui.GetVariable(ref guideHeight_, "wH");
-        public ClVariable adjustedScreenWidth => Gui.GetVariable(ref adjustedScreenWidth_, "sW");
-        public ClVariable adjustedScreenHeight => Gui.GetVariable(ref adjustedScreenHeight_, "sH");
 
         CWindowResizer resizer;
 
@@ -39,8 +30,7 @@ namespace RWLayout.alpha2
                 { 
                     var fixedSize = winSize - MarginsSize();
 
-                    Gui.UpdateStayConstrait(ref guideWidth_, fixedSize.x);
-                    Gui.UpdateStayConstrait(ref guideHeight_, fixedSize.y);
+                    Gui.UpdateGuideSize(fixedSize);
 
                     Gui.InRect = new Rect(Vector2.zero, fixedSize);
                     winSize = Gui.bounds.size + MarginsSize();
@@ -50,7 +40,7 @@ namespace RWLayout.alpha2
             base.WindowOnGUI();
         }
 
-        public CGuiRoot Gui { get; private set; }
+        public CWindowRoot Gui { get; private set; }
         public Vector2 initSize = new Vector2(100, 100);
         public override Vector2 InitialSize
         {
@@ -83,9 +73,7 @@ namespace RWLayout.alpha2
 
         public CWindow(Vector2 estimatedSize) : base()
         {
-            Gui = new CGuiRoot();
-            Gui.FlexableHeight = true; 
-            Gui.FlexableWidth = true;
+            Gui = new CWindowRoot();
             initSize = estimatedSize;        
         }
 
@@ -98,25 +86,15 @@ namespace RWLayout.alpha2
 
             //Gui.Solver.Remove
 
-            Gui.CreateConstraintIfNeeded(ref guideWidth_, () => { 
-                guideWidth.Value = initSize.x;
-                return new ClStayConstraint(guideWidth);
-            });
 
-            Gui.CreateConstraintIfNeeded(ref guideHeight_, () => { 
-                guideHeight.Value = initSize.y; 
-                return new ClStayConstraint(guideHeight); 
-            });
+            Gui.UpdateGuideSize(initSize);
 
-            Gui.UpdateStayConstrait(ref guideWidth_, initSize.x);
-            Gui.UpdateStayConstrait(ref guideHeight_, initSize.y);
-
-            Gui.CreateConstraintIfNeeded(ref adjustedScreenWidth_, () => new ClStayConstraint(adjustedScreenWidth));
-            Gui.CreateConstraintIfNeeded(ref adjustedScreenHeight_, () => new ClStayConstraint(adjustedScreenHeight));
+            Gui.CreateConstraintIfNeeded(ref Gui.adjustedScreenWidth_, () => new ClStayConstraint(Gui.adjustedScreenWidth));
+            Gui.CreateConstraintIfNeeded(ref Gui.adjustedScreenHeight_, () => new ClStayConstraint(Gui.adjustedScreenHeight));
 
             var margins = MarginsSize();
-            Gui.UpdateStayConstrait(ref adjustedScreenWidth_, UI.screenWidth - margins.x);
-            Gui.UpdateStayConstrait(ref adjustedScreenHeight_, UI.screenHeight - margins.y);
+            Gui.UpdateStayConstrait(ref Gui.adjustedScreenWidth_, UI.screenWidth - margins.x);
+            Gui.UpdateStayConstrait(ref Gui.adjustedScreenHeight_, UI.screenHeight - margins.y);
 
             Gui.InRect = new Rect(Vector2.zero, initSize);
             initSize = Gui.bounds.size;
@@ -139,8 +117,7 @@ namespace RWLayout.alpha2
 
         public override void DoWindowContents(Rect inRect)
         {
-            Gui.UpdateStayConstrait(ref guideWidth_, inRect.width);
-            Gui.UpdateStayConstrait(ref guideHeight_, inRect.height);
+            Gui.UpdateGuideSize(inRect.size);
 
             Gui.InRect = inRect;
             
@@ -150,8 +127,8 @@ namespace RWLayout.alpha2
         public override void Notify_ResolutionChanged()
         {
             var margins = MarginsSize();
-            Gui.UpdateStayConstrait(ref adjustedScreenWidth_, UI.screenWidth - margins.x);
-            Gui.UpdateStayConstrait(ref adjustedScreenHeight_, UI.screenHeight - margins.y);
+            Gui.UpdateStayConstrait(ref Gui.adjustedScreenWidth_, UI.screenWidth - margins.x);
+            Gui.UpdateStayConstrait(ref Gui.adjustedScreenHeight_, UI.screenHeight - margins.y);
 
             Gui.UpdateLayout();
 

@@ -1209,6 +1209,12 @@
             (ClEditInfo replaces the parallel vectors from the Smalltalk impl.)
             </remarks>
         </member>
+        <member name="M:Cassowary.ClSimplexSolver.MergeWith(Cassowary.ClSimplexSolver)">
+            <summary>
+            Is solvers does not contains same variables we can marge them
+            </summary>
+            <param name="other"></param>
+        </member>
         <member name="T:Cassowary.ConstraintsBuilder">
             <summary>
             Constraints builder extension
