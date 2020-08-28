@@ -32,8 +32,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="0Cassowary">
       <HintPath>..\..\..\..\..\..\..\..\..\Repo\Cassowary.net\Cassowary\bin\Release\0Cassowary.dll</HintPath>
     </Reference>
     <Reference Include="0Harmony">

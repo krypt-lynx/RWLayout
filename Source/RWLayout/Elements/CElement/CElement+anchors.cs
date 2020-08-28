@@ -16,9 +16,9 @@ namespace RWLayout.alpha2
         public ClConstraint cn;
     }
 
+
     public partial class CElement
     {
-
         public virtual void AddImpliedConstraints()
         {
             CreateConstraintIfNeeded(ref width_, () => left + width ^ right);
@@ -86,11 +86,20 @@ namespace RWLayout.alpha2
             yield return centerY_.var;
             yield return intrinsicWidth_.var;
             yield return intrinsicHeight_.var;
+
+            foreach (var guide in Guides)
+            {
+                foreach (var anchor in guide.Anchors)
+                {
+                    yield return anchor.var;
+                }
+            }
         }
 
         protected virtual IEnumerable<ClVariable> allAnchors()
         {
             IEnumerable<ClVariable> allAnchors = enumerateAnchors().Where(x => x != null);
+
             foreach (var element in elements)
             {
                 allAnchors = allAnchors.Concat(element.allAnchors());

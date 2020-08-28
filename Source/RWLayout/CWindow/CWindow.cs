@@ -87,7 +87,7 @@ namespace RWLayout.alpha2
             //Gui.Solver.Remove
 
 
-            Gui.UpdateGuideSize(initSize);
+            Gui.UpdateGuideSize(initSize); // TODO: Regression: value is not applied
 
             Gui.CreateConstraintIfNeeded(ref Gui.adjustedScreenWidth_, () => new ClStayConstraint(Gui.adjustedScreenWidth));
             Gui.CreateConstraintIfNeeded(ref Gui.adjustedScreenHeight_, () => new ClStayConstraint(Gui.adjustedScreenHeight));

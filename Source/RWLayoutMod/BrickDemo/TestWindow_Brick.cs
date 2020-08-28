@@ -40,6 +40,10 @@ namespace RWLayoutMod.BrickDemo
             Gui.AddConstraint(Gui.height <= Gui.adjustedScreenHeight);
             Gui.AddConstraint(ClStrength.Weak, Gui.width ^ Gui.guideWidth);
 
+            grid = new ClVariable("grid");
+            var guide = new CLayoutGuide();
+            guide.Anchors.Add(new Anchor { var = grid });
+            Gui.Guides.Add(guide);
 
             // 12 x 20 bottle
             var bottleFrame = Gui.AddElement(new CWidget
@@ -48,7 +52,6 @@ namespace RWLayoutMod.BrickDemo
                 Name = "Bottle",
             });
 
-            grid = new ClVariable("grid");
 
             Gui.AddConstraint(Gui.left ^ bottleFrame.left);
             Gui.AddConstraint(Gui.top ^ bottleFrame.top);

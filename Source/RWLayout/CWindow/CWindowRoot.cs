@@ -67,10 +67,14 @@ namespace RWLayout.alpha2
 
         public void UpdateGuideSize(Vector2 size)
         {
-            GetVariable(ref guideWidth_, "wW");
-            GetVariable(ref guideHeight_, "wH");
+            //GetVariable(ref guideWidth_, "wW");
+            //GetVariable(ref guideHeight_, "wH");
             UpdateStayConstrait(ref guideWidth_, size.x); 
-            UpdateStayConstrait(ref guideHeight_, size.y); 
+            UpdateStayConstrait(ref guideHeight_, size.y);
+
+
+
+            //Log.Message($"UpdateGuideSize: ({guideWidth_.var?.ToString() ?? "null"},{guideWidth_.cn?.ToString() ?? "null"})");
         }
 
         public override void PostLayoutUpdate()

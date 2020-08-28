@@ -7,12 +7,19 @@ using Cassowary;
 
 namespace RWLayout.alpha2
 {
+    public class CLayoutGuide
+    {
+        public List<Anchor> Anchors = new List<Anchor>();
+    }
+
+
     public partial class CElement
     {
-        // todo: variables
+        // -todo: variables
         // todo: split solvers (copy + clean each?)
         // todo: remove unnesessary solvers
 
+        public List<CLayoutGuide> Guides = new List<CLayoutGuide>();
 
         private ClSimplexSolver solver;
         protected virtual ClSimplexSolver Solver { 
