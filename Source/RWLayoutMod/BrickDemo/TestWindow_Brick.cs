@@ -271,7 +271,7 @@ namespace RWLayoutMod.BrickDemo
                 $"Constrants: {Gui.AllConstraintsDebug().Length}\nVariables: {Gui.AllVariablesDebug().Count()}\nTest counter: {testCounter}";
 
             Dictionary<string, int> varCounts = new Dictionary<string, int>();
-             // TODO: Regression
+
             foreach (var variable in Gui.AllVariablesDebug())
             {
                 if (!varCounts.ContainsKey(variable.Name))

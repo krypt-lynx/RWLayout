@@ -25,9 +25,6 @@ namespace RWLayout.alpha2
         public CElement()
         {
             id = nextId++;
-            solver = new ClSimplexSolver();
-            solver.Name = NamePrefix();
-            Solver.AutoSolve = false;
         }
 
         /*public virtual void UpdateLayoutConstraints()

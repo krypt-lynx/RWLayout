@@ -15,11 +15,17 @@ namespace RWLayout.alpha2
 
     public partial class CElement
     {
-        // -todo: variables
         // todo: split solvers (copy + clean each?)
-        // todo: remove unnesessary solvers
-
+      
         public List<CLayoutGuide> Guides = new List<CLayoutGuide>();
+
+
+        private void CreateSolver()
+        {
+            solver = new ClSimplexSolver();
+            solver.Name = NamePrefix();
+            solver.AutoSolve = false;
+        }
 
         private ClSimplexSolver solver;
         protected virtual ClSimplexSolver Solver { 
@@ -27,6 +33,10 @@ namespace RWLayout.alpha2
                 var parent = Parent;
                 if (parent == null)
                 {
+                    if (solver == null)
+                    {
+                        CreateSolver();
+                    }
                     return solver;
                 }
                 else

@@ -30,7 +30,11 @@ namespace RWLayout.alpha2
 
             elements.Add(element);
             element.parent_ = new WeakReference(this, false);
-            Solver.MergeWith(element.solver);
+            if (element.solver != null)
+            {
+                Solver.MergeWith(element.solver);
+                element.solver = null;
+            }
 
             element.PostAdd();
 
