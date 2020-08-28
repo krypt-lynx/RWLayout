@@ -86,11 +86,10 @@ namespace RWLayout.alpha2
 
             //Gui.Solver.Remove
 
+            Gui.AddImpliedConstraints();
 
-            Gui.UpdateGuideSize(initSize); // TODO: Regression: value is not applied
+            Gui.UpdateGuideSize(initSize);
 
-            Gui.CreateConstraintIfNeeded(ref Gui.adjustedScreenWidth_, () => new ClStayConstraint(Gui.adjustedScreenWidth));
-            Gui.CreateConstraintIfNeeded(ref Gui.adjustedScreenHeight_, () => new ClStayConstraint(Gui.adjustedScreenHeight));
 
             var margins = MarginsSize();
             Gui.UpdateStayConstrait(ref Gui.adjustedScreenWidth_, UI.screenWidth - margins.x);

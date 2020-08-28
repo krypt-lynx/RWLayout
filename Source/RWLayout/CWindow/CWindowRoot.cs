@@ -35,6 +35,9 @@ namespace RWLayout.alpha2
 
             CreateConstraintIfNeeded(ref guideWidth_, () => new ClStayConstraint(guideWidth));
             CreateConstraintIfNeeded(ref guideHeight_, () => new ClStayConstraint(guideHeight));
+
+            CreateConstraintIfNeeded(ref adjustedScreenWidth_, () => new ClStayConstraint(adjustedScreenWidth));
+            CreateConstraintIfNeeded(ref adjustedScreenHeight_, () => new ClStayConstraint(adjustedScreenHeight));
         }
 
         private IEnumerable<ClVariable> enumerateAnchors()
@@ -65,16 +68,22 @@ namespace RWLayout.alpha2
             Solver.Solve();
         }
 
+        Vector2 oldSize = Vector2.negativeInfinity;
+
         public void UpdateGuideSize(Vector2 size)
         {
-            //GetVariable(ref guideWidth_, "wW");
-            //GetVariable(ref guideHeight_, "wH");
-            UpdateStayConstrait(ref guideWidth_, size.x); 
-            UpdateStayConstrait(ref guideHeight_, size.y);
+            if (oldSize != size)
+            {
+                Log.Message($"UpdateGuideSize: ({guideWidth_.var?.ToString() ?? "null"},{guideWidth_.cn?.ToString() ?? "null"})");
+
+                //GetVariable(ref guideWidth_, "wW");
+                //GetVariable(ref guideHeight_, "wH");
+                UpdateStayConstrait(ref guideWidth_, size.x);
+                UpdateStayConstrait(ref guideHeight_, size.y);
+                oldSize = size;
+            }
 
 
-
-            //Log.Message($"UpdateGuideSize: ({guideWidth_.var?.ToString() ?? "null"},{guideWidth_.cn?.ToString() ?? "null"})");
         }
 
         public override void PostLayoutUpdate()
