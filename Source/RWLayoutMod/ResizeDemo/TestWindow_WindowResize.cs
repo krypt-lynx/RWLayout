@@ -101,7 +101,7 @@ namespace RWLayoutMod.ResizeDemo
                 {
                     if (sender.Checked)
                     {
-                        widthLock = new ClLinearEquation(Gui.width, this.InnerSize.x, ClStrength.Strong);
+                        widthLock = Gui.width ^ this.InnerSize.x;
                         Gui.AddConstraint(widthLock);
                         //Solver.Solve(); // TODO: Regression
                     }
@@ -128,7 +128,7 @@ namespace RWLayoutMod.ResizeDemo
                 {
                     if (sender.Checked)
                     {
-                        heightLock = new ClLinearEquation(Gui.height, this.InnerSize.y, ClStrength.Strong);
+                        heightLock = Gui.height ^ this.InnerSize.y;
                         Gui.AddConstraint(heightLock);
                         // Solver.Solve(); // TODO: Regression
                     }

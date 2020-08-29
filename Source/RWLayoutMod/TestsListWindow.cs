@@ -81,12 +81,11 @@ namespace RWLayoutMod
                 TextAlignment = TextAnchor.UpperRight,
             });
 
-
             
             buttonsPanel.StackLeft(true, true, ClStrength.Strong,
                 (buttonsColumn1, 220), 20, (buttonsColumn2, 150));
             buttonsColumn1.StackTop(true, false, ClStrength.Strong,
-                /*(btn1, 30),*/ (btn2, 30), (btn3, 30), (btn4, 30));
+                (btn1, 30), (btn2, 30), (btn3, 30), (btn4, 30));
             buttonsColumn2.StackTop(true, false, ClStrength.Strong,
                 (debugCheck, 30));
 

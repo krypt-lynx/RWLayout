@@ -16,6 +16,9 @@ namespace RWLayout.alpha2
         public string Title;
         public GameFont Font = GameFont.Small;
         public Color? Color = null;
+        /// <summary>
+        /// Not implemented (should be used as modifier for tryFit)
+        /// </summary>
         public bool Multiline = false;
         /// <summary>
         /// Not implemented (should be used as modifier for tryFit)
