@@ -50,10 +50,18 @@ namespace RWLayoutMod
             });
             var btn3 = buttonsColumn1.AddElement(new CButton
             {
-                Title = "Add/Remove Elements Demo",
+                Title = "Add/Remove Elements",
                 Action = (_) =>
                 {
                     Find.WindowStack.Add(new BrickDemo.TestWindow_Brick());
+                }
+            });
+            var btn4 = buttonsColumn1.AddElement(new CButton
+            {
+                Title = "Show/Hide Elements",
+                Action = (_) =>
+                {
+                    Find.WindowStack.Add(new VisibilityDemo.TestWindow_Visibility());
                 }
             });
 
@@ -78,7 +86,7 @@ namespace RWLayoutMod
             buttonsPanel.StackLeft(true, true, ClStrength.Strong,
                 (buttonsColumn1, 220), 20, (buttonsColumn2, 150));
             buttonsColumn1.StackTop(true, false, ClStrength.Strong,
-                /*(btn1, 30),*/ (btn2, 30), (btn3, 30));
+                /*(btn1, 30),*/ (btn2, 30), (btn3, 30), (btn4, 30));
             buttonsColumn2.StackTop(true, false, ClStrength.Strong,
                 (debugCheck, 30));
 
@@ -87,7 +95,7 @@ namespace RWLayoutMod
             Gui.StackTop(true, true, ClStrength.Strong,
                 (titleLabel, 42), buttonsPanel, (versionInfo, versionInfo.intrinsicHeight));
 
-            Gui.AddConstraint(Gui.height ^ 230-MarginsSize().x);
+            Gui.AddConstraint(Gui.height ^ 230 - MarginsSize().x);
         }
 
         public override void DoWindowContents(Rect inRect)

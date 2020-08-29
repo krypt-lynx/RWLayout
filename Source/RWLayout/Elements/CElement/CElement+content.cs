@@ -23,11 +23,11 @@ namespace RWLayout.alpha2
             if (!Hidden)
             {
                 DoContent();
-            }
 
-            foreach (var element in Elements)
-            {
-                element.DoElementContent();
+                foreach (var element in Elements)
+                {
+                    element.DoElementContent();
+                }
             }
         }
 

@@ -42,6 +42,19 @@ namespace RWLayout.alpha2
             return element;
         }
 
+        public void AddElements(IEnumerable<CElement> elements)
+        {
+            foreach(var element in elements)
+            {
+                AddElement(element);
+            }
+        }
+
+        public void AddElements(params CElement[] elements)
+        {
+            AddElements((IEnumerable<CElement>)elements);
+        }
+
         public void RemoveElement(CElement element)
         {
             if (!elements.Remove(element))
@@ -53,6 +66,8 @@ namespace RWLayout.alpha2
 
             elements.Remove(element);
             element.parent_ = null;
+
+            Log.Message($"moved constraints:\n{string.Join("\n", movedConstraints)}");
 
             foreach (var cn in movedConstraints)
             {
@@ -104,6 +119,19 @@ namespace RWLayout.alpha2
             }
 
             return movedConstraints;
+        }
+
+        public void RemoveElements(IEnumerable<CElement> elements)
+        {
+            foreach (var element in elements) // todo: performance
+            {
+                this.RemoveElement(element);
+            }
+        }
+
+        public void RemoveElements(params CElement[] elements)
+        {
+            RemoveElements((IEnumerable<CElement>)elements);
         }
 
         public void RemoveAllElements()
