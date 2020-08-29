@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cassowary;
 using Verse;
 
 namespace RWLayout.alpha2
@@ -40,6 +41,7 @@ namespace RWLayout.alpha2
 
             return element;
         }
+
         public void RemoveElement(CElement element)
         {
             if (!elements.Remove(element))
@@ -47,17 +49,72 @@ namespace RWLayout.alpha2
                 throw new InvalidOperationException($"view {element} in not a subview of {this}");
             }
 
-            element.RemoveImpliedConstraints(Solver);
+            List<ClConstraint> movedConstraints = ShearConstraints(element);
+
             elements.Remove(element);
+            element.parent_ = null;
+
+            foreach (var cn in movedConstraints)
+            {
+                element.AddConstraint(cn);
+            }
         }
+
+        private List<ClConstraint> ShearConstraints(CElement element)
+        {
+            var cns = Solver.AllConstraints();
+            var detachedAnchors = element.allAnchors().ToHashSet();
+            var movedConstraints = new List<ClConstraint>();
+
+            foreach (var cn in cns)
+            {
+                bool hasDetached = false;
+                bool hasAttached = false;
+
+                foreach (var var in cn.Expression.Terms.Keys)
+                {
+                    if (detachedAnchors.Contains(var))
+                    {
+                        hasDetached = true;
+                    }
+                    else
+                    {
+                        hasAttached = true;
+                    }
+
+                    if (hasAttached && hasDetached)
+                    {
+                        break;
+                    }
+                }
+
+                if (hasDetached)
+                {
+                    Solver.RemoveConstraint(cn);
+                    if (!hasAttached)
+                    {
+                        movedConstraints.Add(cn);
+                    }
+                }
+            }
+
+            foreach (var var in detachedAnchors)
+            {
+                Solver.RemoveVariable(var);
+            }
+
+            return movedConstraints;
+        }
+
         public void RemoveAllElements()
         {
             var views = new List<CElement>(Elements);
-            foreach (var view in views)
+            foreach (var view in views) // todo: performance
             {
                 this.RemoveElement(view);
             }
         }
+
         public virtual void PostAdd()
         {
 
