@@ -38,7 +38,7 @@ namespace RWLayoutMod.BrickDemo
             resizeable = true;
             Gui.AddConstraint(Gui.height >= 200);
             Gui.AddConstraint(Gui.height <= Gui.adjustedScreenHeight);
-            Gui.AddConstraint(ClStrength.Weak, Gui.width ^ Gui.guideWidth);
+            Gui.AddConstraint(Gui.width ^ Gui.guideWidth, ClStrength.Weak);
 
             grid = new ClVariable("grid");
             var guide = new CLayoutGuide();
@@ -188,9 +188,7 @@ namespace RWLayoutMod.BrickDemo
 
             figures.Add(figure);
 
-            //figure.UpdateLayoutConstraints();
-            Gui.UpdateLayout();
-            Gui.PostLayoutUpdate();
+            Gui.UpdateLayoutTemp();
 
             if (figures.Count() > 0 && figures.Last().top.Value <= bottle.top.Value + 1)
             {
@@ -229,8 +227,7 @@ namespace RWLayoutMod.BrickDemo
                 bottle.AddConstraint(figures[indexToRemove].bottom ^ bottom);
             }
 
-            Gui.UpdateLayout();
-            Gui.PostLayoutUpdate();
+            Gui.UpdateLayoutTemp();
         }
 
         void ClearBottle()

@@ -32,8 +32,6 @@ namespace RWLayout.alpha2
             UpdateStayConstrait(ref top_, InRect.yMin);
 
             base.UpdateLayout();
-
-            Solver.Solve();
         }
     }
 }

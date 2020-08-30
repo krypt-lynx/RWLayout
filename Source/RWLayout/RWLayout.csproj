@@ -34,10 +34,6 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Cassowary, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\..\Repo\Cassowary.net\Cassowary\bin\Release\0Cassowary.dll</HintPath>
-    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
@@ -95,6 +91,12 @@
     <Compile Include="MiscTools\EdgeInsets.cs" />
     <Compile Include="MiscTools\GuiTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\..\..\..\Repo\Cassowary.net\Cassowary\Cassowary.csproj">
+      <Project>{f01578a3-ba19-47e6-b333-40e41158658b}</Project>
+      <Name>Cassowary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

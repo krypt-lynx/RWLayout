@@ -49,12 +49,58 @@ namespace RWLayoutMod
             harmony.Patch(AccessTools.Method(typeof(WindowResizer), "DoResizeControl"),
                 prefix: new HarmonyMethod(typeof(HarmonyPatches), "DoResizeControl_prefix"));
 
+            harmony.Patch(AccessTools.Constructor(typeof(LogMessage), new Type[] { typeof(string) }),
+                prefix: new HarmonyMethod(typeof(HarmonyLogPatches), "LogMessage_ctor_string_prefix"));
+            harmony.Patch(AccessTools.Constructor(typeof(LogMessage), new Type[] { typeof(LogMessageType), typeof(string), typeof(string) }),
+                prefix: new HarmonyMethod(typeof(HarmonyLogPatches), "LogMessage_ctor_LogMessageType_string_string_prefix"));
+
             //harmony.Patch(AccessTools.Method(typeof(GenUI), "Rounded", new Type[] { typeof(Rect) }),
             //    prefix: new HarmonyMethod(typeof(HarmonyPatches), "Rounded_prefix"));
         }
 
+
+        public override string SettingsCategory()
+        {
+            return "RWLayout";
+        }
+
+        public override void DoSettingsWindowContents(Rect inRect)
+        {
+            base.DoSettingsWindowContents(inRect);
+
+            var options = new Listing_Standard();
+            options.maxOneColumn = true;
+
+            options.Begin(inRect);
+
+
+            if (options.ButtonText("break everything"))
+            {
+                Log.Message(null);
+            }
+
+            options.End();
+        }
+
+        static class HarmonyLogPatches
+        {
+            static bool LogMessage_ctor_string_prefix(ref string text)
+            {
+                text = text ?? "null";
+                return true;
+            }
+
+            static bool LogMessage_ctor_LogMessageType_string_string_prefix(ref string text)
+            {
+                text = text ?? "null";
+                return true;
+            }
+        }
+
+        [StaticConstructorOnStartup]
         static class HarmonyPatches
         {
+
             static bool Rounded_prefix(Rect r, ref Rect __result)
             {
                 __result = Rect.MinMaxRect(r.xMin, r.yMin, r.xMax, r.yMax);

@@ -75,52 +75,6 @@ namespace RWLayout.alpha2
             }
         }
 
-        private List<ClConstraint> ShearConstraints(CElement element)
-        {
-            var cns = Solver.AllConstraints();
-            var detachedAnchors = element.allAnchors().ToHashSet();
-            var movedConstraints = new List<ClConstraint>();
-
-            foreach (var cn in cns)
-            {
-                bool hasDetached = false;
-                bool hasAttached = false;
-
-                foreach (var var in cn.Expression.Terms.Keys)
-                {
-                    if (detachedAnchors.Contains(var))
-                    {
-                        hasDetached = true;
-                    }
-                    else
-                    {
-                        hasAttached = true;
-                    }
-
-                    if (hasAttached && hasDetached)
-                    {
-                        break;
-                    }
-                }
-
-                if (hasDetached)
-                {
-                    Solver.RemoveConstraint(cn);
-                    if (!hasAttached)
-                    {
-                        movedConstraints.Add(cn);
-                    }
-                }
-            }
-
-            foreach (var var in detachedAnchors)
-            {
-                Solver.RemoveVariable(var);
-            }
-
-            return movedConstraints;
-        }
-
         public void RemoveElements(IEnumerable<CElement> elements)
         {
             foreach (var element in elements) // todo: performance

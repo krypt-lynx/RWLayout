@@ -27,7 +27,7 @@ namespace RWLayout.alpha2
             solver.AutoSolve = false;
         }
 
-        private ClSimplexSolver solver;
+        protected ClSimplexSolver solver;
         protected virtual ClSimplexSolver Solver { 
             get {
                 var parent = Parent;
@@ -46,18 +46,16 @@ namespace RWLayout.alpha2
             }
         }
 
-        public void AddConstraint(ClStrength strength, ClConstraint constraint)
+        public void AddConstraint(ClConstraint constraint, ClStrength strength = null)
         {
-            //if (constraints.Contains(constraint))
-            //{
-            //    throw new InvalidOperationException($"Constraint {constraint} is already added to {this}");
-            //}
             ValidateVariables(constraint);
 
-            constraint.SetStrength(strength);
-            //constraints.Add(constraint);
+            if (strength != null)
+            {
+                constraint.SetStrength(strength);
+            }
 
-            Solver?.AddConstraint(strength, constraint);
+            Solver?.AddConstraint(constraint);
         }
 
         private void ValidateVariables(ClConstraint constraint)
@@ -83,33 +81,83 @@ namespace RWLayout.alpha2
             Solver?.RemoveConstraint(constraint);
         }
 
-
-        public void AddConstraint(ClConstraint constraint)
+        /// <summary>
+        /// Removes all constraints leading into element
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns>isolated constraints of element not connected to outside tree</returns>
+        private List<ClConstraint> ShearConstraints(CElement element)
         {
-            AddConstraint(ClStrength.Strong, constraint);
+            var cns = Solver.AllConstraints();
+            var detachedAnchors = element.allAnchors().ToHashSet();
+            var movedConstraints = new List<ClConstraint>();
+
+            foreach (var cn in cns)
+            {
+                bool hasDetached = false;
+                bool hasAttached = false;
+
+                foreach (var var in cn.Expression.Terms.Keys)
+                {
+                    if (detachedAnchors.Contains(var))
+                    {
+                        hasDetached = true;
+                    }
+                    else
+                    {
+                        hasAttached = true;
+                    }
+
+                    if (hasAttached && hasDetached)
+                    {
+                        break;
+                    }
+                }
+
+                if (hasDetached)
+                {
+                    Solver.RemoveConstraint(cn);
+                    if (!hasAttached)
+                    {
+                        movedConstraints.Add(cn);
+                    }
+                }
+            }
+
+            foreach (var var in detachedAnchors)
+            {
+                Solver.RemoveVariable(var);
+            }
+
+            return movedConstraints;
         }
+
+             
 
         public void AddConstraints(ClStrength strength, IEnumerable<ClConstraint> constraints)
         {
             foreach (var cn in constraints)
             {
-                Solver.AddConstraint(strength, cn);
+                AddConstraint(cn, strength);
             }
         }
 
         public void AddConstraints(ClStrength strength, params ClConstraint[] constraints)
         {
-            Solver.AddConstraints(strength, (IEnumerable<ClConstraint>)constraints);
+            AddConstraints(strength, (IEnumerable<ClConstraint>)constraints);
         }
 
         public void AddConstraints(IEnumerable<ClConstraint> constraints)
         {
-            Solver.AddConstraints(ClStrength.Strong, constraints);
+            foreach (var cn in constraints)
+            {
+                AddConstraint(cn);
+            }
         }
 
         public void AddConstraints(params ClConstraint[] constraints)
         {
-            Solver.AddConstraints(ClStrength.Strong, constraints);
+            AddConstraints((IEnumerable<ClConstraint>)constraints);
         }
 
         public void RemoveConstraint(IEnumerable<ClConstraint> constraints)

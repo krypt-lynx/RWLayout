@@ -47,15 +47,35 @@ namespace RWLayout.alpha2
         }*/
 
 
-        /*
+        
         public override void UpdateLayout()
         {
             base.UpdateLayout();
-            foreach (var row in rows)
+        }
+
+        public override CElement hitTest(Vector2 point)
+        {
+            if (userInteractionEnabled && bounds.Contains(point))
             {
-                row.UpdateLayout();
+
+                var listPoint = point - this.bounds.position;
+
+                foreach (var row in rows)
+                {
+                    var element = row.hitTest(listPoint);
+                    if (element != null)
+                    {
+                        return element;
+                    }
+                }
+
+                return base.hitTest(point);
+            } 
+            else
+            {
+                return null;
             }
-        }*/
+        }
 
         public override void PostLayoutUpdate()
         {
@@ -94,6 +114,7 @@ namespace RWLayout.alpha2
         public CElement NewRow()
         {
             var row = new CListingRow();
+            row.Owner = this;
             rows.Add(row);
 
             return row;

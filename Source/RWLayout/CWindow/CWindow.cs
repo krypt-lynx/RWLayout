@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -129,7 +129,7 @@ namespace RWLayout.alpha2
             Gui.UpdateStayConstrait(ref Gui.adjustedScreenWidth_, UI.screenWidth - margins.x);
             Gui.UpdateStayConstrait(ref Gui.adjustedScreenHeight_, UI.screenHeight - margins.y);
 
-            Gui.UpdateLayout();
+            Gui.UpdateLayoutTemp();
 
             base.Notify_ResolutionChanged();
         }

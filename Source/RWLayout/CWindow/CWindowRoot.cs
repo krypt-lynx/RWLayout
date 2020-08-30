@@ -55,7 +55,6 @@ namespace RWLayout.alpha2
             return enumerateAnchors().Where(x => x != null).Concat(base.allAnchors());
         }
 
-
         public override void UpdateLayout()
         {
             //Debug.WriteLine(InRect.width);
@@ -64,8 +63,6 @@ namespace RWLayout.alpha2
             UpdateStayConstrait(ref top_, InRect.yMin);
 
             base.UpdateLayout();
-
-            Solver.Solve();
         }
 
         Vector2 oldSize = Vector2.negativeInfinity;
@@ -74,7 +71,7 @@ namespace RWLayout.alpha2
         {
             if (oldSize != size)
             {
-                Log.Message($"UpdateGuideSize: ({guideWidth_.var?.ToString() ?? "null"},{guideWidth_.cn?.ToString() ?? "null"})");
+                //Log.Message($"UpdateGuideSize: ({guideWidth_.var?.ToString() ?? "null"},{guideWidth_.cn?.ToString() ?? "null"})");
 
                 //GetVariable(ref guideWidth_, "wW");
                 //GetVariable(ref guideHeight_, "wH");

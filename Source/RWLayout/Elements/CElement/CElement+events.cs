@@ -10,9 +10,9 @@ namespace RWLayout.alpha2
     public partial class CElement
     {
         public bool userInteractionEnabled = true;
-        CElement hitTest(Vector2 point)
+        public virtual CElement hitTest(Vector2 point)
         {
-            if (!userInteractionEnabled || bounds.Contains(point))
+            if (userInteractionEnabled && bounds.Contains(point))
             {
                 foreach (var element in Elements.Reverse())
                 {

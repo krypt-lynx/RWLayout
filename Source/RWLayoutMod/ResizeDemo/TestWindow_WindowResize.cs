@@ -36,8 +36,8 @@ namespace RWLayoutMod.ResizeDemo
 
 
             // bind windows size to resize input
-            Gui.AddConstraint(ClStrength.Weak, Gui.width ^ Gui.guideWidth);
-            Gui.AddConstraint(ClStrength.Weak, Gui.height ^ Gui.guideHeight);
+            Gui.AddConstraint(Gui.width ^ Gui.guideWidth, ClStrength.Weak);
+            Gui.AddConstraint(Gui.height ^ Gui.guideHeight, ClStrength.Weak);
 
             // if your window is square you can use this:
             //      AddConstraint(ClStrength.Weak, Gui.width ^ (this.guideWidth + this.guideHeight) / 2);

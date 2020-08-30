@@ -45,8 +45,6 @@ namespace RWLayout.alpha2
             UpdateStayConstrait(ref bottom_, InRect.yMax);
 
             base.UpdateLayout();
-
-            Solver.Solve();
         }
 
         public override void PostLayoutUpdate()

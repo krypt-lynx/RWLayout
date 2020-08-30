@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Verse;
 
 namespace RWLayout.alpha2
 {
@@ -113,7 +114,17 @@ namespace RWLayout.alpha2
         {
             if (pair.var != null && pair.cn == null)
             {
-                Solver.AddConstraint(ClStrength.Required, pair.cn = builder()); // implied constrains going directly into solver
+                try
+                {
+                    Solver.AddConstraint(ClStrength.Required, pair.cn = builder()); // implied constrains going directly into solver
+                    // InErrorState = false; // todo:
+                }
+                catch (Exception e)
+                {
+                    // InErrorState = true;
+                    Log.Error($"{e.GetType().Name} was thrown during constraint {pair.cn} adding: {e.Message}");
+                    Log.Message($"solver's constraints:\n{string.Join("\n", Solver.AllConstraints().Select(x => x.ToString()))}");
+                }
             }
         }
         public ClVariable GetVariable(ref Anchor pair, string name)
@@ -126,26 +137,57 @@ namespace RWLayout.alpha2
         }
         public void UpdateStayConstrait(ref Anchor pair, double value)
         {
-            if (pair.cn == null)
-            {
-                return;
-            }
-            if (Cl.Approx(pair.var.Value, value))
+            if (pair.var == null || Cl.Approx(pair.var.Value, value))
             {
                 return;
             }
 
             pair.var.Value = value;
-            var newStay = new ClStayConstraint(pair.var, pair.cn.Strength);
-            Solver.RemoveConstraint(pair.cn); // implied constrains going directly into solver
-            Solver.AddConstraint(pair.cn = newStay); // implied constrains going directly into solver
+
+            if (pair.cn == null)
+            {
+                return;
+            }
+
+            try
+            {
+                var newStay = new ClStayConstraint(pair.var, pair.cn.Strength);
+                Solver.TryRemoveConstraint(pair.cn); // implied constrains going directly into solver
+                Solver.AddConstraint(pair.cn = newStay); // implied constrains going directly into solver
+                // InErrorState = false; // todo:
+            }
+            catch (Exception e)
+            {
+                // InErrorState = true;
+                var sb = new StringBuilder();
+                sb.AppendLine($"{e.GetType().Name} was thrown during stay {pair.var} update: {e.Message}");
+                sb.AppendLine($"{e.StackTrace}");
+                sb.AppendLine();
+                sb.AppendLine($"solver's constraints:\n{string.Join("\n", Solver.AllConstraints().Select(x => x.ToString()))}");
+                Log.Error(sb.ToString());
+            }
+
         }
         public void RemoveVariableIfNeeded(ref Anchor pair)
         {
             if (pair.var != null)
             {
-                Solver.RemoveVariable(pair.var); // implied constrains going directly into solver
-                pair.cn = null;
+                try
+                {
+                    Solver.RemoveVariable(pair.var); // implied constrains going directly into solver
+                    pair.cn = null;
+                    // InErrorState = false; // todo:
+                }
+                catch (Exception e)
+                {
+                    var sb = new StringBuilder();
+                    sb.AppendLine($"{e.GetType().Name} thrown during constraint update: {e.Message}");
+                    sb.AppendLine($"{e.StackTrace}");
+                    sb.AppendLine();
+                    sb.AppendLine($"solver's constraints:\n{string.Join("\n", Solver.AllConstraints().Select(x => x.ToString()))}");
+                    Log.Error(sb.ToString());
+                    // InErrorState = true;
+                }
             }
         }
     }

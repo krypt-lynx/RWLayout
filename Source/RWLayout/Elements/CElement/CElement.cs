@@ -36,14 +36,22 @@ namespace RWLayout.alpha2
             }
         }*/
 
-       /* public virtual void PostConstraintsUpdate()
+        /* public virtual void PostConstraintsUpdate()
+         {
+             foreach (var element in Elements)
+             {
+                 element.PostConstraintsUpdate();
+             }
+         }
+        */
+
+        public void UpdateLayoutTemp()
         {
-            foreach (var element in Elements)
-            {
-                element.PostConstraintsUpdate();
-            }
+            this.Root.UpdateLayout();
+            this.Root.PostLayoutUpdate();
         }
-       */
+
+
         public virtual void UpdateLayout()
         {
             AddImpliedConstraints();
@@ -102,9 +110,7 @@ namespace RWLayout.alpha2
         {
             if (NeedsUpdateLayout)
             {
-                UpdateLayout();
-
-                PostLayoutUpdate();
+                UpdateLayoutTemp();
             }
         }
 
