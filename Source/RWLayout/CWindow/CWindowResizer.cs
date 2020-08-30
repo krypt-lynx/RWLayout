@@ -24,8 +24,8 @@ namespace RWLayout.alpha2
             if (this.isResizing)
             {
                 Vector2 size = new Vector2(
-                     Mathf.Min(resizeStart.width + (mousePosition.x - this.resizeStart.x), UI.screenWidth - winRect.xMin),
-                     Mathf.Min(resizeStart.height + (mousePosition.y - this.resizeStart.y), UI.screenHeight - winRect.yMin)
+                    Mathf.Max(minWindowSize.x, Mathf.Min(resizeStart.width + (mousePosition.x - this.resizeStart.x), UI.screenWidth - winRect.xMin)),
+                    Mathf.Max(minWindowSize.y, Mathf.Min(resizeStart.height + (mousePosition.y - this.resizeStart.y), UI.screenHeight - winRect.yMin))
                     );
 
                 UpdateSize(ref size);

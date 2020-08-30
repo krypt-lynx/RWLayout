@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -25,7 +25,7 @@ namespace RWLayout.alpha2
             {
                 resizer = new CWindowResizer();
                 typeof(Window).GetField("resizer", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, resizer);
-
+                resizer.minWindowSize = MarginsSize();
                 resizer.UpdateSize = (ref Vector2 winSize) =>
                 { 
                     var fixedSize = winSize - MarginsSize();
