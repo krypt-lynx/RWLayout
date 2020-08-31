@@ -31,7 +31,8 @@ namespace RWLayoutMod
                 {
                     commitInfo = reader.ReadToEnd()?.TrimEndNewlines();
                 }
-            } catch
+            }
+            catch
             {
                 commitInfo = null;
             }

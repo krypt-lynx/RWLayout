@@ -67,7 +67,7 @@ namespace RWLayout.alpha2
             elements.Remove(element);
             element.parent_ = null;
 
-            Log.Message($"moved constraints:\n{string.Join("\n", movedConstraints)}");
+            //Log.Message($"moved constraints:\n{string.Join("\n", movedConstraints)}");
 
             foreach (var cn in movedConstraints)
             {

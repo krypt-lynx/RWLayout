@@ -31,26 +31,10 @@ namespace RWLayout.alpha2
                 (contentHeight > bounds.height);
         }
 
-        /* // TODO: Regression
-        public override void PostConstraintsUpdate()
+
+        public virtual Vector2 toViewCoordinates(Vector2 point)
         {
-            base.PostConstraintsUpdate();
-
-            float y = 0;
-            foreach (var row in rows)
-            {
-                row.AddConstraints(ClStrength.Weak, row.height ^ 20);
-                row.InRect = new Rect(0, y, bounds.width - (IsScrollBarVisible() ? 20 : 0), float.NaN);
-                y += row.bounds.height;
-            }
-            contentHeight = y;
-        }*/
-
-
-        
-        public override void UpdateLayout()
-        {
-            base.UpdateLayout();
+            return point; // todo: implement
         }
 
         public override CElement hitTest(Vector2 point)
@@ -81,8 +65,10 @@ namespace RWLayout.alpha2
         {
             base.PostLayoutUpdate();
 
+            var skin = GUI.skin.verticalScrollbar;
+
             float y = 0;
-            float w = bounds.width - (IsScrollBarVisible() ? 20 : 0);
+            float w = bounds.width - (IsScrollBarVisible() ? (skin.fixedWidth + skin.margin.left) : 0);
             foreach (var row in rows)
             {
                 row.InRect = new Rect(0, y, w, float.NaN);
@@ -111,13 +97,62 @@ namespace RWLayout.alpha2
             Widgets.EndScrollView();
         }
 
-        public CElement NewRow()
+        public CListingRow AppendRow(CListingRow row)
         {
-            var row = new CListingRow();
+            if (row.Owner != null)
+            {
+                throw new InvalidOperationException($"{row} is already added to {row.Owner}");
+            }
+
             row.Owner = this;
             rows.Add(row);
-
+            // set needs layout
             return row;
+        }
+
+        public CListingRow InsertRow(int index, CListingRow row)
+        {
+            if (row.Owner != null)
+            {
+                throw new InvalidOperationException($"{row} is already added to {row.Owner}");
+            }
+
+            row.Owner = this;
+            rows.Insert(index, row);
+            // set needs layout
+            return row;
+        }
+
+        public bool RemoveRow(CListingRow row)
+        {
+            bool result;
+            if (result = rows.Remove(row))
+            {
+                row.Owner = null;
+            }
+            // set needs layout
+            return result;
+        }
+
+        public CListingRow RemoveRowAt(int index)
+        {
+            var row = rows[index];
+            rows.RemoveAt(index);
+            row.Owner = null;
+            // set needs layout
+            return row;
+        }
+
+        public void MoveRowTo(CListingRow row, int index)
+        {
+            rows.Remove(row);
+            rows.Insert(index, row);
+            // set needs layout
+        }
+
+        public int IndexOfRow(CListingRow row)
+        {
+            return rows.IndexOf(row);
         }
     }
 }

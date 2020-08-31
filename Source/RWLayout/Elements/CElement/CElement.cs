@@ -45,6 +45,11 @@ namespace RWLayout.alpha2
          }
         */
 
+        /// <summary>
+        /// Field for custom data storage
+        /// </summary>
+        public object Tag = null;
+
         public void UpdateLayoutTemp()
         {
             this.Root.UpdateLayout();
@@ -115,5 +120,10 @@ namespace RWLayout.alpha2
         }
 
         // todo: intristic size
+
+        public override string ToString()
+        {
+            return $"{base.ToString()}-{NamePrefix()}";
+        }
     }
 }

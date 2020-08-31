@@ -85,16 +85,17 @@ namespace RWLayoutMod.ListingStandardDemo
         {
             foreach (var str in strings)
             {
-                var row = listLeft.NewRow();
+                var row = listLeft.AppendRow(new CListingRow());
                 row.Embed(row.AddElement(new ListItem(str)));
             }
         }
 
-        ListItem draggingItem = null;
+        CListingRow draggingRow = null;
 
-        void TraceTree(CElement topleaf, out CListView list, out string debug)
+        void TraceTree(CElement topleaf, out CListingRow row, out CListView list, out string debug)
         {
             list = null;
+            row = null;
             var sb = new StringBuilder();
             var element = topleaf;
             while (element != null)
@@ -102,6 +103,11 @@ namespace RWLayoutMod.ListingStandardDemo
                 if (element is CListView listView)
                 {
                     list = listView;
+                }
+
+                if (element is CListingRow listRow)
+                {
+                    row = listRow;
                 }
 
                 sb.Append(element.NamePrefix());
@@ -120,45 +126,58 @@ namespace RWLayoutMod.ListingStandardDemo
             debug = sb.ToString();
         }
 
+
         public override void DoWindowContents(Rect inRect)
         {
             var element = Gui.hitTest(Event.current.mousePosition);
 
+            CListingRow item;
             CListView targetList;
             string treeTrace;
-            TraceTree(element, out targetList, out treeTrace);
-
+            TraceTree(element, out item, out targetList, out treeTrace);
 
             if (Input.GetMouseButtonDown(0))
             {
                 //Log.Message(element?.ToString() ?? "<null>");
-                draggingItem = element as ListItem;
+                draggingRow = item;
             }
 
             if (Input.GetMouseButtonUp(0))
             {
-                if (draggingItem != null && targetList != null)
+                if (draggingRow != null && targetList != null)
                 {
-                    var oldRow = draggingItem?.Parent as CListingRow;
-                    oldRow.AddConstraint(oldRow.height ^ 20);
-                    oldRow?.RemoveElement(draggingItem);
 
-                    var row = targetList.NewRow();
-                    row.Embed(row.AddElement(draggingItem));
+                    int index = -1;
+                    if (item != null)
+                    {
+                        index = targetList.IndexOfRow(item);
+                    }
+
+                    ((CListView)draggingRow.Owner).RemoveRow(draggingRow);
+
+                    if (index != -1)
+                    {
+                        targetList.InsertRow(index, draggingRow);
+                    }
+                    else
+                    {
+                        targetList.AppendRow(draggingRow);
+                    }
                     targetList.UpdateLayoutTemp();
 
-                    draggingItem = null;
+                    draggingRow = null;
                 }
             }
+            
 
 
 
 
-            var sb = new StringBuilder();
+           var sb = new StringBuilder();
             sb.AppendLine(treeTrace);
-            sb.Append($"item: {draggingItem?.NamePrefix() ?? "null"}; ");
-            sb.AppendLine($"target: {targetList?.NamePrefix() ?? "null"}");
-            sb.AppendLine($"{Input.GetMouseButtonDown(0)}; {Mouse.IsOver(inRect)}");
+            sb.AppendLine($"{draggingRow?.NamePrefix() ?? "-"}");
+            sb.AppendLine($"{targetList?.NamePrefix() ?? "-"} {item?.NamePrefix() ?? "-"}");
+            //sb.AppendLine($"{Input.GetMouseButtonDown(0)}; {Mouse.IsOver(inRect)}");
 
 
             elementInfo.Title = sb.ToString();
