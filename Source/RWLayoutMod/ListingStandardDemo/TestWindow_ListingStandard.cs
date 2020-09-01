@@ -10,9 +10,17 @@ using Verse;
 
 namespace RWLayoutMod.ListingStandardDemo
 {
-    public class DrawingHack : CElement
+    public class CDraggableElement : CElement
     {
+        public static bool itemDraggig = false;
+        public bool IsDragging = false;
         protected bool inCustomDrawing = false;
+
+        public override bool Hidden
+        {
+            get => (base.Hidden || IsDragging) && !inCustomDrawing;
+            set => base.Hidden = value;
+        }
 
         public void DrawAt(Vector2 point)
         {
@@ -31,7 +39,7 @@ namespace RWLayoutMod.ListingStandardDemo
     }
 
 
-    public class ListItem : DrawingHack
+    public class ListItem : CDraggableElement
     {
         public ListItem(string Title)
         {
@@ -46,9 +54,10 @@ namespace RWLayoutMod.ListingStandardDemo
             AddConstraint(height ^ 50);
         }
 
+
         public override void DoContent()
         {
-            if (Mouse.IsOver(bounds) || inCustomDrawing)
+            if ((Mouse.IsOver(bounds) && !itemDraggig) || inCustomDrawing)
             {
                 Widgets.DrawHighlight(bounds);
             }
@@ -95,7 +104,6 @@ namespace RWLayoutMod.ListingStandardDemo
             {
                 Font = GameFont.Tiny
             });
-            elementInfo.Title = "test";
 
             Gui.AddConstraints(
                 Gui.left ^ leftFrame.left,
@@ -173,8 +181,7 @@ namespace RWLayoutMod.ListingStandardDemo
 
         private void DrawDragGhost()
         {
-
-            var elementToDraw = draggingRow?.Elements.FirstOrDefault() as DrawingHack;
+            var elementToDraw = draggingRow?.Elements.FirstOrDefault() as CDraggableElement;
             if (elementToDraw != null)
             {              
                 elementToDraw.DrawAt(Event.current.mousePosition - dragPoint);
@@ -183,11 +190,6 @@ namespace RWLayoutMod.ListingStandardDemo
 
         private void DoDrag(Rect inRect)
         {
-           /* if (!Mouse.IsOver(inRect))
-            {
-                return;
-            }*/
-
             var element = Gui.hitTest(Event.current.mousePosition);
 
             CListingRow item;
@@ -199,10 +201,17 @@ namespace RWLayoutMod.ListingStandardDemo
             if (Mouse.IsOver(inRect) && Event.current.type == EventType.MouseDown && draggingRow == null)
             {
                 draggingRow = item;
+                var elementToDraw = draggingRow?.Elements.FirstOrDefault() as CDraggableElement;
+                if (draggingRow != null)
+                {
+                    elementToDraw.IsDragging = true;
+                    CDraggableElement.itemDraggig = true;
+                }
                 if (item != null)
                 {
                     dragPoint = Event.current.mousePosition 
                         - targetList.bounds.position // translate to list coordinates
+                        + targetList.ScrollPosition // scroll offset
                         - item.bounds.position; // delta
                     Event.current.Use();
                 }
@@ -221,6 +230,10 @@ namespace RWLayoutMod.ListingStandardDemo
 
                     if (targetList != null)
                     {
+                        var elementToDraw = draggingRow?.Elements.FirstOrDefault() as CDraggableElement;
+                        elementToDraw.IsDragging = false;
+                        CDraggableElement.itemDraggig = false;
+
                         int index = -1;
                         if (item != null)
                         {

@@ -12,7 +12,7 @@ namespace RWLayout.alpha2
     public class CListView : CElement
     {
         Rect innerRect;
-        Vector2 scrollPosition = Vector2.zero;
+        public Vector2 ScrollPosition = Vector2.zero;
 
         List<CListingRow> rows = new List<CListingRow>();
 
@@ -42,7 +42,7 @@ namespace RWLayout.alpha2
             if (userInteractionEnabled && bounds.Contains(point))
             {
 
-                var listPoint = point - this.bounds.position;
+                var listPoint = point - this.bounds.position + this.ScrollPosition;
 
                 foreach (var row in rows)
                 {
@@ -84,11 +84,11 @@ namespace RWLayout.alpha2
             bool showScrollBar = IsScrollBarVisible();
 
             showScrollBar = true;
-            Widgets.BeginScrollView(bounds, ref scrollPosition, innerRect, showScrollBar);
+            Widgets.BeginScrollView(bounds, ref ScrollPosition, innerRect, showScrollBar);
 
             foreach (var element in rows)
             {
-                if ((element.bounds.yMax > scrollPosition.y) && (element.bounds.yMin < (scrollPosition.y + this.bounds.height)))
+                if ((element.bounds.yMax > ScrollPosition.y) && (element.bounds.yMin < (ScrollPosition.y + this.bounds.height)))
                 {
                     element.DoElementContent();
                 }

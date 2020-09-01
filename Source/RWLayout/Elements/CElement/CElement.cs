@@ -91,7 +91,7 @@ namespace RWLayout.alpha2
             }
         }
 
-        public bool Hidden = false;
+        public virtual bool Hidden { set; get; } = false;
 
 
         //protected bool needsUpdateLayout = true;
