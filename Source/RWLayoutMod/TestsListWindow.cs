@@ -12,8 +12,17 @@ namespace RWLayoutMod
 {
     class TestsListWindow : CWindow
     {
+        (string, Func<Window>)[] tests =
+        {
+            ("List View", () => new ListingStandardDemo.TestWindow_ListingStandard()),
+            ("Window Resize", () => new ResizeDemo.TestWindow_WindowResize()),
+            ("Add/Remove Elements", () => new BrickDemo.TestWindow_Brick()),
+            ("Show/Hide Elements", () => new VisibilityDemo.TestWindow_Visibility()),
+        };
+
         public override void ConstructGui()
         {
+           // EditWindow_CurveEditor
 
             doCloseX = true;
             draggable = true;
@@ -31,39 +40,13 @@ namespace RWLayoutMod
             var buttonsColumn1 = buttonsPanel.AddElement(new CElement());
             var buttonsColumn2 = buttonsPanel.AddElement(new CElement());
 
-
-            var btn1 = buttonsColumn1.AddElement(new CButton
-            {
-                Title = "List_Standart",
-                Action = (_) =>
+            var buttons = tests.Select(x => buttonsColumn1.AddElement(new CButton
                 {
-                    Find.WindowStack.Add(new ListingStandardDemo.TestWindow_ListingStandard());
-                }
-            });
-            var btn2 = buttonsColumn1.AddElement(new CButton
-            {
-                Title = "Window Resize",
-                Action = (_) =>
-                {
-                    Find.WindowStack.Add(new ResizeDemo.TestWindow_WindowResize());
-                }
-            });
-            var btn3 = buttonsColumn1.AddElement(new CButton
-            {
-                Title = "Add/Remove Elements",
-                Action = (_) =>
-                {
-                    Find.WindowStack.Add(new BrickDemo.TestWindow_Brick());
-                }
-            });
-            var btn4 = buttonsColumn1.AddElement(new CButton
-            {
-                Title = "Show/Hide Elements",
-                Action = (_) =>
-                {
-                    Find.WindowStack.Add(new VisibilityDemo.TestWindow_Visibility());
-                }
-            });
+                    Title = x.Item1,
+                    Action = (_) => Find.WindowStack.Add(x.Item2())
+                }))
+                .Select(x => (object)(x, 30)).ToArray();
+  
 
             var debugCheck = buttonsColumn2.AddElement(new CCheckBox
             {
@@ -84,8 +67,7 @@ namespace RWLayoutMod
             
             buttonsPanel.StackLeft(true, true, ClStrength.Strong,
                 (buttonsColumn1, 220), 20, (buttonsColumn2, 150));
-            buttonsColumn1.StackTop(true, false, ClStrength.Strong,
-                (btn1, 30), (btn2, 30), (btn3, 30), (btn4, 30));
+            buttonsColumn1.StackTop(true, false, ClStrength.Strong, buttons);
             buttonsColumn2.StackTop(true, false, ClStrength.Strong,
                 (debugCheck, 30));
 

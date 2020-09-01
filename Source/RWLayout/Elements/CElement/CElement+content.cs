@@ -13,8 +13,8 @@ namespace RWLayout.alpha2
 {
     public partial class CElement
     {
-        public Rect bounds { get; private set; }
-        public Rect boundsRounded { get; private set; }
+        public Rect bounds { get; protected set; }
+        public Rect boundsRounded { get; protected set; }
 
         public virtual Vector2 tryFit(Vector2 size) { return Vector2.zero; }
 

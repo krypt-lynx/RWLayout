@@ -10,7 +10,29 @@ using Verse;
 
 namespace RWLayoutMod.ListingStandardDemo
 {
-    class ListItem : CElement
+    public class DrawingHack : CElement
+    {
+        protected bool inCustomDrawing = false;
+
+        public void DrawAt(Vector2 point)
+        {
+            var oldBounds = bounds;
+            var oldRounded = boundsRounded;
+            inCustomDrawing = true;
+
+            GUI.BeginGroup(new Rect(-bounds.position + point, bounds.position + bounds.size));
+            DoElementContent();
+            GUI.EndGroup();
+
+            inCustomDrawing = false;
+            bounds = oldBounds;
+            boundsRounded = oldRounded;
+        }
+
+    }
+
+
+    public class ListItem : DrawingHack
     {
         public ListItem(string Title)
         {
@@ -27,7 +49,7 @@ namespace RWLayoutMod.ListingStandardDemo
 
         public override void DoContent()
         {
-            if (Mouse.IsOver(bounds))
+            if (Mouse.IsOver(bounds) || inCustomDrawing)
             {
                 Widgets.DrawHighlight(bounds);
             }
@@ -47,7 +69,7 @@ namespace RWLayoutMod.ListingStandardDemo
         public override void ConstructGui()
         {
             doCloseX = true;
-            //optionalTitle = "Listing_Standard";
+            draggable = true;
             resizeable = true;
 
             InnerSize = new Vector2(500, 350);
@@ -59,7 +81,10 @@ namespace RWLayoutMod.ListingStandardDemo
             var listRight = Gui.AddElement(new CListView());
             BuildList(listRight, rightStrings);
 
-            elementInfo = Gui.AddElement(new CLabel());
+            elementInfo = Gui.AddElement(new CLabel
+            {
+                Font = GameFont.Tiny
+            });
             elementInfo.Title = "test";
 
             Gui.AddConstraints(
@@ -72,13 +97,12 @@ namespace RWLayoutMod.ListingStandardDemo
 
                 Gui.top ^ listLeft.top, Gui.top ^ listRight.top,
                 listLeft.bottom + 10 ^ elementInfo.top, listRight.bottom + 10 ^ elementInfo.top,
-                elementInfo.height ^ 60, elementInfo.bottom ^ Gui.bottom
+                elementInfo.height ^ GuiTools.UsingFont(GameFont.Tiny, () => Text.CurFontStyle.CalcSize(new GUIContent(" \n \n ")).y),
+                elementInfo.bottom ^ Gui.bottom
                 );
 
             Gui.AddConstraint(Gui.width ^ Gui.guideWidth);
             Gui.AddConstraint(Gui.height ^ Gui.guideHeight);
-
-            //Gui.StackLeft(true, true, ClStrength.Strong, listLeft, 40, (listRight, listLeft.width));
         }
 
         private void BuildList(CListView listLeft, string[] strings)
@@ -90,7 +114,6 @@ namespace RWLayoutMod.ListingStandardDemo
             }
         }
 
-        CListingRow draggingRow = null;
 
         void TraceTree(CElement topleaf, out CListingRow row, out CListView list, out string debug)
         {
@@ -126,9 +149,36 @@ namespace RWLayoutMod.ListingStandardDemo
             debug = sb.ToString();
         }
 
+        Vector2 dragPoint;
+        CListingRow draggingRow = null;
 
         public override void DoWindowContents(Rect inRect)
         {
+            DoDrag(inRect);
+
+            base.DoWindowContents(inRect);
+              
+            DrawDragGhost();
+        }
+
+        private void DrawDragGhost()
+        {
+
+            var elementToDraw = draggingRow?.Elements.FirstOrDefault() as DrawingHack;
+            if (elementToDraw != null)
+            {              
+                elementToDraw.DrawAt(Event.current.mousePosition - dragPoint);
+            }
+
+        }
+
+        private void DoDrag(Rect inRect)
+        {
+            if (!Mouse.IsOver(inRect))
+            {
+                return;
+            }
+
             var element = Gui.hitTest(Event.current.mousePosition);
 
             CListingRow item;
@@ -136,14 +186,24 @@ namespace RWLayoutMod.ListingStandardDemo
             string treeTrace;
             TraceTree(element, out item, out targetList, out treeTrace);
 
-            if (Input.GetMouseButtonDown(0))
+            // pick
+            if (Event.current.type == EventType.MouseDown && draggingRow == null)
             {
-                //Log.Message(element?.ToString() ?? "<null>");
                 draggingRow = item;
+                if (item != null)
+                {
+                    dragPoint = Event.current.mousePosition 
+                        - targetList.bounds.position // translate to list coordinates
+                        - item.bounds.position; // delta
+                    Event.current.Use();
+                }
             }
 
-            if (Input.GetMouseButtonUp(0))
+            // drop
+            if (Event.current.type == EventType.MouseUp)
             {
+                Event.current.Use();
+
                 if (draggingRow != null && targetList != null)
                 {
 
@@ -168,25 +228,20 @@ namespace RWLayoutMod.ListingStandardDemo
                     draggingRow = null;
                 }
             }
-            
 
+            // drag
+            if (draggingRow != null && Event.current.type == EventType.MouseDrag)
+            {
+                Event.current.Use();
+            }
 
-
-
-           var sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.AppendLine(treeTrace);
             sb.AppendLine($"{draggingRow?.NamePrefix() ?? "-"}");
             sb.AppendLine($"{targetList?.NamePrefix() ?? "-"} {item?.NamePrefix() ?? "-"}");
-            //sb.AppendLine($"{Input.GetMouseButtonDown(0)}; {Mouse.IsOver(inRect)}");
 
 
             elementInfo.Title = sb.ToString();
-
-
-
-
-            base.DoWindowContents(inRect);
         }
-
     }
 }
