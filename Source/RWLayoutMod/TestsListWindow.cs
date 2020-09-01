@@ -22,8 +22,6 @@ namespace RWLayoutMod
 
         public override void ConstructGui()
         {
-           // EditWindow_CurveEditor
-
             doCloseX = true;
             draggable = true;
 

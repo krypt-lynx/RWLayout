@@ -28,7 +28,6 @@ namespace RWLayoutMod.ListingStandardDemo
             bounds = oldBounds;
             boundsRounded = oldRounded;
         }
-
     }
 
 
@@ -74,12 +73,23 @@ namespace RWLayoutMod.ListingStandardDemo
 
             InnerSize = new Vector2(500, 350);
 
+            var leftFrame = Gui.AddElement(new CWidget
+            {
+                DoWidgetContent = (sender) => GuiTools.UsingColor(new Color(1, 1, 1, 0.3f), () => GuiTools.Box(sender.bounds, new EdgeInsets(1))),
+            });
 
-            var listLeft = Gui.AddElement(new CListView());
+            var listLeft = leftFrame.AddElement(new CListView());
             BuildList(listLeft, leftStrings);
+            leftFrame.Embed(listLeft, new EdgeInsets(2));
 
-            var listRight = Gui.AddElement(new CListView());
+            var rightFrame = Gui.AddElement(new CWidget
+            {
+                DoWidgetContent = (sender) => GuiTools.UsingColor(new Color(1, 1, 1, 0.3f), () => GuiTools.Box(sender.bounds, new EdgeInsets(1))),
+            });
+
+            var listRight = rightFrame.AddElement(new CListView());
             BuildList(listRight, rightStrings);
+            rightFrame.Embed(listRight, new EdgeInsets(2));
 
             elementInfo = Gui.AddElement(new CLabel
             {
@@ -88,15 +98,15 @@ namespace RWLayoutMod.ListingStandardDemo
             elementInfo.Title = "test";
 
             Gui.AddConstraints(
-                Gui.left ^ listLeft.left,
-                listLeft.right + 40 ^ listRight.left,
-                listRight.width ^ listLeft.width,
-                listRight.right ^ Gui.right,
+                Gui.left ^ leftFrame.left,
+                leftFrame.right + 40 ^ rightFrame.left,
+                rightFrame.width ^ leftFrame.width,
+                rightFrame.right ^ Gui.right,
 
                 Gui.left ^ elementInfo.left, Gui.right ^ elementInfo.right,
 
-                Gui.top ^ listLeft.top, Gui.top ^ listRight.top,
-                listLeft.bottom + 10 ^ elementInfo.top, listRight.bottom + 10 ^ elementInfo.top,
+                Gui.top ^ leftFrame.top, Gui.top ^ rightFrame.top,
+                leftFrame.bottom + 10 ^ elementInfo.top, rightFrame.bottom + 10 ^ elementInfo.top,
                 elementInfo.height ^ GuiTools.UsingFont(GameFont.Tiny, () => Text.CurFontStyle.CalcSize(new GUIContent(" \n \n ")).y),
                 elementInfo.bottom ^ Gui.bottom
                 );
@@ -169,15 +179,14 @@ namespace RWLayoutMod.ListingStandardDemo
             {              
                 elementToDraw.DrawAt(Event.current.mousePosition - dragPoint);
             }
-
         }
 
         private void DoDrag(Rect inRect)
         {
-            if (!Mouse.IsOver(inRect))
+           /* if (!Mouse.IsOver(inRect))
             {
                 return;
-            }
+            }*/
 
             var element = Gui.hitTest(Event.current.mousePosition);
 
@@ -187,7 +196,7 @@ namespace RWLayoutMod.ListingStandardDemo
             TraceTree(element, out item, out targetList, out treeTrace);
 
             // pick
-            if (Event.current.type == EventType.MouseDown && draggingRow == null)
+            if (Mouse.IsOver(inRect) && Event.current.type == EventType.MouseDown && draggingRow == null)
             {
                 draggingRow = item;
                 if (item != null)
@@ -198,32 +207,38 @@ namespace RWLayoutMod.ListingStandardDemo
                     Event.current.Use();
                 }
             }
-
+           
             // drop
-            if (Event.current.type == EventType.MouseUp)
+            if (((Event.current.type == EventType.MouseUp) || !Input.GetMouseButton(0)) && draggingRow != null)
             {
-                Event.current.Use();
 
-                if (draggingRow != null && targetList != null)
+                if (draggingRow != null)
                 {
-
-                    int index = -1;
-                    if (item != null)
+                    if (Event.current.type == EventType.MouseUp)
                     {
-                        index = targetList.IndexOfRow(item);
+                        Event.current.Use();
                     }
 
-                    ((CListView)draggingRow.Owner).RemoveRow(draggingRow);
+                    if (targetList != null)
+                    {
+                        int index = -1;
+                        if (item != null)
+                        {
+                            index = targetList.IndexOfRow(item);
+                        }
+                        
+                        ((CListView)draggingRow.Owner).RemoveRow(draggingRow);
 
-                    if (index != -1)
-                    {
-                        targetList.InsertRow(index, draggingRow);
+                        if (index != -1)
+                        {
+                            targetList.InsertRow(index, draggingRow);
+                        }
+                        else
+                        {
+                            targetList.AppendRow(draggingRow);
+                        }
+                        targetList.UpdateLayoutTemp();
                     }
-                    else
-                    {
-                        targetList.AppendRow(draggingRow);
-                    }
-                    targetList.UpdateLayoutTemp();
 
                     draggingRow = null;
                 }
