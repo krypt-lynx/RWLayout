@@ -32,12 +32,6 @@ namespace RWLayout.alpha2
                 (contentHeight > Bounds.height);
         }
 
-
-        public virtual Vector2 toViewCoordinates(Vector2 point)
-        {
-            return point; // todo: implement
-        }
-
         public override CElement hitTest(Vector2 point)
         {
             if (userInteractionEnabled && Bounds.Contains(point))
@@ -78,6 +72,7 @@ namespace RWLayout.alpha2
             foreach (var row in rows)
             {
                 row.InRect = new Rect(0, y, w, float.NaN);
+                row.UpdateLayoutIfNeeded();
                 y += row.Bounds.height;
             }
             contentHeight = y;

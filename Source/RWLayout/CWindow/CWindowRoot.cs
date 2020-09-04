@@ -89,6 +89,14 @@ namespace RWLayout.alpha2
 
             LayoutUpdated?.Invoke();
         }
+
+        public void UpdateAndDoContent(Rect inRect)
+        {
+            UpdateGuideSize(inRect.size);
+            InRect = inRect;
+            UpdateLayoutIfNeeded();
+            DoElementContent();
+        }
     }
 
 }

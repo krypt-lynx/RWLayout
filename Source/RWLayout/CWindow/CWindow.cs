@@ -33,6 +33,7 @@ namespace RWLayout.alpha2
                     Gui.UpdateGuideSize(fixedSize);
 
                     Gui.InRect = new Rect(Vector2.zero, fixedSize);
+                    Gui.UpdateLayoutIfNeeded();
                     winSize = Gui.Bounds.size + MarginsSize();
                 };
             }
@@ -96,6 +97,7 @@ namespace RWLayout.alpha2
             Gui.UpdateStayConstrait(ref Gui.adjustedScreenHeight_, UI.screenHeight - margins.y);
 
             Gui.InRect = new Rect(Vector2.zero, initSize);
+            Gui.UpdateLayoutIfNeeded();
             initSize = Gui.Bounds.size;
             Gui.LayoutUpdated = () =>
             {
@@ -138,11 +140,7 @@ namespace RWLayout.alpha2
 
         public override void DoWindowContents(Rect inRect)
         {
-            Gui.UpdateGuideSize(inRect.size);
-
-            Gui.InRect = inRect;
-            
-            Gui.DoElementContent();
+            Gui.UpdateAndDoContent(inRect);
         }
 
         public override void Notify_ResolutionChanged()
@@ -151,7 +149,7 @@ namespace RWLayout.alpha2
             Gui.UpdateStayConstrait(ref Gui.adjustedScreenWidth_, UI.screenWidth - margins.x);
             Gui.UpdateStayConstrait(ref Gui.adjustedScreenHeight_, UI.screenHeight - margins.y);
 
-            Gui.UpdateLayoutIfNeeded();
+            //Gui.UpdateLayoutIfNeeded();
 
             base.Notify_ResolutionChanged();
         }

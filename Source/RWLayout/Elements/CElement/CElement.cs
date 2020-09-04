@@ -104,14 +104,15 @@ namespace RWLayout.alpha2
 
         public virtual void UpdateLayoutIfNeeded()
         {
-            if (NeedsUpdateLayout())
+            var root = Root;
+            if (root.NeedsUpdateLayout())
             {
-                UpdateLayoutInternal();
+                root.UpdateLayoutInternal();
             }
             // Elements can ask for second update to resolve stays (scroll view, label)
-            if (NeedsUpdateLayout())
+            if (root.NeedsUpdateLayout())
             {
-                UpdateLayoutInternal();
+                root.UpdateLayoutInternal();
             }
 
         }

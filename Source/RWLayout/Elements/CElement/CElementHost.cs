@@ -36,11 +36,9 @@ namespace RWLayout.alpha2
             get { return _inRect; }
             set
             {
-                needsUpdateLayout = _inRect != value;
                 _inRect = value;
 
-                //UpdateLayoutConstraintsIfNeeded();
-                UpdateLayoutIfNeeded();
+                NeedsUpdateLayout();
             }
         }
 
