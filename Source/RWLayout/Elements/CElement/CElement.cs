@@ -12,19 +12,12 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
-    public interface IElement
-    {
-        T AddElement<T>(T element) where T : CElement;
-        void RemoveElement(CElement element);
-        CElement Parent { get; }
-    }
-
     public partial class CElement
     {
-        public int id { get; }
+        public int ID { get; }
         public CElement()
         {
-            id = nextId++;
+            ID = nextId++;
         }
 
         /*public virtual void UpdateLayoutConstraints()
@@ -50,7 +43,7 @@ namespace RWLayout.alpha2
         /// </summary>
         public object Tag = null;
 
-        public void UpdateLayoutTemp()
+        internal void UpdateLayoutInternal()
         {
             this.Root.UpdateLayout();
             this.Root.PostLayoutUpdate();
@@ -63,7 +56,7 @@ namespace RWLayout.alpha2
 
             if (intrinsicWidth_.cn != null || intrinsicHeight_.cn != null)
             {
-                var intrinsicSize = this.tryFit(bounds.size);
+                var intrinsicSize = this.tryFit(Bounds.size);
 
                 if (intrinsicWidth_.cn != null)
                 {
@@ -80,10 +73,11 @@ namespace RWLayout.alpha2
                 element.UpdateLayout();
             }
         }
+
         public virtual void PostLayoutUpdate()
         {
-            bounds = Rect.MinMaxRect((float)left.Value, (float)top.Value, (float)right.Value, (float)bottom.Value);
-            boundsRounded = bounds.Rounded2();
+            Bounds = Rect.MinMaxRect((float)left.Value, (float)top.Value, (float)right.Value, (float)bottom.Value);
+            BoundsRounded = Bounds.Rounded2();
 
             foreach (var element in Elements)
             {
@@ -95,28 +89,31 @@ namespace RWLayout.alpha2
 
 
         //protected bool needsUpdateLayout = true;
-        public virtual bool NeedsUpdateLayout
+        public virtual bool NeedsUpdateLayout()
         {
-            get
+            return Parent?.NeedsUpdateLayout() ?? false;
+        }
+
+        public virtual void SetNeedsUpdateLayout()
+        {
+            if (Parent != null)
             {
-                return Parent?.NeedsUpdateLayout ?? false;
-            }
-            set
-            {
-                if (Parent != null)
-                {
-                    Parent.NeedsUpdateLayout = value;
-                }
+                Parent.SetNeedsUpdateLayout();
             }
         }
 
-
         public virtual void UpdateLayoutIfNeeded()
         {
-            if (NeedsUpdateLayout)
+            if (NeedsUpdateLayout())
             {
-                UpdateLayoutTemp();
+                UpdateLayoutInternal();
             }
+            // Elements can ask for second update to resolve stays (scroll view, label)
+            if (NeedsUpdateLayout())
+            {
+                UpdateLayoutInternal();
+            }
+
         }
 
         // todo: intristic size

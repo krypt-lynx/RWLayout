@@ -104,7 +104,7 @@ namespace RWLayoutMod.BrickDemo
         public override void DoContent()
         {
             base.DoContent();
-            GUI.BeginGroup(boundsRounded);
+            GUI.BeginGroup(BoundsRounded);
 
             int offsetX;
             int offsetY;
@@ -116,7 +116,7 @@ namespace RWLayoutMod.BrickDemo
             }
             else
             {
-                offsetX = ((int)Math.Round(bounds.width / size) - 4) / 2;
+                offsetX = ((int)Math.Round(Bounds.width / size) - 4) / 2;
                 offsetY = 0;
             }
 

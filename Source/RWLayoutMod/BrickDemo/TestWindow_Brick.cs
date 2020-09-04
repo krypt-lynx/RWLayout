@@ -35,20 +35,20 @@ namespace RWLayoutMod.BrickDemo
             optionalTitle = "Poor Man's Tetris";
             doCloseX = true;
             draggable = true;
-            resizeable = true;
+            MakeResizable(horizontal: true);
+
             Gui.AddConstraint(Gui.height >= 200);
             Gui.AddConstraint(Gui.height <= Gui.adjustedScreenHeight);
-            Gui.AddConstraint(Gui.width ^ Gui.guideWidth, ClStrength.Weak);
 
             grid = new ClVariable("grid");
-            var guide = new CLayoutGuide();
+            var guide = new CVarListGuide();
             guide.Anchors.Add(new Anchor { var = grid });
-            Gui.Guides.Add(guide);
+            Gui.AddGuide(guide);
 
             // 12 x 20 bottle
             var bottleFrame = Gui.AddElement(new CWidget
             {
-                DoWidgetContent = (sender) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.boundsRounded)),
+                DoWidgetContent = (sender) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.BoundsRounded)),
                 Name = "Bottle",
             });
 
@@ -72,7 +72,7 @@ namespace RWLayoutMod.BrickDemo
 
             var previewFrame = Gui.AddElement(new CWidget
             {
-                DoWidgetContent = (sender) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.boundsRounded)),
+                DoWidgetContent = (sender) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.BoundsRounded)),
                 Name = "Preview",
             });
 
@@ -188,7 +188,7 @@ namespace RWLayoutMod.BrickDemo
 
             figures.Add(figure);
 
-            Gui.UpdateLayoutTemp();
+            Gui.UpdateLayoutIfNeeded();
 
             if (figures.Count() > 0 && figures.Last().top.Value <= bottle.top.Value + 1)
             {
@@ -227,7 +227,7 @@ namespace RWLayoutMod.BrickDemo
                 bottle.AddConstraint(figures[indexToRemove].bottom ^ bottom);
             }
 
-            Gui.UpdateLayoutTemp();
+            Gui.UpdateLayoutIfNeeded();
         }
 
         void ClearBottle()

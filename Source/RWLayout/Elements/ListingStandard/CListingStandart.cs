@@ -33,13 +33,13 @@ namespace RWLayout.alpha2
 
         public override Vector2 tryFit(Vector2 size)
         {
-            return new Vector2(bounds.width, contentHeight);
+            return new Vector2(Bounds.width, contentHeight);
         }
 
         public bool IsScrollBarVisible()
         {
             return (ShowScrollBar == CScrollBarMode.Show) ||
-                (contentHeight > bounds.height);
+                (contentHeight > Bounds.height);
         }
 
         /* // TODO: Regression
@@ -66,8 +66,8 @@ namespace RWLayout.alpha2
             float y = 0;
             foreach (var row in rows)
             {
-                row.InRect = new Rect(0, y, bounds.width - (IsScrollBarVisible() ? 20 : 0), float.NaN);
-                y += row.bounds.height;
+                row.InRect = new Rect(0, y, Bounds.width - (IsScrollBarVisible() ? 20 : 0), float.NaN);
+                y += row.Bounds.height;
             }
             contentHeight = y;
         }
@@ -79,16 +79,16 @@ namespace RWLayout.alpha2
 
             if (showScrollBar)
             {
-                listing.BeginScrollView(bounds, ref scrollPosition, ref innerRect);
+                listing.BeginScrollView(Bounds, ref scrollPosition, ref innerRect);
             }
             else
             {
-                listing.Begin(bounds);
+                listing.Begin(Bounds);
             }
 
             foreach (var element in rows)
             {
-                var rect = listing.GetRect(element.bounds.height);
+                var rect = listing.GetRect(element.Bounds.height);
                 element.DoElementContent();
             }
 

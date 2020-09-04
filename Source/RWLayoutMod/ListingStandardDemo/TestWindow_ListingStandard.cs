@@ -24,17 +24,17 @@ namespace RWLayoutMod.ListingStandardDemo
 
         public void DrawAt(Vector2 point)
         {
-            var oldBounds = bounds;
-            var oldRounded = boundsRounded;
+            var oldBounds = Bounds;
+            var oldRounded = BoundsRounded;
             inCustomDrawing = true;
 
-            GUI.BeginGroup(new Rect(-bounds.position + point, bounds.position + bounds.size));
+            GUI.BeginGroup(new Rect(-Bounds.position + point, Bounds.position + Bounds.size));
             DoElementContent();
             GUI.EndGroup();
 
             inCustomDrawing = false;
-            bounds = oldBounds;
-            boundsRounded = oldRounded;
+            Bounds = oldBounds;
+            BoundsRounded = oldRounded;
         }
     }
 
@@ -57,9 +57,9 @@ namespace RWLayoutMod.ListingStandardDemo
 
         public override void DoContent()
         {
-            if ((Mouse.IsOver(bounds) && !itemDraggig) || inCustomDrawing)
+            if ((Mouse.IsOver(Bounds) && !itemDraggig) || inCustomDrawing)
             {
-                Widgets.DrawHighlight(bounds);
+                Widgets.DrawHighlight(Bounds);
             }
 
             base.DoContent();
@@ -78,13 +78,13 @@ namespace RWLayoutMod.ListingStandardDemo
         {
             doCloseX = true;
             draggable = true;
-            resizeable = true;
+            MakeResizable(true, true);
 
             InnerSize = new Vector2(500, 350);
 
             var leftFrame = Gui.AddElement(new CWidget
             {
-                DoWidgetContent = (sender) => GuiTools.UsingColor(new Color(1, 1, 1, 0.3f), () => GuiTools.Box(sender.bounds, new EdgeInsets(1))),
+                DoWidgetContent = (sender) => GuiTools.UsingColor(new Color(1, 1, 1, 0.3f), () => GuiTools.Box(sender.Bounds, new EdgeInsets(1))),
             });
 
             var listLeft = leftFrame.AddElement(new CListView());
@@ -93,7 +93,7 @@ namespace RWLayoutMod.ListingStandardDemo
 
             var rightFrame = Gui.AddElement(new CWidget
             {
-                DoWidgetContent = (sender) => GuiTools.UsingColor(new Color(1, 1, 1, 0.3f), () => GuiTools.Box(sender.bounds, new EdgeInsets(1))),
+                DoWidgetContent = (sender) => GuiTools.UsingColor(new Color(1, 1, 1, 0.3f), () => GuiTools.Box(sender.Bounds, new EdgeInsets(1))),
             });
 
             var listRight = rightFrame.AddElement(new CListView());
@@ -118,9 +118,6 @@ namespace RWLayoutMod.ListingStandardDemo
                 elementInfo.height ^ GuiTools.UsingFont(GameFont.Tiny, () => Text.CurFontStyle.CalcSize(new GUIContent(" \n \n ")).y),
                 elementInfo.bottom ^ Gui.bottom
                 );
-
-            Gui.AddConstraint(Gui.width ^ Gui.guideWidth);
-            Gui.AddConstraint(Gui.height ^ Gui.guideHeight);
         }
 
         private void BuildList(CListView listLeft, string[] strings)
@@ -210,14 +207,14 @@ namespace RWLayoutMod.ListingStandardDemo
                 if (item != null)
                 {
                     dragPoint = Event.current.mousePosition 
-                        - targetList.bounds.position // translate to list coordinates
+                        - targetList.Bounds.position // translate to list coordinates
                         + targetList.ScrollPosition // scroll offset
-                        - item.bounds.position; // delta
+                        - item.Bounds.position; // delta
                     Event.current.Use();
                 }
             }
            
-            // drop
+            // drop?
             if (((Event.current.type == EventType.MouseUp) || !Input.GetMouseButton(0)) && draggingRow != null)
             {
 
@@ -228,11 +225,13 @@ namespace RWLayoutMod.ListingStandardDemo
                         Event.current.Use();
                     }
 
+                    var elementToDraw = draggingRow?.Elements.FirstOrDefault() as CDraggableElement;
+                    elementToDraw.IsDragging = false;
+                    CDraggableElement.itemDraggig = false;
+
                     if (targetList != null)
                     {
-                        var elementToDraw = draggingRow?.Elements.FirstOrDefault() as CDraggableElement;
-                        elementToDraw.IsDragging = false;
-                        CDraggableElement.itemDraggig = false;
+                        // drop.
 
                         int index = -1;
                         if (item != null)
@@ -250,7 +249,7 @@ namespace RWLayoutMod.ListingStandardDemo
                         {
                             targetList.AppendRow(draggingRow);
                         }
-                        targetList.UpdateLayoutTemp();
+                        targetList.UpdateLayoutIfNeeded();
                     }
 
                     draggingRow = null;

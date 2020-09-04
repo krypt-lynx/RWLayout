@@ -11,29 +11,27 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
-    public class CButton : CElement
+    public class CButton : CTitledElement
     {
-        public TaggedString Title { get; set; }
         public Action<CElement> Action { get; set; }
-        public GameFont Font = GameFont.Small;
 
         public override Vector2 tryFit(Vector2 size)
         {
-            var result = GuiTools.UsingFont(Font, () => Text.CalcSize(Title));
-
+            ApplyGeometryOnly();
+            var result = Text.CalcSize(Title);
+            RestoreGeometryOnly();
             return result + new Vector2(14, 10);
         }
 
         public override void DoContent()
         {           
             base.DoContent();
-            GuiTools.UsingFont(Font, () =>
+            ApplyAll();
+            if (Widgets.ButtonText(Bounds, Title, doMouseoverSound: true))
             {
-                if (Widgets.ButtonText(bounds, Title, doMouseoverSound: true))
-                {
-                    this.Action?.Invoke(this);
-                }
-            });
+                this.Action?.Invoke(this);
+            }
+            RestoreAll();
         }
     }
 }

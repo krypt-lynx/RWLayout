@@ -50,7 +50,7 @@ namespace RWLayout.alpha2
         public override void PostLayoutUpdate()
         {
             base.PostLayoutUpdate();
-            Debug.WriteLine(bounds);
+            Debug.WriteLine(Bounds);
             //Log.Message($"CGuiRoot.PostLayoutUpdate: InRect: {InRect}; bounds: {bounds}");
             //Log.Message($"solver state of {NamePrefix()}:\n{solver}");
             LayoutUpdated?.Invoke();

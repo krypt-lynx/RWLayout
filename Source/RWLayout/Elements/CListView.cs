@@ -9,6 +9,7 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+    
     public class CListView : CElement
     {
         Rect innerRect;
@@ -22,13 +23,13 @@ namespace RWLayout.alpha2
 
         public override Vector2 tryFit(Vector2 size)
         {
-            return new Vector2(bounds.width, contentHeight);
+            return new Vector2(Bounds.width, contentHeight);
         }
 
         public bool IsScrollBarVisible()
         {
             return (ShowScrollBar == CScrollBarMode.Show) ||
-                (contentHeight > bounds.height);
+                (contentHeight > Bounds.height);
         }
 
 
@@ -39,10 +40,15 @@ namespace RWLayout.alpha2
 
         public override CElement hitTest(Vector2 point)
         {
-            if (userInteractionEnabled && bounds.Contains(point))
+            if (userInteractionEnabled && Bounds.Contains(point))
             {
+                var listPoint = point - this.Bounds.position + this.ScrollPosition;
 
-                var listPoint = point - this.bounds.position + this.ScrollPosition;
+                var sub = base.hitTest(point);
+                if (sub != this)
+                {
+                    return sub;
+                }
 
                 foreach (var row in rows)
                 {
@@ -53,7 +59,7 @@ namespace RWLayout.alpha2
                     }
                 }
 
-                return base.hitTest(point);
+                return this;
             } 
             else
             {
@@ -68,11 +74,11 @@ namespace RWLayout.alpha2
             var skin = GUI.skin.verticalScrollbar;
 
             float y = 0;
-            float w = bounds.width - (IsScrollBarVisible() ? (skin.fixedWidth + skin.margin.left) : 0);
+            float w = Bounds.width - (IsScrollBarVisible() ? (skin.fixedWidth + skin.margin.left) : 0);
             foreach (var row in rows)
             {
                 row.InRect = new Rect(0, y, w, float.NaN);
-                y += row.bounds.height;
+                y += row.Bounds.height;
             }
             contentHeight = y;
             innerRect = new Rect(0, 0, w, contentHeight);
@@ -84,11 +90,11 @@ namespace RWLayout.alpha2
             bool showScrollBar = IsScrollBarVisible();
 
             showScrollBar = true;
-            Widgets.BeginScrollView(bounds, ref ScrollPosition, innerRect, showScrollBar);
+            Widgets.BeginScrollView(Bounds, ref ScrollPosition, innerRect, showScrollBar);
 
             foreach (var element in rows)
             {
-                if ((element.bounds.yMax > ScrollPosition.y) && (element.bounds.yMin < (ScrollPosition.y + this.bounds.height)))
+                if ((element.Bounds.yMax > ScrollPosition.y) && (element.Bounds.yMin < (ScrollPosition.y + this.Bounds.height)))
                 {
                     element.DoElementContent();
                 }
@@ -106,7 +112,7 @@ namespace RWLayout.alpha2
 
             row.Owner = this;
             rows.Add(row);
-            // set needs layout
+            SetNeedsUpdateLayout();
             return row;
         }
 
@@ -119,7 +125,7 @@ namespace RWLayout.alpha2
 
             row.Owner = this;
             rows.Insert(index, row);
-            // set needs layout
+            SetNeedsUpdateLayout();
             return row;
         }
 
@@ -130,7 +136,7 @@ namespace RWLayout.alpha2
             {
                 row.Owner = null;
             }
-            // set needs layout
+            SetNeedsUpdateLayout();
             return result;
         }
 
@@ -139,7 +145,7 @@ namespace RWLayout.alpha2
             var row = rows[index];
             rows.RemoveAt(index);
             row.Owner = null;
-            // set needs layout
+            SetNeedsUpdateLayout();
             return row;
         }
 
@@ -147,7 +153,7 @@ namespace RWLayout.alpha2
         {
             rows.Remove(row);
             rows.Insert(index, row);
-            // set needs layout
+            SetNeedsUpdateLayout();
         }
 
         public int IndexOfRow(CListingRow row)

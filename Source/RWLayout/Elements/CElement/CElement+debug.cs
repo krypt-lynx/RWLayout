@@ -16,11 +16,11 @@ namespace RWLayout.alpha2
         {
             if (Name == null)
             {
-                return $"{GetType().Name}_{id}";
+                return $"{GetType().Name}_{ID}";
             } 
             else
             {
-                return $"{GetType().Name}_{Name}_{id}";
+                return $"{GetType().Name}_{Name}_{ID}";
             }
         }
 
@@ -29,6 +29,10 @@ namespace RWLayout.alpha2
             return Solver.AllConstraints();
         }
 
+        public string AllConstraintsString()
+        {
+            return string.Join("\n", Solver.AllConstraints().Select(x => x.ToString()));
+        }
 
         public ClAbstractVariable[] AllVariablesDebug()
         {

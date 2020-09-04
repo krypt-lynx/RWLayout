@@ -34,10 +34,10 @@ namespace RWLayoutMod.BrickDemo
         public override void DoContent()
         {
             base.DoContent();
-            GUI.BeginGroup(boundsRounded);
+            GUI.BeginGroup(BoundsRounded);
 
-            int maxX = (int)Math.Round(bounds.width / size);
-            int maxY = (int)Math.Round(bounds.height / size);
+            int maxX = (int)Math.Round(Bounds.width / size);
+            int maxY = (int)Math.Round(Bounds.height / size);
 
             for (int x = 0; x < maxX; x++)
             {

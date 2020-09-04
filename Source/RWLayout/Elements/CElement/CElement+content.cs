@@ -13,8 +13,9 @@ namespace RWLayout.alpha2
 {
     public partial class CElement
     {
-        public Rect bounds { get; protected set; }
-        public Rect boundsRounded { get; protected set; }
+        public Rect Bounds { get; protected set; }
+        public Rect BoundsRounded { get; protected set; }
+        protected Vector2 drawingOffset;
 
         public virtual Vector2 tryFit(Vector2 size) { return Vector2.zero; }
 
@@ -31,16 +32,21 @@ namespace RWLayout.alpha2
             }
         }
 
+        public virtual Vector2 toViewCoordinates(CElement source, Vector2 point)
+        {
+            return point; // todo: implement
+        }
+
         public static bool DebugDraw = false;
 
         public virtual void DoContent()
         {
             if (DebugDraw)
             {
-                GuiTools.UsingColor(new Color(1, 0, 0, 0.2f), () => GuiTools.Box(bounds, new EdgeInsets(1, 1, 1, 1)));
+                GuiTools.UsingColor(new Color(1, 0, 0, 0.2f), () => GuiTools.Box(Bounds, new EdgeInsets(1, 1, 1, 1)));
                 GuiTools.UsingColor(new Color(1, 1, 1, 0.2f), () => GuiTools.UsingFont(GameFont.Tiny, () =>
                 {
-                    Widgets.Label(bounds, bounds.ToString());
+                    Widgets.Label(Bounds, Bounds.ToString());
                 }));
             }
         }

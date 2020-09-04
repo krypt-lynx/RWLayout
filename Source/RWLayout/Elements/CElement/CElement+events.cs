@@ -12,7 +12,7 @@ namespace RWLayout.alpha2
         public bool userInteractionEnabled = true;
         public virtual CElement hitTest(Vector2 point)
         {
-            if (userInteractionEnabled && bounds.Contains(point))
+            if (userInteractionEnabled && Bounds.Contains(point))
             {
                 foreach (var element in Elements.Reverse())
                 {

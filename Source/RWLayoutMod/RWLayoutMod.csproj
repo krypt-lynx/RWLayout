@@ -77,6 +77,7 @@
     <Compile Include="BrickDemo\TestWindow_Brick.cs" />
     <Compile Include="ResizeDemo\TestWindow_WindowResize.cs" />
     <Compile Include="ListingStandardDemo\TestWindow_ListingStandard.cs" />
+    <Compile Include="ScrollDemo\TestWindow_ScrollView.cs" />
     <Compile Include="VisibilityDemo\TestWindow_Visibility.cs" />
     <Compile Include="RWLayoutMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -100,6 +101,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>git describe --tag  --dirty --always &gt; "$(ProjectDir)\git.txt"
-rmdir /q /s "$(TargetDir)"</PreBuildEvent>
+
+rem rmdir /q /s "$(TargetDir)"</PreBuildEvent>
   </PropertyGroup>
 </Project>

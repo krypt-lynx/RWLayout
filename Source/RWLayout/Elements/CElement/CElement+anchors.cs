@@ -17,9 +17,49 @@ namespace RWLayout.alpha2
         public ClConstraint cn;
     }
 
+    public abstract class CLayoutGuide
+    {
+
+        public virtual void AddImpliedConstraints() { }
+
+        public virtual void RemoveImpliedConstraints() { }
+
+        public abstract IEnumerable<ClVariable> enumerateAnchors();
+
+        WeakReference parent_ = null;
+
+        /// <summary>
+        /// Weak reverese to owning element
+        /// </summary>
+        internal CElement Parent
+        {
+            get { return parent_?.IsAlive ?? false ? parent_.Target as CElement : null; }
+            set { parent_ = new WeakReference(value, false); }
+        }
+    }
+
+    public class CVarListGuide : CLayoutGuide
+    {
+        public List<Anchor> Anchors = new List<Anchor>();
+
+        public override IEnumerable<ClVariable> enumerateAnchors()
+        {
+            return Anchors.Select(x => x.var);
+        }
+    }
+
 
     public partial class CElement
     {
+        public IReadOnlyList<CLayoutGuide> Guides { get => guides; }
+        public List<CLayoutGuide> guides = new List<CLayoutGuide>();
+        public void AddGuide(CLayoutGuide guide)
+        {
+            guide.Parent = this;
+            guides.Add(guide);
+        }
+
+
         public virtual void AddImpliedConstraints()
         {
             CreateConstraintIfNeeded(ref width_, () => left + width ^ right);
@@ -30,9 +70,14 @@ namespace RWLayout.alpha2
 
             CreateConstraintIfNeeded(ref intrinsicWidth_, () => new ClStayConstraint(intrinsicWidth));
             CreateConstraintIfNeeded(ref intrinsicHeight_, () => new ClStayConstraint(intrinsicHeight));
+
+            foreach (var guide in guides)
+            {
+                guide.AddImpliedConstraints();
+            }
         }
 
-        public void RemoveImpliedConstraints(ClSimplexSolver solver)
+        public void RemoveImpliedConstraints()
         {
             RemoveVariableIfNeeded(ref left_);
             RemoveVariableIfNeeded(ref top_);
@@ -45,6 +90,11 @@ namespace RWLayout.alpha2
             RemoveVariableIfNeeded(ref centerY_);
             RemoveVariableIfNeeded(ref intrinsicWidth_);
             RemoveVariableIfNeeded(ref intrinsicHeight_);
+
+            foreach (var guide in guides)
+            {
+                guide.RemoveImpliedConstraints();
+            }
         }
 
         // core variables
@@ -90,9 +140,9 @@ namespace RWLayout.alpha2
 
             foreach (var guide in Guides)
             {
-                foreach (var anchor in guide.Anchors)
+                foreach (var var in guide.enumerateAnchors())
                 {
-                    yield return anchor.var;
+                    yield return var;
                 }
             }
         }

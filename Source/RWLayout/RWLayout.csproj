@@ -67,6 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Elements\CScrollView.cs" />
     <Compile Include="CWindow\CWindow.cs" />
     <Compile Include="CWindow\CWindowResizer.cs" />
     <Compile Include="Elements\CElement\CElement+anchors.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Elements\CCheckBox.cs" />
     <Compile Include="Elements\CLabel.cs" />
     <Compile Include="Elements\CListView.cs" />
+    <Compile Include="Elements\CTitledElement.cs" />
     <Compile Include="Elements\CWidget.cs" />
     <Compile Include="CWindow\CWindowRoot.cs" />
     <Compile Include="Elements\ListingStandard\CListingRow.cs" />

@@ -18,14 +18,15 @@ namespace RWLayoutMod
             ("Window Resize", () => new ResizeDemo.TestWindow_WindowResize()),
             ("Add/Remove Elements", () => new BrickDemo.TestWindow_Brick()),
             ("Show/Hide Elements", () => new VisibilityDemo.TestWindow_Visibility()),
+            ("Scroll View", () => new ScrollDemo.TestWindow_ScrollView()),
         };
+
 
         public override void ConstructGui()
         {
             doCloseX = true;
             draggable = true;
 
-            Gui.Name = "guiroot";
 
             var titleLabel = Gui.AddElement(new CLabel
             {
@@ -39,12 +40,12 @@ namespace RWLayoutMod
             var buttonsColumn2 = buttonsPanel.AddElement(new CElement());
 
             var buttons = tests.Select(x => buttonsColumn1.AddElement(new CButton
-                {
-                    Title = x.Item1,
-                    Action = (_) => Find.WindowStack.Add(x.Item2())
-                }))
+            {
+                Title = x.Item1,
+                Action = (_) => Find.WindowStack.Add(x.Item2())
+            }))
                 .Select(x => (object)(x, 30)).ToArray();
-  
+
 
             var debugCheck = buttonsColumn2.AddElement(new CCheckBox
             {
@@ -62,23 +63,34 @@ namespace RWLayoutMod
                 TextAlignment = TextAnchor.UpperRight,
             });
 
-            
-            buttonsPanel.StackLeft(true, true, ClStrength.Strong,
+            buttonsPanel.StackLeft(false, true, ClStrength.Strong,
                 (buttonsColumn1, 220), 20, (buttonsColumn2, 150));
-            buttonsColumn1.StackTop(true, false, ClStrength.Strong, buttons);
-            buttonsColumn2.StackTop(true, false, ClStrength.Strong,
+            buttonsPanel.AddConstraint(buttonsColumn1.top ^ buttonsPanel.top, ClStrength.Strong);
+            buttonsPanel.AddConstraint(buttonsColumn2.top ^ buttonsPanel.top, ClStrength.Strong);
+            buttonsColumn1.StackTop(true, true, ClStrength.Strong, buttons);
+            buttonsColumn2.StackTop(true, true, ClStrength.Strong,
                 (debugCheck, 30));
+
+            buttonsColumn1.AddConstraint(buttonsColumn1.bottom <= buttonsPanel.bottom, ClStrength.Medium);
+            buttonsColumn2.AddConstraint(buttonsColumn2.bottom <= buttonsPanel.bottom, ClStrength.Medium);
 
             Gui.AddElement(buttonsPanel);
 
             Gui.StackTop(true, true, ClStrength.Strong,
-                (titleLabel, 42), buttonsPanel, (versionInfo, versionInfo.intrinsicHeight));
+                (titleLabel, 42), buttonsPanel, 20, (versionInfo, versionInfo.intrinsicHeight));
 
-            Gui.AddConstraint(Gui.height ^ 230 - MarginsSize().x);
+            //Gui.AddConstraint(Gui.height ^ 230 - MarginsSize().x);
         }
 
+        //bool once = false;
         public override void DoWindowContents(Rect inRect)
         {
+            //if (!once)
+            //{
+            //    once = true;
+            //    Log.Message(Gui.Solver.ToString());
+            //    Log.Message(string.Join("\n", Gui.Solver.AllConstraints().Select(x => x.ToString())));
+            //}
             base.DoWindowContents(inRect);
         }
     }

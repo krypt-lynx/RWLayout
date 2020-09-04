@@ -14,7 +14,7 @@ namespace RWLayout.alpha2
 {
     public partial class CElement
     {
-        private List<CElement> elements = new List<CElement>(); // "readonly"
+        private List<CElement> elements = new List<CElement>();
         public IReadOnlyList<CElement> Elements
         {
             get
@@ -22,22 +22,25 @@ namespace RWLayout.alpha2
                 return elements;
             }
         }
+
         public T AddElement<T>(T element) where T : CElement
         {
             if (element.Parent != null)
             {
-                throw new InvalidOperationException($"Element {0} already in has parent");
+                throw new InvalidOperationException($"Element {0} already has a parent");
             }
 
             elements.Add(element);
             element.parent_ = new WeakReference(this, false);
             if (element.solver != null)
             {
-                Solver.MergeWith(element.solver);
+                //Solver.MergeWith(element.solver); // todo: fix MergeWith
+                Solver.AddConstraints(element.solver.AllConstraints()); // the same but slow
                 element.solver = null;
             }
 
             element.PostAdd();
+            SetNeedsUpdateLayout();
 
             return element;
         }
@@ -59,7 +62,7 @@ namespace RWLayout.alpha2
         {
             if (!elements.Remove(element))
             {
-                throw new InvalidOperationException($"view {element} in not a subview of {this}");
+                throw new InvalidOperationException($"view {element} is not a subview of {this}");
             }
 
             List<ClConstraint> movedConstraints = ShearConstraints(element);
@@ -73,6 +76,7 @@ namespace RWLayout.alpha2
             {
                 element.AddConstraint(cn);
             }
+            SetNeedsUpdateLayout();
         }
 
         public void RemoveElements(IEnumerable<CElement> elements)
@@ -109,6 +113,7 @@ namespace RWLayout.alpha2
                 throw new InvalidOperationException($"view {element} in not a subview of {this}");
             }
             elements.Add(element);
+            SetNeedsUpdateLayout();
         }
         public void SendToBack(CElement element)
         {
@@ -117,6 +122,7 @@ namespace RWLayout.alpha2
                 throw new InvalidOperationException($"view {element} in not a subview of {this}");
             }
             elements.Insert(0, element);
+            SetNeedsUpdateLayout();
         }
         public void MoveToPosition(CElement element, int position)
         {
@@ -129,6 +135,7 @@ namespace RWLayout.alpha2
                 throw new InvalidOperationException($"view {element} in not a subview of {this}");
             }
             elements.Insert(position, element);
+            SetNeedsUpdateLayout();
         }
 
         WeakReference parent_ = null;

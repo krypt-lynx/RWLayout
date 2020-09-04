@@ -13,7 +13,21 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
-    public class CElementHost : CElement
+    public class COwnedElement : CElement
+    {
+        WeakReference owner_ = null;
+
+        /// <summary>
+        /// Weak reverese to owning element
+        /// </summary>
+        public CElement Owner
+        {
+            get { return owner_?.IsAlive ?? false ? owner_.Target as CElement : null; }
+            set { owner_ = new WeakReference(value, false); }
+        }
+    }
+
+    public class CElementHost : COwnedElement
     {
         public bool InErrorState { get; private set; } = false;
         public Rect _inRect;
@@ -28,19 +42,6 @@ namespace RWLayout.alpha2
                 //UpdateLayoutConstraintsIfNeeded();
                 UpdateLayoutIfNeeded();
             }
-        }
-
-
-
-        WeakReference owner_ = null;
-
-        /// <summary>
-        /// Weak reverese to owning element
-        /// </summary>
-        public CElement Owner
-        {
-            get { return owner_?.IsAlive ?? false ? owner_.Target as CElement : null; }
-            set { owner_ = new WeakReference(value, false); }
         }
 
 
@@ -70,17 +71,16 @@ namespace RWLayout.alpha2
 
         protected bool needsUpdateLayout = true;
 
-        public override bool NeedsUpdateLayout { get => needsUpdateLayout; set => needsUpdateLayout |= value; }
-        /*public void UpdateLayoutIfNeeded()
+        public override bool NeedsUpdateLayout()
         {
-            if (needsUpdateLayout)
-            {
+            return needsUpdateLayout;
+        }
 
-                UpdateLayout();
+        public override void SetNeedsUpdateLayout()
+        {
+            needsUpdateLayout = true;
+        }
 
-                PostLayoutUpdate();
-            }
-        }*/
         bool retry = false;
         public override void UpdateLayout()
         {
@@ -126,17 +126,17 @@ namespace RWLayout.alpha2
             base.DoContent();
             if (InErrorState)
             {
-                GuiTools.ColorPush(Color.red);
-                GuiTools.Box(bounds, new EdgeInsets(3));
+                GuiTools.PushColor(Color.red);
+                GuiTools.Box(Bounds, new EdgeInsets(3));
 
-                GuiTools.TextAnchorPush(TextAnchor.MiddleCenter);
-                GuiTools.FontPush(GameFont.Tiny);
+                GuiTools.PushTextAnchor(TextAnchor.MiddleCenter);
+                GuiTools.PushFont(GameFont.Tiny);
 
-                Widgets.Label(bounds, NamePrefix() + "\nexception during update");
+                Widgets.Label(Bounds, NamePrefix() + "\nexception during update");
 
-                GuiTools.FontPop();
-                GuiTools.TextAnchorPop();
-                GuiTools.ColorPop();
+                GuiTools.PopFont();
+                GuiTools.PopTextAnchor();
+                GuiTools.PopColor();
             }
         }
     }
