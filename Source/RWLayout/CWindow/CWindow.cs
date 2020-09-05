@@ -30,7 +30,7 @@ namespace RWLayout.alpha2
                 { 
                     var fixedSize = winSize - MarginsSize();
 
-                    Gui.UpdateGuideSize(fixedSize);
+                    Gui.UpdateWindowGuide(fixedSize);
 
                     Gui.InRect = new Rect(Vector2.zero, fixedSize);
                     Gui.UpdateLayoutIfNeeded();
@@ -89,12 +89,10 @@ namespace RWLayout.alpha2
 
             Gui.AddImpliedConstraints();
 
-            Gui.UpdateGuideSize(initSize);
+            Gui.UpdateWindowGuide(initSize);
 
 
-            var margins = MarginsSize();
-            Gui.UpdateStayConstrait(ref Gui.adjustedScreenWidth_, UI.screenWidth - margins.x);
-            Gui.UpdateStayConstrait(ref Gui.adjustedScreenHeight_, UI.screenHeight - margins.y);
+            Gui.UpdateScreenGuide(new Vector2(UI.screenWidth, UI.screenHeight) - MarginsSize());
 
             Gui.InRect = new Rect(Vector2.zero, initSize);
             Gui.UpdateLayoutIfNeeded();
@@ -129,11 +127,11 @@ namespace RWLayout.alpha2
             }
             if (horizontal)
             {
-                Gui.AddConstraint(Gui.width ^ Gui.guideWidth, strength);
+                Gui.AddConstraint(Gui.width ^ Gui.WindowSize.width, strength);
             }
             if (vertical)
             {
-                Gui.AddConstraint(Gui.height ^ Gui.guideHeight, strength);
+                Gui.AddConstraint(Gui.height ^ Gui.WindowSize.height, strength);
             }
             resizeable = true;
         }
@@ -145,9 +143,7 @@ namespace RWLayout.alpha2
 
         public override void Notify_ResolutionChanged()
         {
-            var margins = MarginsSize();
-            Gui.UpdateStayConstrait(ref Gui.adjustedScreenWidth_, UI.screenWidth - margins.x);
-            Gui.UpdateStayConstrait(ref Gui.adjustedScreenHeight_, UI.screenHeight - margins.y);
+            Gui.UpdateScreenGuide(new Vector2(UI.screenWidth, UI.screenHeight) - MarginsSize());
 
             //Gui.UpdateLayoutIfNeeded();
 

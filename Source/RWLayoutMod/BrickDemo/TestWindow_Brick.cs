@@ -38,7 +38,7 @@ namespace RWLayoutMod.BrickDemo
             MakeResizable(horizontal: true);
 
             Gui.AddConstraint(Gui.height >= 200);
-            Gui.AddConstraint(Gui.height <= Gui.adjustedScreenHeight);
+            Gui.AddConstraint(Gui.height <= Gui.AdjustedScreenSize.height);
 
             grid = new ClVariable("grid");
             var guide = new CVarListGuide();
