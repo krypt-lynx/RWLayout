@@ -19,6 +19,7 @@ namespace RWLayoutMod
             ("Add/Remove Elements", () => new BrickDemo.TestWindow_Brick()),
             ("Show/Hide Elements", () => new VisibilityDemo.TestWindow_Visibility()),
             ("Scroll View", () => new ScrollDemo.TestWindow_ScrollView()),
+            ("Mixed Use", () => new NativeWindow.WindowTest_NativeWindow()),
         };
 
 

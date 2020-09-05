@@ -75,6 +75,8 @@
     <Compile Include="BrickDemo\Curtain.cs" />
     <Compile Include="BrickDemo\Figure.cs" />
     <Compile Include="BrickDemo\TestWindow_Brick.cs" />
+    <Compile Include="NativeWindow\NativeWindow_Harmony.cs" />
+    <Compile Include="NativeWindow\WindowTest_NativeWindow.cs" />
     <Compile Include="ResizeDemo\TestWindow_WindowResize.cs" />
     <Compile Include="ListingStandardDemo\TestWindow_ListingStandard.cs" />
     <Compile Include="ScrollDemo\TestWindow_ScrollView.cs" />

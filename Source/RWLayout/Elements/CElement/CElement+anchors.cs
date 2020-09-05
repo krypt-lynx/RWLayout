@@ -77,7 +77,7 @@ namespace RWLayout.alpha2
             }
         }
 
-        public void RemoveImpliedConstraints()
+        public virtual void RemoveImpliedConstraints()
         {
             RemoveVariableIfNeeded(ref left_);
             RemoveVariableIfNeeded(ref top_);

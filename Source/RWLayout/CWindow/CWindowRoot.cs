@@ -40,6 +40,20 @@ namespace RWLayout.alpha2
             CreateConstraintIfNeeded(ref adjustedScreenHeight_, () => new ClStayConstraint(adjustedScreenHeight));
         }
 
+        public override void RemoveImpliedConstraints()
+        {
+            base.RemoveImpliedConstraints();
+
+            RemoveVariableIfNeeded(ref left_);
+            RemoveVariableIfNeeded(ref top_);
+
+            RemoveVariableIfNeeded(ref guideWidth_);
+            RemoveVariableIfNeeded(ref guideHeight_);
+
+            RemoveVariableIfNeeded(ref adjustedScreenWidth_);
+            RemoveVariableIfNeeded(ref adjustedScreenHeight_);
+        }
+
         private IEnumerable<ClVariable> enumerateAnchors()
         {
             yield return guideWidth_.var;

@@ -42,25 +42,32 @@ namespace RWLayoutMod
             Harmony harmony = new Harmony(packageIdOfMine);
 
             harmony.Patch(AccessTools.Method(typeof(DebugWindowsOpener), "DevToolStarterOnGUI"),
-                postfix: new HarmonyMethod(typeof(HarmonyPatches), "DevToolStarterOnGUI_postfix"));
+                postfix: new HarmonyMethod(typeof(DevToolsPatches), "DevToolStarterOnGUI_postfix"));
             harmony.Patch(AccessTools.Method(typeof(DebugWindowsOpener), "DrawButtons"),
-                postfix: new HarmonyMethod(typeof(HarmonyPatches), "DrawButtons_postfix"));
+                postfix: new HarmonyMethod(typeof(DevToolsPatches), "DrawButtons_postfix"));
 
 
             harmony.Patch(AccessTools.Method(typeof(WindowResizer), "DoResizeControl"),
-                prefix: new HarmonyMethod(typeof(HarmonyPatches), "DoResizeControl_prefix"));
+                prefix: new HarmonyMethod(typeof(RWLayoutResizerPatches), "DoResizeControl_prefix"));
+
+
+            NativeWindow.MixedUseExamplePatches.Prepare();
+            harmony.Patch(AccessTools.PropertyGetter(typeof(NativeWindow.WindowTest_NativeWindow), "InitialSize"),
+                postfix: new HarmonyMethod(typeof(NativeWindow.MixedUseExamplePatches), "InitialSize_postfix"));
+            harmony.Patch(AccessTools.Method(typeof(NativeWindow.WindowTest_NativeWindow), "DoWindowContents"),
+                prefix: new HarmonyMethod(typeof(NativeWindow.MixedUseExamplePatches), "DoWindowContents_prefix"));
 
             // bugfixes should not be there but in separate mod, but those are annoying doring development and I'm lazy to create a new one
             // bugfixes:
             // missing null checks in Log class
             harmony.Patch(AccessTools.Constructor(typeof(LogMessage), new Type[] { typeof(string) }),
-                prefix: new HarmonyMethod(typeof(HarmonyLogPatches), "LogMessage_ctor_string_prefix"));
+                prefix: new HarmonyMethod(typeof(MiscFixes), "LogMessage_ctor_string_prefix"));
             harmony.Patch(AccessTools.Constructor(typeof(LogMessage), new Type[] { typeof(LogMessageType), typeof(string), typeof(string) }),
-                prefix: new HarmonyMethod(typeof(HarmonyLogPatches), "LogMessage_ctor_LogMessageType_string_string_prefix"));
+                prefix: new HarmonyMethod(typeof(MiscFixes), "LogMessage_ctor_LogMessageType_string_string_prefix"));
             // window resizing issues
             harmony.Patch(AccessTools.Method(typeof(WindowResizer), "DoResizeControl"),
-                postfix: new HarmonyMethod(typeof(HarmonyPatches), "DoResizeControl_postfix"));
-
+                postfix: new HarmonyMethod(typeof(MiscFixes), "DoResizeControl_postfix"));
+           
             //harmony.Patch(AccessTools.Method(typeof(GenUI), "Rounded", new Type[] { typeof(Rect) }),
             //    prefix: new HarmonyMethod(typeof(HarmonyPatches), "Rounded_prefix"));
         }
@@ -89,8 +96,7 @@ namespace RWLayoutMod
             options.End();
         }
 
-
-        static class HarmonyLogPatches
+        static class MiscFixes
         {
             static bool LogMessage_ctor_string_prefix(ref string text)
             {
@@ -103,11 +109,6 @@ namespace RWLayoutMod
                 text = text ?? "null";
                 return true;
             }
-        }
-
-        [StaticConstructorOnStartup]
-        static class HarmonyPatches
-        {
 
             static bool Rounded_prefix(Rect r, ref Rect __result)
             {
@@ -116,16 +117,6 @@ namespace RWLayoutMod
                 return false;
             }
 
-            static bool DoResizeControl_prefix(WindowResizer __instance, ref Rect __result, Rect winRect)
-            {
-                if (__instance is CWindowResizer resizer)
-                {                    
-                    __result = resizer.override_DoResizeControl(winRect);
-                    return false;
-                } 
-
-                return true;
-            }
 
             static void DoResizeControl_postfix(WindowResizer __instance)
             {
@@ -140,6 +131,26 @@ namespace RWLayoutMod
                     }
                 }
             }
+        }
+
+        static class RWLayoutResizerPatches
+        {
+            static bool DoResizeControl_prefix(WindowResizer __instance, ref Rect __result, Rect winRect)
+            {
+                if (__instance is CWindowResizer resizer)
+                {
+                    __result = resizer.override_DoResizeControl(winRect);
+                    return false;
+                }
+
+                return true;
+            }
+
+        }
+
+        [StaticConstructorOnStartup]
+        static class DevToolsPatches
+        {
 
 
             static void DevToolStarterOnGUI_postfix()
@@ -153,7 +164,6 @@ namespace RWLayoutMod
                     devWindow.windowRect = Rect.MinMaxRect(oldRect.xMin, oldRect.yMin, oldRect.xMax + 28, oldRect.yMax);
                 }
             }
-
 
             static WidgetRow widgetRow(DebugWindowsOpener obj)
             {

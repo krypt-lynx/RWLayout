@@ -11,8 +11,8 @@ namespace RWLayout.alpha2
 {
     public class CGuiRoot : CElementHost
     {
-        public bool FlexableWidth = false;
-        public bool FlexableHeight = false;
+        //public bool FlexableWidth = false;
+        //public bool FlexableHeight = false;
 
         public Action LayoutUpdated;
 
@@ -24,16 +24,25 @@ namespace RWLayout.alpha2
             CreateConstraintIfNeeded(ref left_, () => new ClStayConstraint(left, ClStrength.Required));
             CreateConstraintIfNeeded(ref top_, () => new ClStayConstraint(top, ClStrength.Required));
 
-            if (!FlexableWidth)
-            {
+            //if (!FlexableWidth)
+            //{
                 CreateConstraintIfNeeded(ref right_, () => new ClStayConstraint(right, ClStrength.Required));
-            }
-            if (!FlexableHeight)
-            {
+            //}
+            //if (!FlexableHeight)
+            //{
                 CreateConstraintIfNeeded(ref bottom_, () => new ClStayConstraint(bottom, ClStrength.Required));
-            }
+            //}
         }
 
+        public override void RemoveImpliedConstraints()
+        {
+            base.RemoveImpliedConstraints();
+
+            RemoveVariableIfNeeded(ref left_);
+            RemoveVariableIfNeeded(ref right_);
+            RemoveVariableIfNeeded(ref top_);
+            RemoveVariableIfNeeded(ref bottom_);
+        }
 
         public override void UpdateLayout()
         {
@@ -50,11 +59,7 @@ namespace RWLayout.alpha2
         public override void PostLayoutUpdate()
         {
             base.PostLayoutUpdate();
-            Debug.WriteLine(Bounds);
-            //Log.Message($"CGuiRoot.PostLayoutUpdate: InRect: {InRect}; bounds: {bounds}");
-            //Log.Message($"solver state of {NamePrefix()}:\n{solver}");
             LayoutUpdated?.Invoke();
         }
     }
-
 }
