@@ -10,13 +10,49 @@ namespace RWLayout.alpha2
 {
     public abstract class CTitledElement : CElement
     {
-        public string Title;
-        public GameFont Font = GameFont.Small;
+        string title = null;
+        public string Title
+        {
+            get => title; 
+            set {
+                if (title != value)
+                {
+                    title = value;
+                    SetNeedsUpdateLayout();
+                }
+            }
+        }
+
+
+        GameFont font = GameFont.Small;
+        public GameFont Font 
+        {
+            get => font; 
+            set {
+                if (font != value)
+                {
+                    font = value;
+                    SetNeedsUpdateLayout();
+                }
+            }
+        }
         public Color? Color = null;
 
-        public bool WordWrap = false;
-        public bool Multiline = false;
-        public int LineCount = 0;
+        public bool wordWrap = false;
+        public bool WordWrap
+        {
+            get => wordWrap;
+            set
+            {
+                if (wordWrap != value)
+                {
+                    wordWrap = value;
+                    SetNeedsUpdateLayout();
+                }
+            }
+        }
+        //public bool Multiline = false;
+        //public int LineCount = 0;
         /// <summary>
         /// Text alignment
         /// </summary>
@@ -54,10 +90,18 @@ namespace RWLayout.alpha2
         public Vector2 tryFitText(Vector2 size, Vector2 margin)
         {
             ApplyGeometryOnly();
-            contentForTesting.text = Title;
-            var result = Text.CurFontStyle.CalcSize(contentForTesting);
+            contentForTesting.text = Title ?? "";
+
+            float minX = 0;
+            float maxX = 0;
+            
+            Text.CurFontStyle.CalcMinMaxWidth(contentForTesting, out minX, out maxX);
+
+            float x = Mathf.Max(minX, Mathf.Min(maxX, size.x));
+            float y = Text.CurFontStyle.CalcHeight(contentForTesting, x);
+
             RestoreGeometryOnly();
-            return result + margin;
+            return new Vector2(x, y) + margin;
         }
     }
 
