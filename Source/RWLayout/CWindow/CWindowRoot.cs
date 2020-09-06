@@ -10,9 +10,12 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
-    public class CSizeLayoutGuide : CLayoutGuide
+    /// <summary>
+    /// Layout guide providing size anchors
+    /// </summary>
+    public class CSizeGuide : CLayoutGuide
     {
-        public CSizeLayoutGuide(string nameInfix)
+        public CSizeGuide(string nameInfix)
         {
             widthSuffix = nameInfix + "W";
             heightSuffix = nameInfix + "H";
@@ -52,10 +55,20 @@ namespace RWLayout.alpha2
         }
     }
 
+    /// <summary>
+    /// Gui root of CWindow
+    /// </summary>
     public class CWindowRoot : CElementHost
     {
-        public CSizeLayoutGuide WindowSize { get; } = new CSizeLayoutGuide("w");
-        public CSizeLayoutGuide AdjustedScreenSize { get; } = new CSizeLayoutGuide("s");
+        /// <summary>
+        /// Guide for desired window size
+        /// </summary>
+        public CSizeGuide WindowSize { get; } = new CSizeGuide("w");
+
+        /// <summary>
+        /// Guide for adjusted screen size (screen size - window margins size)
+        /// </summary>
+        public CSizeGuide AdjustedScreenSize { get; } = new CSizeGuide("s");
 
         public CWindowRoot()
         {
@@ -63,7 +76,7 @@ namespace RWLayout.alpha2
             AddGuide(AdjustedScreenSize);
         }
 
-        public Action LayoutUpdated;
+        internal Action LayoutUpdated;
 
         public override void AddImpliedConstraints()
         {
@@ -90,12 +103,12 @@ namespace RWLayout.alpha2
             base.UpdateLayout();
         }
 
-        public void UpdateWindowGuide(Vector2 size)
+        internal void UpdateWindowGuide(Vector2 size)
         {
             WindowSize.UpdateSize(size);
         }
 
-        public void UpdateScreenGuide(Vector2 size)
+        internal void UpdateScreenGuide(Vector2 size)
         {
             AdjustedScreenSize.UpdateSize(size);
         }
@@ -107,7 +120,7 @@ namespace RWLayout.alpha2
             LayoutUpdated?.Invoke();
         }
 
-        public void UpdateAndDoContent(Rect inRect)
+        internal void UpdateAndDoContent(Rect inRect)
         {
             UpdateWindowGuide(inRect.size);
             InRect = inRect;

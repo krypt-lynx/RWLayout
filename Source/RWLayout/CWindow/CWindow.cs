@@ -11,12 +11,11 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
-
+    /// <summary>
+    /// Window subclass providing host for constraint based views and methods for window geometry 
+    /// </summary>
     public class CWindow : Window
     {
-
-
-
         CWindowResizer resizer;
 
         public override void WindowOnGUI()
@@ -41,8 +40,15 @@ namespace RWLayout.alpha2
             base.WindowOnGUI();
         }
 
+        /// <summary>
+        /// Root gui view of the window
+        /// </summary>
         public CWindowRoot Gui { get; private set; }
-        public Vector2 initSize = new Vector2(100, 100);
+        private Vector2 initSize = new Vector2(100, 100);
+
+        /// <summary>
+        /// Intitial size of the view (native RW method)
+        /// </summary>
         public override Vector2 InitialSize
         {
             get
@@ -51,12 +57,19 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Size of the window margins (accounted to all modifications of it)
+        /// </summary>
+        /// <returns></returns>
         public Vector2 MarginsSize()
         {
             var size = new Vector2(Margin * 2, Margin * 2 + (optionalTitle == null ? 0 : Margin + 25f)); 
             return size;
         }
 
+        /// <summary>
+        /// Inner size of the window (window size - margins)
+        /// </summary>
         public Vector2 InnerSize
         {
             get
@@ -72,12 +85,19 @@ namespace RWLayout.alpha2
 
         public CWindow() : this(new Vector2(100, 100)) { }
 
+        /// <summary>
+        /// creates window with excpected window size
+        /// </summary>
+        /// <param name="estimatedSize">excpected window size</param>
         public CWindow(Vector2 estimatedSize) : base()
         {
             Gui = new CWindowRoot();
             initSize = estimatedSize;        
         }
 
+        /// <summary>
+        /// Method called before window is shown for the first time (native RW method)
+        /// </summary>
         public override void PreOpen()
         {
             var timer = new Stopwatch();
@@ -85,7 +105,6 @@ namespace RWLayout.alpha2
             timer.Start();
             ConstructGui();
 
-            //Gui.Solver.Remove
 
             Gui.AddImpliedConstraints();
 
@@ -109,16 +128,30 @@ namespace RWLayout.alpha2
             base.PreOpen();
         }
 
+        /// <summary>
+        /// Override this method and construct window content in it
+        /// </summary>
         public virtual void ConstructGui()
         {
 
         }
 
-        public virtual void MakeResizable(bool vertical = false, bool horizontal = false)
+        /// <summary>
+        /// Creates constraints to make window resizable
+        /// </summary>
+        /// <param name="vertical">make vertically resizable</param>
+        /// <param name="horizontal">make horizontally resizable</param>
+        public virtual void MakeResizable(bool vertical = true, bool horizontal = true)
         {
             MakeResizable(vertical, horizontal, null);
         }
 
+        /// <summary>
+        /// Creates constraints to make window resizable
+        /// </summary>
+        /// <param name="vertical">make vertically resizable</param>
+        /// <param name="horizontal">make horizontally resizable</param>
+        /// <param name="strength">strength of created constraints</param>
         public virtual void MakeResizable(bool vertical, bool horizontal, ClStrength strength)
         {
             if (strength == null)
@@ -136,11 +169,18 @@ namespace RWLayout.alpha2
             resizeable = true;
         }
 
+        /// <summary>
+        /// draws window content (native RW method)
+        /// </summary>
+        /// <param name="inRect"></param>
         public override void DoWindowContents(Rect inRect)
         {
             Gui.UpdateAndDoContent(inRect);
         }
 
+        /// <summary>
+        /// screen resolution/rw window size changed notification (native RW method)
+        /// </summary>
         public override void Notify_ResolutionChanged()
         {
             Gui.UpdateScreenGuide(new Vector2(UI.screenWidth, UI.screenHeight) - MarginsSize());
@@ -148,24 +188,6 @@ namespace RWLayout.alpha2
             //Gui.UpdateLayoutIfNeeded();
 
             base.Notify_ResolutionChanged();
-        }
-
-        public CElement Parent
-        {
-            get
-            {
-                return null;
-            }
-        }
-
-        public T AddElement<T>(T element) where T : CElement
-        {
-            return Gui.AddElement(element);
-        }
-
-        public void RemoveElement(CElement element)
-        {
-            Gui.RemoveElement(element);
         }
     }
 }

@@ -10,10 +10,20 @@ using UnityEngine;
 
 namespace RWLayout.alpha2
 {
+    /// <summary>
+    /// Basic wrapper class for native gui
+    /// </summary>
     public class CWidget : CElement
     {
+        /// <summary>
+        /// shout provide smallest size fitting content of the widget. Argument is current desized size
+        /// </summary>
         public Func<Vector2, Vector2> TryFitContect;
-        public Action<CWidget> DoWidgetContent;
+
+        /// <summary>
+        /// Do native content. Works in the same way as DoWindowContent of Verse.Window class. First argument is the CWidget itself. Second is CWidget's bounds
+        /// </summary>
+        public Action<CWidget, Rect> DoWidgetContent;
 
         public override Vector2 tryFit(Vector2 size)
         {
@@ -30,7 +40,7 @@ namespace RWLayout.alpha2
         public override void DoContent()
         {
             base.DoContent();
-            DoWidgetContent?.Invoke(this);
+            DoWidgetContent?.Invoke(this, Bounds);
         }
     }
 }

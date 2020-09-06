@@ -9,6 +9,9 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+    /// <summary>
+    /// Row content class
+    /// </summary>
     internal class CScrollContent : COwnedElement
     {
         public override ClSimplexSolver Solver
@@ -25,6 +28,9 @@ namespace RWLayout.alpha2
         }
     }
 
+    /// <summary>
+    /// Scroll view layout guide. Provides anchors for inner size and scrollbar sizes
+    /// </summary>
     public class CScrollViewGuide : CLayoutGuide
     {
         public override void AddImpliedConstraints()
@@ -50,10 +56,22 @@ namespace RWLayout.alpha2
         private Anchor vBarWidth_ = new Anchor();
         private Anchor hBarHeight_ = new Anchor();
 
-
+        /// <summary>
+        /// Inner width (scroll width without scroll bar width)
+        /// </summary>
         public ClVariable width => Parent?.GetVariable(ref width_, "cW");
+
+        /// <summary>
+        /// Inner height (scroll height without scroll bar height)
+        /// </summary>
         public ClVariable height => Parent?.GetVariable(ref height_, "cH");
+        /// <summary>
+        /// vertical scroll bar width
+        /// </summary>
         public ClVariable vBarWidth => Parent?.GetVariable(ref vBarWidth_, "bW");
+        /// <summary>
+        /// horizontal scroll bar height
+        /// </summary>
         public ClVariable hBarHeight => Parent?.GetVariable(ref hBarHeight_, "bH");
 
         public override IEnumerable<ClVariable> enumerateAnchors()
@@ -71,9 +89,17 @@ namespace RWLayout.alpha2
         }
     }
 
+    /// <summary>
+    /// Scroll View wrapper controlled by constraint and capable of hosting CViews inside
+    /// </summary>
+    /// <remarks>supports constraints between inner content and outside layout</remarks>
     public class CScrollView : CElement
     {
         private CScrollContent content = null;
+
+        /// <summary>
+        /// Inner view of the CScrollView. Use it to add views into it.
+        /// </summary>
         public CElement Content { get => content; }
 
         public CScrollView()
@@ -92,8 +118,14 @@ namespace RWLayout.alpha2
             return base.allAnchors().Concat(content.exposeAnchors());
         }
 
-
+        /// <summary>
+        /// Current scroll position
+        /// </summary>
         public Vector2 ScrollPosition;
+
+        /// <summary>
+        /// Guide for inner size if CScrollView (size 
+        /// </summary>
         public readonly CScrollViewGuide InnerSizeGuide;
 
         public override void UpdateLayout()

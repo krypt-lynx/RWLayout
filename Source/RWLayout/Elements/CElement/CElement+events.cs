@@ -9,7 +9,16 @@ namespace RWLayout.alpha2
 {
     public partial class CElement
     {
+        /// <summary>
+        /// can view able to detect interactions?
+        /// </summary>
         public bool userInteractionEnabled = true;
+
+        /// <summary>
+        /// searches topmost view in current view tree at given point
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
         public virtual CElement hitTest(Vector2 point)
         {
             if (userInteractionEnabled && Bounds.Contains(point))

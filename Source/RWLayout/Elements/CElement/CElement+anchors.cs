@@ -11,25 +11,40 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+    /// <summary>
+    /// Geometry Anchor. A variable and its defining constraint.
+    /// </summary>
     public struct Anchor
     {
         public ClVariable var;
         public ClConstraint cn;
     }
 
+    /// <summary>
+    /// Layout Guide. Contains extra anchors for some views.
+    /// </summary>
     public abstract class CLayoutGuide
     {
-
+        /// <summary>
+        /// Defining constraints should be created in this method
+        /// </summary>
         public virtual void AddImpliedConstraints() { }
 
+        /// <summary>
+        /// Defining constraints should be removed in this method
+        /// </summary>
         public virtual void RemoveImpliedConstraints() { }
 
+        /// <summary>
+        /// you must override this method to return every anchor variable of the layout guide
+        /// </summary>
+        /// <returns></returns>
         public abstract IEnumerable<ClVariable> enumerateAnchors();
 
         WeakReference parent_ = null;
 
         /// <summary>
-        /// Weak reverese to owning element
+        /// Weak reverese to parent element
         /// </summary>
         internal CElement Parent
         {
@@ -38,6 +53,9 @@ namespace RWLayout.alpha2
         }
     }
 
+    /// <summary>
+    /// Simple list of variables. Can be used to inject exatra variable into simplex solver
+    /// </summary>
     public class CVarListGuide : CLayoutGuide
     {
         public List<Anchor> Anchors = new List<Anchor>();
@@ -48,7 +66,7 @@ namespace RWLayout.alpha2
         }
     }
 
-
+    
     public partial class CElement
     {
         public IReadOnlyList<CLayoutGuide> Guides { get => guides; }

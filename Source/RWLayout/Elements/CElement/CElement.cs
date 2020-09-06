@@ -12,14 +12,19 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+    /// <summary>
+    /// View. Represents region defined by constraints. Provides geometry, update and drawing methods
+    /// </summary>
     public partial class CElement
     {
+        /// <summary>
+        /// View ID. Used obly for debug info
+        /// </summary>
         public int ID { get; }
         public CElement()
         {
             ID = nextId++;
         }
-
      
         /// <summary>
         /// Field for custom data storage
@@ -32,7 +37,10 @@ namespace RWLayout.alpha2
             this.Root.PostLayoutUpdate();
         }
 
-
+        /// <summary>
+        /// Updates constraints and anchor values
+        /// </summary>
+        /// <remarks>should not be called directly. Use UpdateLayoutIfNeeded</remarks>
         public virtual void UpdateLayout()
         {
             AddImpliedConstraints();
@@ -57,6 +65,9 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Called after constraints resolve. You can override it to perform inner geometry update.
+        /// </summary>
         public virtual void PostLayoutUpdate()
         {
             Bounds = Rect.MinMaxRect((float)left.Value, (float)top.Value, (float)right.Value, (float)bottom.Value);
@@ -68,15 +79,26 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Is view hidden flag
+        /// </summary>
+        /// <remarks>is true hides current element and all its children</remarks>
         public virtual bool Hidden { set; get; } = false;
 
 
-        //protected bool needsUpdateLayout = true;
+        /// <summary>
+        /// Returns true if layout was changed and update is requited
+        /// </summary>
+        /// <returns></returns>
         public virtual bool NeedsUpdateLayout()
         {
             return Parent?.NeedsUpdateLayout() ?? false;
         }
 
+
+        /// <summary>
+        /// Requests layout update
+        /// </summary>
         public virtual void SetNeedsUpdateLayout()
         {
             if (Parent != null)
@@ -85,6 +107,9 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Updates layout, but only if it really required
+        /// </summary>
         public virtual void UpdateLayoutIfNeeded()
         {
             var root = Root;
@@ -102,6 +127,10 @@ namespace RWLayout.alpha2
 
         // todo: intristic size
 
+        /// <summary>
+        /// String desctiption
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return $"{base.ToString()}-{NamePrefix()}";

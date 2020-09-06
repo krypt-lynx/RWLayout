@@ -9,9 +9,17 @@ namespace RWLayout.alpha2
 {
     public partial class CElement
     {
+        /// <summary>
+        /// View's Name. Used only for debug
+        /// </summary>
         public string Name = null;
 
-        public static int nextId = 0;
+        private static int nextId = 0;
+
+        /// <summary>
+        /// View's Anchor' Name prefix
+        /// </summary>
+        /// <returns></returns>
         public string NamePrefix()
         {
             if (Name == null)

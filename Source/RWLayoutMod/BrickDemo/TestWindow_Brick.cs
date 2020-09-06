@@ -35,7 +35,7 @@ namespace RWLayoutMod.BrickDemo
             optionalTitle = "Poor Man's Tetris";
             doCloseX = true;
             draggable = true;
-            MakeResizable(horizontal: true);
+            MakeResizable(false, true);
 
             Gui.AddConstraint(Gui.height >= 200);
             Gui.AddConstraint(Gui.height <= Gui.AdjustedScreenSize.height);
@@ -48,7 +48,7 @@ namespace RWLayoutMod.BrickDemo
             // 12 x 20 bottle
             var bottleFrame = Gui.AddElement(new CWidget
             {
-                DoWidgetContent = (sender) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.BoundsRounded)),
+                DoWidgetContent = (sender, _) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.BoundsRounded)),
                 Name = "Bottle",
             });
 
@@ -72,7 +72,7 @@ namespace RWLayoutMod.BrickDemo
 
             var previewFrame = Gui.AddElement(new CWidget
             {
-                DoWidgetContent = (sender) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.BoundsRounded)),
+                DoWidgetContent = (sender, _) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.BoundsRounded)),
                 Name = "Preview",
             });
 

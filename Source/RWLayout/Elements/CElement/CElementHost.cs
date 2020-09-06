@@ -13,6 +13,9 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+    /// <summary>
+    /// This view can be oftend by other view without actually adding it as a child
+    /// </summary>
     public class COwnedElement : CElement
     {
         WeakReference owner_ = null;
@@ -27,10 +30,20 @@ namespace RWLayout.alpha2
         }
     }
 
+    /// <summary>
+    /// base class for hierarchy root.
+    /// </summary>
     public class CElementHost : COwnedElement
     {
+        /// <summary>
+        /// Indicates inability to resolve constraints
+        /// </summary>
         public bool InErrorState { get; private set; } = false;
         public Rect _inRect;
+
+        /// <summary>
+        /// Expected view rect
+        /// </summary>
         public Rect InRect
         {
             get { return _inRect; }
@@ -44,30 +57,6 @@ namespace RWLayout.alpha2
             }
         }
 
-
-        /*
-        protected bool needsUpdateLayoutConstraints = true;
-        public void UpdateLayoutConstraintsIfNeeded()
-        {
-            if (needsUpdateLayoutConstraints)
-            {
-                UpdateLayoutConstraints();
-
-                PostConstraintsUpdate();
-
-                UpdateLayout(); // forcefully updating layout after init to resolve multiline labels
-                PostLayoutUpdate();
-                needsUpdateLayout = true;
-            }
-        }
-
-        public override void UpdateLayoutConstraints()
-        {
-            needsUpdateLayoutConstraints = false;
-
-            base.UpdateLayoutConstraints();
-            Solver.Solve();
-        }*/
 
         protected bool needsUpdateLayout = true;
 

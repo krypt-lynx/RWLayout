@@ -9,11 +9,18 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+    /// <summary>
+    /// Gui constraints host for use within native drawing methods
+    /// </summary>
     public class CGuiRoot : CElementHost
     {
         //public bool FlexableWidth = false;
         //public bool FlexableHeight = false;
 
+        /// <summary>
+        /// Called if layoud got updated 
+        /// </summary>
+        /// <remarks>CGuiRoot guaranteed to have actual size</remarks>
         public Action LayoutUpdated;
 
         public override void AddImpliedConstraints()

@@ -13,12 +13,26 @@ namespace RWLayout.alpha2
 {
     public partial class CElement
     {
+        /// <summary>
+        /// Bounds of the view
+        /// </summary>
         public Rect Bounds { get; protected set; }
+        /// <summary>
+        /// Rounded to whole numbers bounds of the view
+        /// </summary>
         public Rect BoundsRounded { get; protected set; }
-        protected Vector2 drawingOffset;
+        protected Vector2 drawingOffset; // TODO: implement
 
+        /// <summary>
+        /// expected to return best fitting size in given place
+        /// </summary>
+        /// <param name="size"></param>
+        /// <returns>used for intrinsic size calculations</returns>
         public virtual Vector2 tryFit(Vector2 size) { return Vector2.zero; }
 
+        /// <summary>
+        /// Remders the view and its children
+        /// </summary>
         public void DoElementContent()
         {
             if (!Hidden)
@@ -32,13 +46,26 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Translates coordinates to basis used in current view
+        /// </summary>
+        /// <param name="source">the view original coordinates belongs to</param>
+        /// <param name="point">coordinates in original view basis</param>
+        /// <returns>coordinates in current view basis</returns>
+        /// <remarks>not implemented</remarks>
         public virtual Vector2 toViewCoordinates(CElement source, Vector2 point)
         {
             return point; // todo: implement
         }
 
+        /// <summary>
+        /// Controls debug overlay
+        /// </summary>
         public static bool DebugDraw = false;
 
+        /// <summary>
+        /// Remders the view
+        /// </summary>
         public virtual void DoContent()
         {
             if (DebugDraw)

@@ -9,9 +9,15 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+    /// <summary>
+    /// Base class for widgets wrappers contaning cofigurable text in it
+    /// </summary>
     public abstract class CTitledElement : CElement
     {
         string title = null;
+        /// <summary>
+        /// the title of view
+        /// </summary>
         public string Title
         {
             get => title; 
@@ -26,6 +32,9 @@ namespace RWLayout.alpha2
 
 
         GameFont font = GameFont.Small;
+        /// <summary>
+        /// font for title
+        /// </summary>
         public GameFont Font 
         {
             get => font; 
@@ -37,9 +46,15 @@ namespace RWLayout.alpha2
                 }
             }
         }
+        /// <summary>
+        /// color for title
+        /// </summary>
         public Color? Color = null;
 
         bool wordWrap = false;
+        /// <summary>
+        /// use word wrap flag
+        /// </summary>
         public bool WordWrap
         {
             get => wordWrap;
@@ -88,6 +103,12 @@ namespace RWLayout.alpha2
         }
 
         static GUIContent contentForTesting = new GUIContent();
+        /// <summary>
+        /// measures text size for tryFit method.
+        /// </summary>
+        /// <param name="size">desired size</param>
+        /// <param name="margin">expected inner margin</param>
+        /// <returns>Best size for text to fir in desized size is possible to fit. Required size to fit if is not</returns>
         public Vector2 tryFitText(Vector2 size, Vector2 margin)
         {
             ApplyGeometryOnly();

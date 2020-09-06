@@ -84,7 +84,7 @@ namespace RWLayoutMod.ListViewDemo
 
             var leftFrame = Gui.AddElement(new CWidget
             {
-                DoWidgetContent = (sender) => GuiTools.UsingColor(new Color(1, 1, 1, 0.3f), () => GuiTools.Box(sender.Bounds, new EdgeInsets(1))),
+                DoWidgetContent = (_, bounds) => GuiTools.UsingColor(new Color(1, 1, 1, 0.3f), () => GuiTools.Box(bounds, new EdgeInsets(1))),
             });
 
             var listLeft = leftFrame.AddElement(new CListView());
@@ -93,7 +93,7 @@ namespace RWLayoutMod.ListViewDemo
 
             var rightFrame = Gui.AddElement(new CWidget
             {
-                DoWidgetContent = (sender) => GuiTools.UsingColor(new Color(1, 1, 1, 0.3f), () => GuiTools.Box(sender.Bounds, new EdgeInsets(1))),
+                DoWidgetContent = (_, bounds) => GuiTools.UsingColor(new Color(1, 1, 1, 0.3f), () => GuiTools.Box(bounds, new EdgeInsets(1))),
             });
 
             var listRight = rightFrame.AddElement(new CListView());

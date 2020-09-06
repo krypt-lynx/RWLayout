@@ -11,6 +11,9 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+    /// <summary>
+    /// Widgets.Label wrapper 
+    /// </summary>
     public class CLabel : CTitledElement
     {
         public override Vector2 tryFit(Vector2 size)

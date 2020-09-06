@@ -8,11 +8,20 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+    /// <summary>
+    /// Widgets.CheckboxLabeled wrapper
+    /// </summary>
     public class CCheckBox : CTitledElement
     {
+        /// <summary>
+        /// Is checkbox checked?
+        /// </summary>
         public bool Checked = false;
-        public bool Disabled = false;
 
+        /// <summary>
+        /// Called on Checked state change
+        /// </summary>
+        /// <remarks>first argument is wrapper itself, second argument is Checked state</remarks>
         public Action<CCheckBox, bool> Changed = null;
 
         public override Vector2 tryFit(Vector2 size)

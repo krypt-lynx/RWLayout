@@ -11,8 +11,14 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+    /// <summary>
+    /// Widgets.ButtonText wrapper
+    /// </summary>
     public class CButton : CTitledElement
     {
+        /// <summary>
+        /// Called then button is pressed
+        /// </summary>
         public Action<CElement> Action { get; set; }
 
         public override Vector2 tryFit(Vector2 size)

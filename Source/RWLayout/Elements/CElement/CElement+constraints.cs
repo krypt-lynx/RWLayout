@@ -10,10 +10,9 @@ namespace RWLayout.alpha2
 
     public partial class CElement
     {
-        // todo: split solvers (copy + clean each?)
-      
-
-
+        /// <summary>
+        /// Creates and configures simplex solver
+        /// </summary>
         private void CreateSolver()
         {
             solver = new ClSimplexSolver();
@@ -22,6 +21,9 @@ namespace RWLayout.alpha2
         }
 
         protected ClSimplexSolver solver;
+        /// <summary>
+        /// Cassowary Simplex Solver. Responsible for constraints resolving.
+        /// </summary>
         public virtual ClSimplexSolver Solver { // todo: protected
             get {
                 var parent = Parent;
@@ -40,6 +42,12 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Adds constraint.
+        /// </summary>
+        /// <param name="constraint">the constraint</param>
+        /// <param name="strength">constraints strengh override. Not changed if null</param>
+        /// <remarks>Every variable of the constraint should belong to current view tree</remarks>
         public void AddConstraint(ClConstraint constraint, ClStrength strength = null)
         {
             ValidateVariables(constraint);
@@ -50,8 +58,13 @@ namespace RWLayout.alpha2
             }
 
             Solver?.AddConstraint(constraint);
+
+            SetNeedsUpdateLayout();
         }
 
+        /// <summary>
+        /// Checks if used variables belong to current view tree</remarks>
+        /// </summary>
         private void ValidateVariables(ClConstraint constraint)
         {
             HashSet<ClVariable> anchors = Root.allAnchors().ToHashSet();
@@ -64,6 +77,9 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Removes contraint.
+        /// </summary>
         public void RemoveConstraint(ClConstraint constraint)
         {
             //if (!constraints.Contains(constraint))
@@ -73,6 +89,7 @@ namespace RWLayout.alpha2
 
             //constraints.Remove(constraint);
             Solver?.RemoveConstraint(constraint);
+            SetNeedsUpdateLayout();
         }
 
         /// <summary>
@@ -126,8 +143,14 @@ namespace RWLayout.alpha2
             return movedConstraints;
         }
 
-             
 
+
+        /// <summary>
+        /// Adds multiple constraints.
+        /// </summary>
+        /// <param name="strength">constraints strengh override. Not changed if null</param>
+        /// <param name="constraints">constraints list</param>
+        /// <remarks>Every variable of the constraint should belong to current view tree</remarks>
         public void AddConstraints(ClStrength strength, IEnumerable<ClConstraint> constraints)
         {
             foreach (var cn in constraints)
@@ -136,11 +159,22 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Adds multiple constraints.
+        /// </summary>
+        /// <param name="strength">constraints strengh override. Not changed if null</param>
+        /// <param name="constraints">constraints list</param>
+        /// <remarks>Every variable of the constraint should belong to current view tree</remarks>
         public void AddConstraints(ClStrength strength, params ClConstraint[] constraints)
         {
             AddConstraints(strength, (IEnumerable<ClConstraint>)constraints);
         }
 
+        /// <summary>
+        /// Adds multiple constraints.
+        /// </summary>
+        /// <param name="constraints">constraints list</param>
+        /// <remarks>Every variable of the constraint should belong to current view tree</remarks>
         public void AddConstraints(IEnumerable<ClConstraint> constraints)
         {
             foreach (var cn in constraints)
@@ -149,11 +183,19 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Adds multiple constraints.
+        /// </summary>
+        /// <param name="constraints">constraints list</param>
+        /// <remarks>Every variable of the constraint should belong to current view tree</remarks>
         public void AddConstraints(params ClConstraint[] constraints)
         {
             AddConstraints((IEnumerable<ClConstraint>)constraints);
         }
 
+        /// <summary>
+        /// Removes contraints.
+        /// </summary>
         public void RemoveConstraint(IEnumerable<ClConstraint> constraints)
         {
             foreach (var cn in constraints)
@@ -162,6 +204,9 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Removes contraints.
+        /// </summary>
         public void RemoveConstraint(params ClConstraint[] constraints)
         {
             RemoveConstraint((IEnumerable<ClConstraint>)constraints);

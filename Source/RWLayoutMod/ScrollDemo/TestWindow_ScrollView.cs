@@ -31,11 +31,11 @@ namespace RWLayoutMod.ScrollDemo
             var scroll2 = Gui.AddElement(new CScrollView());
             var test2 = scroll2.Content.AddElement(new CWidget
             {
-                DoWidgetContent = (sender) =>
+                DoWidgetContent = (_, bounds) =>
                 {
                     GuiTools.UsingColor(Color.white, () =>
                     {
-                        GuiTools.Box(sender.Bounds, new EdgeInsets(2, 8, 2, 8));
+                        GuiTools.Box(bounds, new EdgeInsets(2, 8, 2, 8));
                     });
 
                 }

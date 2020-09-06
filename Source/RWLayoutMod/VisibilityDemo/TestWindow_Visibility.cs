@@ -16,7 +16,7 @@ namespace RWLayoutMod.VisibilityDemo
         {
             var indicator = this.AddElement(new CWidget
             {
-                DoWidgetContent = (sender) => Widgets.DrawBoxSolid(sender.Bounds, color),
+                DoWidgetContent = (_, bounds) => Widgets.DrawBoxSolid(bounds, color),
             });
 
             this.Embed(indicator, new EdgeInsets(10));
@@ -44,7 +44,7 @@ namespace RWLayoutMod.VisibilityDemo
 
             var lightsFrame = Gui.AddElement(new CWidget
             {
-                DoWidgetContent = (sender) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.BoundsRounded)),
+                DoWidgetContent = (sender, _) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.BoundsRounded)),
             });
 
             lightsFrame.AddConstraints(lightsFrame.width ^ 100, lightsFrame.height ^ 300);

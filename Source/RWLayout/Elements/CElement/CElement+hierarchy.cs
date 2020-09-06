@@ -15,6 +15,9 @@ namespace RWLayout.alpha2
     public partial class CElement
     {
         private List<CElement> elements = new List<CElement>();
+        /// <summary>
+        /// View's subviews
+        /// </summary>
         public IReadOnlyList<CElement> Elements
         {
             get
@@ -23,6 +26,12 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Adds new subview
+        /// </summary>
+        /// <typeparam name="T">added view type</typeparam>
+        /// <param name="element">child to add</param>
+        /// <returns></returns>
         public T AddElement<T>(T element) where T : CElement
         {
             if (element.Parent != null)
@@ -45,6 +54,10 @@ namespace RWLayout.alpha2
             return element;
         }
 
+        /// <summary>
+        /// Adds multiple subviews
+        /// </summary>
+        /// <param name="elements">children to add</param>
         public void AddElements(IEnumerable<CElement> elements)
         {
             foreach(var element in elements)
@@ -53,11 +66,19 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Adds multiple subviews
+        /// </summary>
+        /// <param name="elements">children to add</param>
         public void AddElements(params CElement[] elements)
         {
             AddElements((IEnumerable<CElement>)elements);
         }
 
+        /// <summary>
+        /// Removes the subview
+        /// </summary>
+        /// <param name="element">children to remove</param>
         public void RemoveElement(CElement element)
         {
             if (!elements.Remove(element))
@@ -79,6 +100,10 @@ namespace RWLayout.alpha2
             SetNeedsUpdateLayout();
         }
 
+        /// <summary>
+        /// Removes multiple subviews
+        /// </summary>
+        /// <param name="elements">children to remove</param>
         public void RemoveElements(IEnumerable<CElement> elements)
         {
             foreach (var element in elements) // todo: performance
@@ -87,11 +112,18 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Removes multiple subviews
+        /// </summary>
+        /// <param name="elements">children to remove</param>
         public void RemoveElements(params CElement[] elements)
         {
             RemoveElements((IEnumerable<CElement>)elements);
         }
 
+        /// <summary>
+        /// Removes all subviews
+        /// </summary>
         public void RemoveAllElements()
         {
             var views = new List<CElement>(Elements);
@@ -101,11 +133,18 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// view was added into another subview
+        /// </summary>
         public virtual void PostAdd()
         {
 
         }
 
+        /// <summary>
+        /// brings view to the top of the views stack
+        /// </summary>
+        /// <param name="element"></param>
         public void BringToFront(CElement element)
         {
             if (!elements.Remove(element))
@@ -115,6 +154,11 @@ namespace RWLayout.alpha2
             elements.Add(element);
             SetNeedsUpdateLayout();
         }
+
+        /// <summary>
+        /// sends view to the bottom of the views stack
+        /// </summary>
+        /// <param name="element"></param>
         public void SendToBack(CElement element)
         {
             if (!elements.Remove(element))
@@ -139,11 +183,18 @@ namespace RWLayout.alpha2
         }
 
         WeakReference parent_ = null;
+        /// <summary>
+        /// Parent view if this view
+        /// </summary>
         public CElement Parent
         {
             get { return parent_?.IsAlive ?? false ? parent_.Target as CElement : null; }
             protected set { parent_ = new WeakReference(value, false); }
         }
+
+        /// <summary>
+        /// current view trees' root view
+        /// </summary>
         public CElement Root
         {
             get {

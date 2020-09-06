@@ -24,6 +24,7 @@
     <LangVersion>8.0</LangVersion>
     <NoWarn>
     </NoWarn>
+    <DocumentationFile>bin\Debug\0RWLayout.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>portable</DebugType>
@@ -81,7 +82,6 @@
     <Compile Include="Elements\CElement\CElement.cs" />
     <Compile Include="Elements\CElement\CElementHost.cs" />
     <Compile Include="Elements\CGuiRoot.cs" />
-    <Compile Include="Elements\CHelpers.cs" />
     <Compile Include="Elements\CButton.cs" />
     <Compile Include="Elements\CCheckBox.cs" />
     <Compile Include="Elements\CLabel.cs" />
