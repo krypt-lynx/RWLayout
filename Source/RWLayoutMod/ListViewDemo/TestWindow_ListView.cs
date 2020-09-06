@@ -8,7 +8,7 @@ using RWLayout.alpha2;
 using UnityEngine;
 using Verse;
 
-namespace RWLayoutMod.ListingStandardDemo
+namespace RWLayoutMod.ListViewDemo
 {
     public class CDraggableElement : CElement
     {
@@ -67,7 +67,7 @@ namespace RWLayoutMod.ListingStandardDemo
     }
 
 
-    class TestWindow_ListingStandard : CWindow
+    class TestWindow_ListView : CWindow
     {
         string[] leftStrings = { "parka", "jacket", "pants" };
         string[] rightStrings = { "T-shirt" };
@@ -149,7 +149,7 @@ namespace RWLayoutMod.ListingStandardDemo
                 }
 
                 sb.Append(element.NamePrefix());
-                if (element is CElementHost host)
+                if (element is COwnedElement host)
                 {
                     sb.Append(" + ");
                     element = host.Owner;

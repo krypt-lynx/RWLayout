@@ -14,7 +14,7 @@ namespace RWLayoutMod
     {
         (string, Func<Window>)[] tests =
         {
-            ("List View", () => new ListingStandardDemo.TestWindow_ListingStandard()),
+            ("List View", () => new ListViewDemo.TestWindow_ListView()), 
             ("Window Resize", () => new ResizeDemo.TestWindow_WindowResize()),
             ("Add/Remove Elements", () => new BrickDemo.TestWindow_Brick()),
             ("Show/Hide Elements", () => new VisibilityDemo.TestWindow_Visibility()),
@@ -58,7 +58,7 @@ namespace RWLayoutMod
             var versionInfo = Gui.AddElement(new CLabel
             {
                 Title = $"RWLayout version: {RWLayoutMod.commitInfo}",
-                Multiline = true,
+                //Multiline = true,
                 Color = new Color(1, 1, 1, 0.5f),
                 Font = GameFont.Tiny,
                 TextAlignment = TextAnchor.UpperRight,

@@ -44,7 +44,7 @@ namespace RWLayoutMod.ResizeDemo
             // "Resize me" label
             var label = Gui.AddElement(new CLabel
             {
-                Multiline = false,
+                //Multiline = false,
                 Title = "Resize me",
                 Font = GameFont.Medium
             });
