@@ -20,6 +20,7 @@ namespace RWLayout.alpha2
         public override void AddImpliedConstraints()
         {
             base.AddImpliedConstraints();
+
             CreateConstraintIfNeeded(ref left_, () => new ClStayConstraint(left, ClStrength.Required));
             CreateConstraintIfNeeded(ref right_, () => new ClStayConstraint(right, ClStrength.Required));
             CreateConstraintIfNeeded(ref top_, () => new ClStayConstraint(top, ClStrength.Required));

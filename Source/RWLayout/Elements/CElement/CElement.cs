@@ -20,24 +20,7 @@ namespace RWLayout.alpha2
             ID = nextId++;
         }
 
-        /*public virtual void UpdateLayoutConstraints()
-        {
-            AddImpliedConstraints();
-            foreach (var element in Elements)
-            {
-                element.UpdateLayoutConstraints();
-            }
-        }*/
-
-        /* public virtual void PostConstraintsUpdate()
-         {
-             foreach (var element in Elements)
-             {
-                 element.PostConstraintsUpdate();
-             }
-         }
-        */
-
+     
         /// <summary>
         /// Field for custom data storage
         /// </summary>
