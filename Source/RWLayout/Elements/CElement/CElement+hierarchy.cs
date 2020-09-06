@@ -31,7 +31,7 @@ namespace RWLayout.alpha2
             }
 
             elements.Add(element);
-            element.parent_ = new WeakReference(this, false);
+            element.Parent = this;
             if (element.solver != null)
             {
                 //Solver.MergeWith(element.solver); // todo: fix MergeWith
@@ -142,6 +142,7 @@ namespace RWLayout.alpha2
         public CElement Parent
         {
             get { return parent_?.IsAlive ?? false ? parent_.Target as CElement : null; }
+            protected set { parent_ = new WeakReference(value, false); }
         }
         public CElement Root
         {
