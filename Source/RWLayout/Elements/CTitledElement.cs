@@ -8,7 +8,7 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
-    public class CTitledElement : CElement
+    public abstract class CTitledElement : CElement
     {
         public string Title;
         public GameFont Font = GameFont.Small;
@@ -48,6 +48,16 @@ namespace RWLayout.alpha2
             GuiTools.PopTextAnchor();
             GuiTools.PopColor();
             GuiTools.PopFont();
+        }
+
+        static GUIContent contentForTesting = new GUIContent();
+        public Vector2 tryFitText(Vector2 size, Vector2 margin)
+        {
+            ApplyGeometryOnly();
+            contentForTesting.text = Title;
+            var result = Text.CurFontStyle.CalcSize(contentForTesting);
+            RestoreGeometryOnly();
+            return result + margin;
         }
     }
 

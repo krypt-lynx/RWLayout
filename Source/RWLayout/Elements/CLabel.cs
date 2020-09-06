@@ -13,15 +13,9 @@ namespace RWLayout.alpha2
 {
     public class CLabel : CTitledElement
     {
-
-        static GUIContent contentForTesting = new GUIContent();
         public override Vector2 tryFit(Vector2 size)
         {
-            ApplyGeometryOnly();
-            contentForTesting.text = Title;
-            var result = GuiTools.UsingFont(Font, () => Text.CurFontStyle.CalcSize(contentForTesting));
-            RestoreGeometryOnly();
-            return result;
+            return tryFitText(size, Vector2.zero);
         }
 
         public override void DoContent()

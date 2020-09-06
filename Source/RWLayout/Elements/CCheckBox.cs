@@ -16,11 +16,8 @@ namespace RWLayout.alpha2
         public Action<CCheckBox> Changed = null;
 
         public override Vector2 tryFit(Vector2 size)
-        {
-            ApplyGeometryOnly();
-            var result = base.tryFit(size);
-            RestoreGeometryOnly();
-            return result;
+        {            
+            return tryFitText(size, new Vector2(10 + 24, 0));
         }
 
         public override void DoContent()

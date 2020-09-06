@@ -17,10 +17,7 @@ namespace RWLayout.alpha2
 
         public override Vector2 tryFit(Vector2 size)
         {
-            ApplyGeometryOnly();
-            var result = Text.CalcSize(Title);
-            RestoreGeometryOnly();
-            return result + new Vector2(14, 10);
+            return tryFitText(size, new Vector2(14, 10));
         }
 
         public override void DoContent()
