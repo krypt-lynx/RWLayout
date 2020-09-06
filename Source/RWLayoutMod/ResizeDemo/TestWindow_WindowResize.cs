@@ -62,9 +62,9 @@ namespace RWLayoutMod.ResizeDemo
             {
                 Title = "show title",
                 Checked = false,
-                Changed = (sender) =>
+                Changed = (_, value) =>
                 {
-                    optionalTitle = sender.Checked ? "window resize test" : null;
+                    optionalTitle = value ? "window resize test" : null;
                 }
 
             });
@@ -96,9 +96,9 @@ namespace RWLayoutMod.ResizeDemo
             {
                 Title = "lock width",
                 Checked = false,
-                Changed = (sender) =>
+                Changed = (_, v) =>
                 {
-                    if (sender.Checked)
+                    if (v)
                     {
                         widthLock = Gui.width ^ this.InnerSize.x;
                         Gui.AddConstraint(widthLock);
@@ -123,9 +123,9 @@ namespace RWLayoutMod.ResizeDemo
             {
                 Title = "lock height",
                 Checked = false,
-                Changed = (sender) =>
+                Changed = (_, v) =>
                 {
-                    if (sender.Checked)
+                    if (v)
                     {
                         heightLock = Gui.height ^ this.InnerSize.y;
                         Gui.AddConstraint(heightLock);

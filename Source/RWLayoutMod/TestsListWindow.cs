@@ -20,7 +20,8 @@ namespace RWLayoutMod
             ("Show/Hide Elements", () => new VisibilityDemo.TestWindow_Visibility()),
             ("Scroll View", () => new ScrollDemo.TestWindow_ScrollView()),
             ("Mixed Use", () => new NativeWindow.WindowTest_NativeWindow()),
-        };
+            ("CLable's intrinsic size", () => new CLabelIntrinsicSize.TestWindow_CLabel()),
+       };
 
 
         public override void ConstructGui()
@@ -52,7 +53,7 @@ namespace RWLayoutMod
             {
                 Title = "Layout Debug",
                 Checked = CElement.DebugDraw,
-                Changed = (x) => CElement.DebugDraw = x.Checked,
+                Changed = (_, x) => CElement.DebugDraw = x,
             });
 
             var versionInfo = Gui.AddElement(new CLabel

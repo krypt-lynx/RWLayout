@@ -22,6 +22,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>8.0</LangVersion>
+    <NoWarn>
+    </NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>portable</DebugType>
@@ -89,6 +91,7 @@
     <Compile Include="CWindow\CWindowRoot.cs" />
     <Compile Include="Elements\ListingStandard\CListingRow.cs" />
     <Compile Include="Elements\ListingStandard\CListingStandart.cs" />
+    <Compile Include="MiscTools\ClassSize.cs" />
     <Compile Include="MiscTools\ConstraintTools.cs" />
     <Compile Include="MiscTools\EdgeInsets.cs" />
     <Compile Include="MiscTools\GuiTools.cs" />

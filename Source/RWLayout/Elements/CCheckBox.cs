@@ -13,7 +13,7 @@ namespace RWLayout.alpha2
         public bool Checked = false;
         public bool Disabled = false;
 
-        public Action<CCheckBox> Changed = null;
+        public Action<CCheckBox, bool> Changed = null;
 
         public override Vector2 tryFit(Vector2 size)
         {            
@@ -30,7 +30,7 @@ namespace RWLayout.alpha2
             RestoreAll();
             if (oldChecked != Checked)
             {
-                Changed?.Invoke(this);
+                Changed?.Invoke(this, Checked);
             }
         }
     }

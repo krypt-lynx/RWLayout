@@ -75,10 +75,11 @@
     <Compile Include="BrickDemo\Curtain.cs" />
     <Compile Include="BrickDemo\Figure.cs" />
     <Compile Include="BrickDemo\TestWindow_Brick.cs" />
+    <Compile Include="CLabelIntrinsicSize\TestWindow_CLabel.cs" />
+    <Compile Include="ListViewDemo\TestWindow_ListView.cs" />
     <Compile Include="NativeWindow\NativeWindow_Harmony.cs" />
     <Compile Include="NativeWindow\WindowTest_NativeWindow.cs" />
     <Compile Include="ResizeDemo\TestWindow_WindowResize.cs" />
-    <Compile Include="ListingStandardDemo\TestWindow_ListingStandard.cs" />
     <Compile Include="ScrollDemo\TestWindow_ScrollView.cs" />
     <Compile Include="VisibilityDemo\TestWindow_Visibility.cs" />
     <Compile Include="RWLayoutMod.cs" />
@@ -99,6 +100,9 @@
       <Project>{859869af-24c5-4aba-a111-f95a794ed7a3}</Project>
       <Name>RWLayout</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ListingStandardDemo\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

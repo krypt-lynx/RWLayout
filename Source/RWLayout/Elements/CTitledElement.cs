@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RWLayout.Alpha1.MiscTools;
 using UnityEngine;
 using Verse;
 
@@ -38,7 +39,7 @@ namespace RWLayout.alpha2
         }
         public Color? Color = null;
 
-        public bool wordWrap = false;
+        bool wordWrap = false;
         public bool WordWrap
         {
             get => wordWrap;
@@ -92,16 +93,16 @@ namespace RWLayout.alpha2
             ApplyGeometryOnly();
             contentForTesting.text = Title ?? "";
 
-            float minX = 0;
-            float maxX = 0;
+            //float minX = 0;
+            //float maxX = 0;
             
-            Text.CurFontStyle.CalcMinMaxWidth(contentForTesting, out minX, out maxX);
+            //Text.CurFontStyle.CalcMinMaxWidth(contentForTesting, out minX, out maxX);
 
-            float x = Mathf.Max(minX, Mathf.Min(maxX, size.x));
-            float y = Text.CurFontStyle.CalcHeight(contentForTesting, x);
-
+            //float x = Mathf.Max(minX, Mathf.Min(maxX, size.x));
+            //float y = Text.CurFontStyle.CalcHeight(contentForTesting, x);
+            var result = Text.CurFontStyle.CalcSize(contentForTesting, size - margin);
             RestoreGeometryOnly();
-            return new Vector2(x, y) + margin;
+            return result + margin;
         }
     }
 
