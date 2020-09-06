@@ -82,6 +82,7 @@ namespace RWLayout.alpha2
             content.Owner = this;
             content.AddConstraint(Content.left ^ 0, ClStrength.Required);
             content.AddConstraint(Content.top ^ 0, ClStrength.Required);
+
             InnerSizeGuide = new CScrollViewGuide();
             AddGuide(InnerSizeGuide);
         }
@@ -120,7 +121,6 @@ namespace RWLayout.alpha2
         
         private void UpdateInnerSizeGuide()
         {
-            // todo: fix delayed update
             var skin = GUI.skin;
             var vBarDefault = skin.verticalScrollbar.fixedWidth + skin.verticalScrollbar.margin.left;
             var hBarDefault = skin.horizontalScrollbar.fixedHeight + skin.horizontalScrollbar.margin.top;
@@ -141,20 +141,35 @@ namespace RWLayout.alpha2
             //Log.Message($"{AllConstraintsString()}");
         }
 
+        public override CElement hitTest(Vector2 point)
+        {
+            if (userInteractionEnabled && Bounds.Contains(point))
+            {
+                var listPoint = point - this.Bounds.position + this.ScrollPosition;
+
+                var sub = base.hitTest(point);
+                if (sub != this)
+                {
+                    return sub;
+                }
+
+                return Content.hitTest(listPoint);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public override void DoContent()
         {
             base.DoContent();
-
-
-            //GUI.BeginClip(Bounds);
-            //var clipped = new Rect(Vector2.zero, Bounds.size);
 
             Widgets.BeginScrollView(Bounds, ref ScrollPosition, Content.Bounds);
             
             Content.DoElementContent();
 
             Widgets.EndScrollView();
-           // GUI.EndClip();
         }
 
         // override 
