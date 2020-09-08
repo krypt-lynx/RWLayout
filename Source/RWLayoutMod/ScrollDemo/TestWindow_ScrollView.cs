@@ -29,16 +29,9 @@ namespace RWLayoutMod.ScrollDemo
             });
             
             var scroll2 = Gui.AddElement(new CScrollView());
-            var test2 = scroll2.Content.AddElement(new CWidget
+            var test2 = scroll2.Content.AddElement(new CFrame
             {
-                DoWidgetContent = (_, bounds) =>
-                {
-                    GuiTools.UsingColor(Color.white, () =>
-                    {
-                        GuiTools.Box(bounds, new EdgeInsets(2, 8, 2, 8));
-                    });
-
-                }
+                Insets = new EdgeInsets(2, 8, 2, 8)
             });
 
             scroll1.Content.Embed(test1, new EdgeInsets(10));

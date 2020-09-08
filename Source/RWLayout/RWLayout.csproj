@@ -70,6 +70,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Elements\CFrame.cs" />
     <Compile Include="Elements\CScrollView.cs" />
     <Compile Include="CWindow\CWindow.cs" />
     <Compile Include="CWindow\CWindowResizer.cs" />
@@ -91,9 +92,9 @@
     <Compile Include="CWindow\CWindowRoot.cs" />
     <Compile Include="Elements\ListingStandard\CListingRow.cs" />
     <Compile Include="Elements\ListingStandard\CListingStandart.cs" />
-    <Compile Include="MiscTools\ClassSize.cs" />
     <Compile Include="MiscTools\ConstraintTools.cs" />
     <Compile Include="MiscTools\EdgeInsets.cs" />
+    <Compile Include="MiscTools\GUIStyleExtension.cs" />
     <Compile Include="MiscTools\GuiTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -120,8 +120,23 @@ namespace RWLayout.alpha2
             LayoutUpdated?.Invoke();
         }
 
+        int layoutUpdateDebugCounter = 0;
         internal void UpdateAndDoContent(Rect inRect)
         {
+            if (NeedsUpdateLayout() && InRect == inRect)
+            {
+                layoutUpdateDebugCounter++;
+            } 
+            else
+            {
+                layoutUpdateDebugCounter = 0;
+            }
+
+            if (layoutUpdateDebugCounter == 60)
+            {
+                Log.Warning($"{NamePrefix()} layout being updated every frame for 60 frames. Probably something is going wrong.");
+            }
+
             UpdateWindowGuide(inRect.size);
             InRect = inRect;
             UpdateLayoutIfNeeded();

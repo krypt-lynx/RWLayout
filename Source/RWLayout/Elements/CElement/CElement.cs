@@ -1,4 +1,4 @@
-﻿// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using Cassowary;
@@ -47,15 +47,15 @@ namespace RWLayout.alpha2
 
             if (intrinsicWidth_.cn != null || intrinsicHeight_.cn != null)
             {
-                var intrinsicSize = this.tryFit(Bounds.size);
+                intrinsicSize = this.tryFit(Bounds.size);
 
                 if (intrinsicWidth_.cn != null)
                 {
-                    UpdateStayConstrait(ref intrinsicWidth_, intrinsicSize.x);
+                    UpdateStayConstrait(ref intrinsicWidth_, intrinsicSize.Value.x);
                 }
                 if (intrinsicHeight_.cn != null)
                 {
-                    UpdateStayConstrait(ref intrinsicHeight_, intrinsicSize.y);
+                    UpdateStayConstrait(ref intrinsicHeight_, intrinsicSize.Value.y);
                 }
             }
 
@@ -64,6 +64,8 @@ namespace RWLayout.alpha2
                 element.UpdateLayout();
             }
         }
+
+        Vector2? intrinsicSize = null;
 
         /// <summary>
         /// Called after constraints resolve. You can override it to perform inner geometry update.
@@ -76,6 +78,13 @@ namespace RWLayout.alpha2
             foreach (var element in Elements)
             {
                 element.PostLayoutUpdate();
+            }
+
+            var newIntrinsicSize = this.tryFit(Bounds.size);
+            if (intrinsicSize.HasValue && newIntrinsicSize != intrinsicSize.Value)
+            {
+                //Log.Message($"{NamePrefix()}: intrinsicSize: {intrinsicSize}; newIntrinsicSize: {newIntrinsicSize}");
+                SetNeedsUpdateLayout();
             }
         }
 

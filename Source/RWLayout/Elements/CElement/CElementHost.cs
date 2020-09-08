@@ -73,6 +73,8 @@ namespace RWLayout.alpha2
         bool retry = false;
         public override void UpdateLayout()
         {
+            //Log.Message($"Layout Update: {NamePrefix()}");
+
             needsUpdateLayout = false;
 
             //UpdateLayoutConstraintsIfNeeded();

@@ -26,7 +26,7 @@ namespace RWLayoutMod.BrickDemo
 
         ClVariable grid = null;
         List<Figure> figures = new List<Figure>();
-        Color borderColor = new Color(1, 1, 1, 0.3f);
+
         public override void ConstructGui()
         {
             base.ConstructGui();
@@ -42,13 +42,12 @@ namespace RWLayoutMod.BrickDemo
 
             grid = new ClVariable("grid");
             var guide = new CVarListGuide();
-            guide.Anchors.Add(new Anchor { var = grid });
+            guide.Variables.Add(grid);
             Gui.AddGuide(guide);
 
             // 12 x 20 bottle
-            var bottleFrame = Gui.AddElement(new CWidget
+            var bottleFrame = Gui.AddElement(new CFrame 
             {
-                DoWidgetContent = (sender, _) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.BoundsRounded)),
                 Name = "Bottle",
             });
 
@@ -69,10 +68,8 @@ namespace RWLayoutMod.BrickDemo
 
 
             // 4 x 4 preview
-
-            var previewFrame = Gui.AddElement(new CWidget
+            var previewFrame = Gui.AddElement(new CFrame
             {
-                DoWidgetContent = (sender, _) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.BoundsRounded)),
                 Name = "Preview",
             });
 
@@ -122,6 +119,7 @@ namespace RWLayoutMod.BrickDemo
             Gui.AddConstraint(btnTest.top ^ btnRemove.bottom + grid);
             Gui.AddConstraint(btnTest.height ^ 2 * grid);
 
+            // debug info section
             debugInfoLabel = Gui.AddElement(new CLabel
             {
                 Font = GameFont.Tiny,
@@ -131,7 +129,7 @@ namespace RWLayoutMod.BrickDemo
             Gui.AddConstraint(debugInfoLabel.right ^ previewFrame.right);
             Gui.AddConstraint(debugInfoLabel.top ^ btnTest.bottom + grid);
 
-
+            // log constraints button
             var logCnsBtn = Gui.AddElement(new CButton
             {
                 Title = "log cns",
@@ -147,6 +145,7 @@ namespace RWLayoutMod.BrickDemo
             Gui.AddConstraint(logCnsBtn.right ^ previewFrame.right);
             Gui.AddConstraint(logCnsBtn.height ^ grid);
 
+            // log variables button
             var logVarsBtn = Gui.AddElement(new CButton
             {
                 Title = "log vars",
@@ -163,7 +162,7 @@ namespace RWLayoutMod.BrickDemo
             Gui.AddConstraint(logVarsBtn.height ^ grid);
             Gui.AddConstraint(logVarsBtn.bottom ^ Gui.bottom);
 
-
+            //
             InnerSize = new Vector2(400, 400);
         }
 

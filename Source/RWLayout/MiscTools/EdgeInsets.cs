@@ -27,6 +27,7 @@ namespace RWLayout.alpha2
             left = margin;
         }
         public static EdgeInsets Zero = new EdgeInsets(0);
+        public static EdgeInsets One = new EdgeInsets(1);
 
         public float top, right, bottom, left;
 

@@ -82,19 +82,13 @@ namespace RWLayoutMod.ListViewDemo
 
             InnerSize = new Vector2(500, 350);
 
-            var leftFrame = Gui.AddElement(new CWidget
-            {
-                DoWidgetContent = (_, bounds) => GuiTools.UsingColor(new Color(1, 1, 1, 0.3f), () => GuiTools.Box(bounds, new EdgeInsets(1))),
-            });
+            var leftFrame = Gui.AddElement(new CFrame());
 
             var listLeft = leftFrame.AddElement(new CListView());
             BuildList(listLeft, leftStrings);
             leftFrame.Embed(listLeft, new EdgeInsets(2));
 
-            var rightFrame = Gui.AddElement(new CWidget
-            {
-                DoWidgetContent = (_, bounds) => GuiTools.UsingColor(new Color(1, 1, 1, 0.3f), () => GuiTools.Box(bounds, new EdgeInsets(1))),
-            });
+            var rightFrame = Gui.AddElement(new CFrame());
 
             var listRight = rightFrame.AddElement(new CListView());
             BuildList(listRight, rightStrings);

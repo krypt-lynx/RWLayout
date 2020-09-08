@@ -31,8 +31,6 @@ namespace RWLayoutMod.VisibilityDemo
         Light yellow;
         Light green;
 
-        Color borderColor = new Color(1, 1, 1, 0.3f);
-
         int stage = 3;
 
         public override void ConstructGui()
@@ -42,10 +40,7 @@ namespace RWLayoutMod.VisibilityDemo
             doCloseX = true;
             draggable = true;
 
-            var lightsFrame = Gui.AddElement(new CWidget
-            {
-                DoWidgetContent = (sender, _) => GuiTools.UsingColor(borderColor, () => Widgets.DrawBox(sender.BoundsRounded)),
-            });
+            var lightsFrame = Gui.AddElement(new CFrame());
 
             lightsFrame.AddConstraints(lightsFrame.width ^ 100, lightsFrame.height ^ 300);
 

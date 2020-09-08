@@ -20,7 +20,7 @@ namespace RWLayoutMod
             ("Show/Hide Elements", () => new VisibilityDemo.TestWindow_Visibility()),
             ("Scroll View", () => new ScrollDemo.TestWindow_ScrollView()),
             ("Mixed Use", () => new NativeWindow.WindowTest_NativeWindow()),
-            ("CLable's intrinsic size", () => new CLabelIntrinsicSize.TestWindow_CLabel()),
+            ("CLabel's intrinsic size", () => new CLabelIntrinsicSize.TestWindow_CLabel()),
        };
 
 

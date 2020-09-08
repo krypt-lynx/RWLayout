@@ -58,11 +58,11 @@ namespace RWLayout.alpha2
     /// </summary>
     public class CVarListGuide : CLayoutGuide
     {
-        public List<Anchor> Anchors = new List<Anchor>();
+        public List<ClVariable> Variables = new List<ClVariable>();
 
         public override IEnumerable<ClVariable> enumerateAnchors()
         {
-            return Anchors.Select(x => x.var);
+            return Variables;
         }
     }
 
@@ -181,7 +181,7 @@ namespace RWLayout.alpha2
             {
                 try
                 {
-                    Solver.AddConstraint(ClStrength.Required, pair.cn = builder()); // implied constrains going directly into solver
+                    Solver.AddConstraint(pair.cn = builder(), ClStrength.Required); // implied constrains going directly into solver
                     // InErrorState = false; // todo:
                 }
                 catch (Exception e)
