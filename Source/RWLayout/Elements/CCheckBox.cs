@@ -35,7 +35,7 @@ namespace RWLayout.alpha2
             bool oldChecked = Checked;
 
             ApplyAll();
-            Widgets.CheckboxLabeled(Bounds, Title, ref Checked);
+            Widgets.CheckboxLabeled(BoundsRounded, Title, ref Checked);
             RestoreAll();
             if (oldChecked != Checked)
             {

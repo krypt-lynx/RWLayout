@@ -18,10 +18,11 @@ namespace RWLayout.alpha2
             Rect rect = new Rect(winRect.width - 24f, winRect.height - 24f, 24f, 24f);
             if (Event.current.type == EventType.MouseDown && Mouse.IsOver(rect))
             {
-                this.isResizing = true;
+                this.IsResizing = true;
                 this.resizeStart = new Rect(mousePosition.x, mousePosition.y, winRect.width, winRect.height);
             }
-            if (this.isResizing)
+            bool wasResizing = this.IsResizing;
+            if (this.IsResizing)
             {
                 Vector2 size = new Vector2(
                     Mathf.Max(minWindowSize.x, Mathf.Min(resizeStart.width + (mousePosition.x - this.resizeStart.x), UI.screenWidth - winRect.xMin)),
@@ -37,18 +38,25 @@ namespace RWLayout.alpha2
                 if (Event.current.type == EventType.MouseUp ||
                     !Input.GetMouseButton(0))
                 {
-                    this.isResizing = false;
+                    this.IsResizing = false;
                 }
             }
             Widgets.ButtonImage(rect, TexUI.WinExpandWidget, true);
 
-            return new Rect(winRect.x, winRect.y, (int)winRect.width, (int)winRect.height);
+            if (wasResizing) 
+            {
+                return winRect.GUIRoundedPreserveOrigin();
+            }
+            else
+            {
+                return winRect;
+            }
             // base.DoResizeControl
         }
 
         public VerifyWindowSizeDelegate UpdateSize = (ref Vector2 size) => { };
 
-        private bool isResizing;
+        public bool IsResizing { get; private set; }
         private Rect resizeStart;
     }
 

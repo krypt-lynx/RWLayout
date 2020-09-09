@@ -31,6 +31,7 @@ namespace RWLayoutMod.CLabelIntrinsicSize
             {
                 //Title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nAenean tellus nisi.",
                 Title = "Good news: I do know how to make intrinsic width and word wrap work together.\nBad news: Not in this release",
+                //Title = "G",
 
                 TextAlignment = TextAnchor.MiddleCenter
             };

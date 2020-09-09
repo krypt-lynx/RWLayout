@@ -84,7 +84,7 @@ namespace RWLayout.alpha2
             var skin = GUI.skin.verticalScrollbar;
 
             float y = 0;
-            float w = Bounds.width - (IsScrollBarVisible() ? (skin.fixedWidth + skin.margin.left) : 0);
+            float w = BoundsRounded.width - (IsScrollBarVisible() ? (skin.fixedWidth + skin.margin.left) : 0);
             foreach (var row in rows)
             {
                 row.InRect = new Rect(0, y, w, float.NaN);
@@ -101,11 +101,11 @@ namespace RWLayout.alpha2
             bool showScrollBar = IsScrollBarVisible();
 
             showScrollBar = true;
-            Widgets.BeginScrollView(Bounds, ref ScrollPosition, innerRect, showScrollBar);
+            Widgets.BeginScrollView(BoundsRounded, ref ScrollPosition, innerRect, showScrollBar);
 
             foreach (var element in rows)
             {
-                if ((element.Bounds.yMax > ScrollPosition.y) && (element.Bounds.yMin < (ScrollPosition.y + this.Bounds.height)))
+                if ((element.BoundsRounded.yMax > ScrollPosition.y) && (element.BoundsRounded.yMin < (ScrollPosition.y + this.BoundsRounded.height)))
                 {
                     element.DoElementContent();
                 }

@@ -118,12 +118,12 @@ namespace RWLayout.alpha2
             if (InErrorState)
             {
                 GuiTools.PushColor(Color.red);
-                GuiTools.Box(Bounds, new EdgeInsets(3));
+                GuiTools.Box(BoundsRounded, new EdgeInsets(3));
 
                 GuiTools.PushTextAnchor(TextAnchor.MiddleCenter);
                 GuiTools.PushFont(GameFont.Tiny);
 
-                Widgets.Label(Bounds, NamePrefix() + "\nexception during update");
+                Widgets.Label(BoundsRounded, NamePrefix() + "\nexception during update");
 
                 GuiTools.PopFont();
                 GuiTools.PopTextAnchor();

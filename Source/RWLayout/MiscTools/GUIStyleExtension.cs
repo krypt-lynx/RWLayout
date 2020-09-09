@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace RWLayout.Alpha1.MiscTools
+namespace RWLayout.alpha2
 {
 
     public static class GUIStyleExtension
     {
         // Unity api is insufficient. Time for hacks.
+
 
         /// <summary>
         /// returns fitting size of the wrapped text
@@ -22,20 +23,33 @@ namespace RWLayout.Alpha1.MiscTools
         /// <returns>fitting size</returns>
         public static Vector2 CalcSize(this GUIStyle style, GUIContent content, Vector2 size)
         {
-            float lower = 0;
-            float upper = 0;
-            //float upperMax = 0;
-
-            Text.CurFontStyle.CalcMinMaxWidth(content, out lower, out upper);
-            
-            var x = Mathf.Min(upper, size.x);
-            if (!Text.WordWrap)
+            if (!style.wordWrap)
             {
-                x = Mathf.Max(lower, x);
+                return style.CalcSize(content);
             }
-                                    
-            return new Vector2(x, Text.CurFontStyle.CalcHeight(content, x));
+            else
+            {
+                float lower = 0;
+                float upper = 0;
+
+                style.CalcMinMaxWidth(content, out lower, out upper);
+                if (Prefs.UIScale != 1.0) // fix of upper size being too small
+                {
+                    var v2 = style.CalcSize(content);
+                    upper = Mathf.Max(upper, v2.x);
+                }
+                // TODO: invalid CalcMinMaxWidth result
+                //       hypothesize: CalcMinMaxWidth uses different font texture to calc size. 
+                //       question: Why single character ('G') is wrapped? 
+                //       Maybe it is possimle to create custom GUIStyle with custom font witting actual size?
+
+                var x = Mathf.Min(upper, size.x);
+
+                var result = new Vector2(x, style.CalcHeight(content, x));
+                return result;
+            }
         }
+
 
         // slow, not in use
         /// <summary>
@@ -45,7 +59,7 @@ namespace RWLayout.Alpha1.MiscTools
         /// <param name="content">content with text to measure</param>
         /// <param name="size">size to fit</param>
         /// <returns>fitting size</returns>
-        public static Vector2 CalcSize2(this GUIStyle style, GUIContent content, Vector2 size)
+        public static Vector2 CalcSize_exact(this GUIStyle style, GUIContent content, Vector2 size)
         {            
             float lower = 0;
             float upper = 0;

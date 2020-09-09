@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RWLayout.Alpha1.MiscTools;
 using UnityEngine;
 using Verse;
 
@@ -18,7 +17,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// the title of view
         /// </summary>
-        public string Title
+        public string Title // TODO: Taggedstring support. Requires some extansive caching for performance
         {
             get => title; 
             set {

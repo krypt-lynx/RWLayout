@@ -79,11 +79,11 @@ namespace RWLayout.alpha2
 
             if (showScrollBar)
             {
-                listing.BeginScrollView(Bounds, ref scrollPosition, ref innerRect);
+                listing.BeginScrollView(BoundsRounded, ref scrollPosition, ref innerRect);
             }
             else
             {
-                listing.Begin(Bounds);
+                listing.Begin(BoundsRounded);
             }
 
             foreach (var element in rows)

@@ -57,9 +57,9 @@ namespace RWLayoutMod.ListViewDemo
 
         public override void DoContent()
         {
-            if ((Mouse.IsOver(Bounds) && !itemDraggig) || inCustomDrawing)
+            if ((Mouse.IsOver(BoundsRounded) && !itemDraggig) || inCustomDrawing)
             {
-                Widgets.DrawHighlight(Bounds);
+                Widgets.DrawHighlight(BoundsRounded);
             }
 
             base.DoContent();

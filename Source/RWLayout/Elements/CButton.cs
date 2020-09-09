@@ -30,7 +30,7 @@ namespace RWLayout.alpha2
         {           
             base.DoContent();
             ApplyAll();
-            if (Widgets.ButtonText(Bounds, Title, doMouseoverSound: true))
+            if (Widgets.ButtonText(BoundsRounded, Title, doMouseoverSound: true))
             {
                 this.Action?.Invoke(this);
             }

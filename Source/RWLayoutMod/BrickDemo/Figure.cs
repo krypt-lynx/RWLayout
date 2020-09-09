@@ -131,7 +131,7 @@ namespace RWLayoutMod.BrickDemo
                     }
                     if (line[x] == 'x')
                     {
-                        var rect = new Rect((x + offsetX) * size, (y + offsetY) * size, size, size).Rounded2();
+                        var rect = new Rect((x + offsetX) * size, (y + offsetY) * size, size, size).GUIRounded();
                         Widgets.DrawBoxSolid(rect, color);
                         GuiTools.UsingColor(Color.gray, () => GuiTools.Box(rect, new EdgeInsets(0, 2, 2, 0)));
                         GuiTools.UsingColor(Color.white, () => GuiTools.Box(rect, new EdgeInsets(2, 0, 0, 2)));

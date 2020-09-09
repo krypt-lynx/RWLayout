@@ -121,9 +121,9 @@ namespace RWLayout.alpha2
         }
 
         int layoutUpdateDebugCounter = 0;
-        internal void UpdateAndDoContent(Rect inRect)
+        internal void UpdateAndDoContent(Rect inRect, bool isResizing)
         {
-            if (NeedsUpdateLayout() && InRect == inRect)
+            if (NeedsUpdateLayout() && !isResizing)
             {
                 layoutUpdateDebugCounter++;
             } 

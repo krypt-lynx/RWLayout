@@ -69,7 +69,7 @@ namespace RWLayoutMod
                 postfix: new HarmonyMethod(typeof(MiscFixes), "DoResizeControl_postfix"));
            
             //harmony.Patch(AccessTools.Method(typeof(GenUI), "Rounded", new Type[] { typeof(Rect) }),
-            //    prefix: new HarmonyMethod(typeof(HarmonyPatches), "Rounded_prefix"));
+            //    prefix: new HarmonyMethod(typeof(MiscFixes), "Rounded_prefix"));
         }
 
 
@@ -112,7 +112,7 @@ namespace RWLayoutMod
 
             static bool Rounded_prefix(Rect r, ref Rect __result)
             {
-                __result = Rect.MinMaxRect(r.xMin, r.yMin, r.xMax, r.yMax);
+                __result = r.GUIRounded();
 
                 return false;
             }

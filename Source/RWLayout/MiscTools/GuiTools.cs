@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -116,10 +117,17 @@ namespace RWLayout.alpha2
             return result;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static float GUIScale(float value, float scale)
+        {
+            return ((int)(value * scale)) / scale;
+        }
 
 
         public static void Box(Rect rect, EdgeInsets insets)
-        {            
+        {
+            var scale = Prefs.UIScale;
+
             float left = rect.xMin;
             float top = rect.yMin;
             float right = rect.xMax;
@@ -137,7 +145,6 @@ namespace RWLayout.alpha2
                 insets.right = width - insets.left;
             }
 
-
             if (insets.top > height)
             {
                 insets.top = height;
@@ -147,10 +154,19 @@ namespace RWLayout.alpha2
                 insets.bottom = height - insets.top;
             }
 
-            GUI.DrawTexture(new Rect(left, top, (float)insets.left, height), BaseContent.WhiteTex);
-            GUI.DrawTexture(new Rect(right - (float)insets.right, top, (float)insets.right, height), BaseContent.WhiteTex);
-            GUI.DrawTexture(new Rect(left + (float)insets.left, top, width - (float)insets.left - (float)insets.right, (float)insets.top), BaseContent.WhiteTex);
-            GUI.DrawTexture(new Rect(left + (float)insets.left, bottom - (float)insets.bottom, width - (float)insets.left - (float)insets.right, (float)insets.bottom), BaseContent.WhiteTex);
+        //    insets.left = GUIScale(insets.left, scale);
+        //    insets.top = GUIScale(insets.top, scale);
+        //    insets.right = GUIScale(insets.right, scale);
+        //    insets.bottom = GUIScale(insets.bottom, scale);
+
+            GUI.DrawTexture(Rect.MinMaxRect(GUIScale(left, scale), GUIScale(top, scale),
+                GUIScale((left + insets.left), scale), GUIScale(bottom, scale)), BaseContent.WhiteTex);
+            GUI.DrawTexture(Rect.MinMaxRect(GUIScale((right - insets.right), scale), GUIScale(top, scale),
+               GUIScale((right - insets.right + insets.right), scale), GUIScale(bottom, scale)), BaseContent.WhiteTex);
+            GUI.DrawTexture(Rect.MinMaxRect(GUIScale((left + insets.left), scale), GUIScale((top), scale),
+                GUIScale((right - insets.right), scale), GUIScale((top + insets.top), scale)), BaseContent.WhiteTex);
+            GUI.DrawTexture(Rect.MinMaxRect(GUIScale((left + insets.left), scale), GUIScale((bottom - insets.bottom), scale),
+                GUIScale((right - insets.right), scale), GUIScale(bottom, scale)), BaseContent.WhiteTex);
         }
 
         public static Rect ExpandedBy(this Rect rect, EdgeInsets insets)
@@ -164,9 +180,27 @@ namespace RWLayout.alpha2
             return Rect.MinMaxRect(rect.xMin + insets.left, rect.yMin + insets.top, rect.xMax - insets.right, rect.yMax - insets.bottom);
         }
 
-        public static Rect Rounded2(this Rect rect)
+        /// <summary>
+        /// Coordinates rounded to be whole screen pixels
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <returns></returns>
+        public static Rect GUIRounded(this Rect rect)
         {
-            return Rect.MinMaxRect((int)rect.xMin, (int)rect.yMin, (int)rect.xMax, (int)rect.yMax);
+            var scale = Prefs.UIScale;
+
+            return Rect.MinMaxRect(GUIScale(rect.xMin, scale), GUIScale(rect.yMin, scale),
+                GUIScale(rect.xMax, scale), GUIScale(rect.yMax, scale));
+        }
+
+        public static Rect GUIRoundedPreserveOrigin(this Rect rect)
+        {
+            var scale = Prefs.UIScale;
+
+            return new Rect(rect.xMin, rect.yMin,
+                GUIScale(rect.width, scale), GUIScale(rect.height, scale));
+
+
         }
     }
 }

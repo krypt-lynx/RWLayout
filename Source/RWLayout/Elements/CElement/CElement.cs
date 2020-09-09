@@ -1,4 +1,4 @@
-// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+﻿// This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 using Cassowary;
@@ -73,7 +73,7 @@ namespace RWLayout.alpha2
         public virtual void PostLayoutUpdate()
         {
             Bounds = Rect.MinMaxRect((float)left.Value, (float)top.Value, (float)right.Value, (float)bottom.Value);
-            BoundsRounded = Bounds.Rounded2();
+            BoundsRounded = Bounds.GUIRounded();
 
             foreach (var element in Elements)
             {

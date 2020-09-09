@@ -68,18 +68,27 @@ namespace RWLayout.alpha2
         }
 
         /// <summary>
+        /// modifier to fight gui jittering on fractional scales
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 GuiScaleFix()
+        {
+            return (Prefs.UIScale % 1) == 0 ? Vector2.zero : Vector2.one;
+        }
+
+        /// <summary>
         /// Inner size of the window (window size - margins)
         /// </summary>
         public Vector2 InnerSize
         {
             get
             {
-                return windowRect.size - MarginsSize();
+                return windowRect.size - MarginsSize() - GuiScaleFix();
             }
             set
             {
                 initSize = value;
-                windowRect = new Rect(windowRect.position, value + MarginsSize());
+                windowRect = new Rect(windowRect.position, value + MarginsSize() + GuiScaleFix());
             }
         }
 
@@ -175,7 +184,11 @@ namespace RWLayout.alpha2
         /// <param name="inRect"></param>
         public override void DoWindowContents(Rect inRect)
         {
-            Gui.UpdateAndDoContent(inRect);
+            var fix = GuiScaleFix();
+            inRect.width -= fix.x;
+            inRect.height -= fix.y;
+
+            Gui.UpdateAndDoContent(inRect, resizer.IsResizing);
         }
 
         /// <summary>

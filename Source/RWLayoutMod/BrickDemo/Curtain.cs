@@ -43,7 +43,7 @@ namespace RWLayoutMod.BrickDemo
             {
                 for (int y = maxY - Lines; y < maxY; y++)
                 {
-                    var rect = new Rect(x * size, y * size, size, size).Rounded2();
+                    var rect = new Rect(x * size, y * size, size, size).GUIRounded();
                     Widgets.DrawBoxSolid(rect, color);
                     GuiTools.UsingColor(Color.gray, () => GuiTools.Box(rect, new EdgeInsets(0, 2, 2, 0)));
                     GuiTools.UsingColor(Color.white, () => GuiTools.Box(rect, new EdgeInsets(2, 0, 0, 2)));

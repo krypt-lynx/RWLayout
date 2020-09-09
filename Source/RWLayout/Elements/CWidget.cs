@@ -21,7 +21,7 @@ namespace RWLayout.alpha2
         public Func<Vector2, Vector2> TryFitContect;
 
         /// <summary>
-        /// Do native content. Works in the same way as DoWindowContent of Verse.Window class. First argument is the CWidget itself. Second is CWidget's bounds
+        /// Do native content. Works in the same way as DoWindowContent of Verse.Window class. First argument is the CWidget itself. Second is CWidget's bounds rounded to whole pixels (*not to integers*)
         /// </summary>
         public Action<CWidget, Rect> DoWidgetContent;
 
@@ -40,7 +40,7 @@ namespace RWLayout.alpha2
         public override void DoContent()
         {
             base.DoContent();
-            DoWidgetContent?.Invoke(this, Bounds);
+            DoWidgetContent?.Invoke(this, BoundsRounded);
         }
     }
 }
