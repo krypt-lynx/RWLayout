@@ -136,13 +136,13 @@ namespace RWLayoutMod.CLabelIntrinsicSize
             guide.Variables.Add(pan2Grid);
             Gui.AddGuide(guide);
 
-            panel1.StackLeft(true, true, ClStrength.Strong, (wordWrap, pan1Grid), (width, pan1Grid), (height, pan1Grid));
-            panel2.StackLeft(true, true, ClStrength.Strong, (downsizeFast, pan2Grid), (downsize, pan2Grid), (fitWidth, pan2Grid * 2), (upsize, pan2Grid), (upsizeFast, pan2Grid));
+            panel1.StackLeft((wordWrap, pan1Grid), (width, pan1Grid), (height, pan1Grid));
+            panel2.StackLeft((downsizeFast, pan2Grid), (downsize, pan2Grid), (fitWidth, pan2Grid * 2), (upsize, pan2Grid), (upsizeFast, pan2Grid));
 
             Gui.AddConstraint(Gui.height >= panel2.bottom);
 
             var testArea = Gui.AddElement(new CElement());
-            Gui.StackTop(true, true, ClStrength.Strong, (panel1, 25), (panel2, 25), testArea);
+            Gui.StackTop((panel1, 25), (panel2, 25), testArea);
 
             var labelFrame = testArea.AddElement(new CFrame
             {

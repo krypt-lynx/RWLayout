@@ -50,7 +50,7 @@ namespace RWLayoutMod.VisibilityDemo
                 Action = NextLight
             });
 
-            Gui.StackTop(true, true, ClStrength.Strong, lightsFrame, 16, (switchLightsBtn, 40));
+            Gui.StackTop(lightsFrame, 16, (switchLightsBtn, 40));
 
             red = new Light(new Color(0.9f, 0.1f, 0.1f));
             yellow = new Light(new Color(0.8f, 0.8f, 0.1f));
@@ -58,7 +58,7 @@ namespace RWLayoutMod.VisibilityDemo
 
             Gui.AddElements(red, yellow, green);
 
-            lightsFrame.StackTop(true, true, ClStrength.Strong, red, (yellow, red.height), (green, red.height));
+            lightsFrame.StackTop(red, (yellow, red.height), (green, red.height));
         }
 
         private void NextLight(CElement obj)

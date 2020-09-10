@@ -65,21 +65,18 @@ namespace RWLayoutMod
                 TextAlignment = TextAnchor.UpperRight,
             });
 
-            buttonsPanel.StackLeft(false, true, ClStrength.Strong,
-                (buttonsColumn1, 220), 20, (buttonsColumn2, 150));
+            buttonsPanel.StackLeft(StackOptions.Create(constrainSides: false), (buttonsColumn1, 220), 20, (buttonsColumn2, 150));
             buttonsPanel.AddConstraint(buttonsColumn1.top ^ buttonsPanel.top, ClStrength.Strong);
             buttonsPanel.AddConstraint(buttonsColumn2.top ^ buttonsPanel.top, ClStrength.Strong);
-            buttonsColumn1.StackTop(true, true, ClStrength.Strong, buttons);
-            buttonsColumn2.StackTop(true, true, ClStrength.Strong,
-                (debugCheck, 30));
+            buttonsColumn1.StackTop(buttons);
+            buttonsColumn2.StackTop((debugCheck, 30));
 
             buttonsColumn1.AddConstraint(buttonsColumn1.bottom <= buttonsPanel.bottom, ClStrength.Medium);
             buttonsColumn2.AddConstraint(buttonsColumn2.bottom <= buttonsPanel.bottom, ClStrength.Medium);
 
             Gui.AddElement(buttonsPanel);
 
-            Gui.StackTop(true, true, ClStrength.Strong,
-                (titleLabel, 42), buttonsPanel, 20, (versionInfo, versionInfo.intrinsicHeight));
+            Gui.StackTop((titleLabel, 42), buttonsPanel, 20, (versionInfo, versionInfo.intrinsicHeight));
 
             //Gui.AddConstraint(Gui.height ^ 230 - MarginsSize().x);
         }

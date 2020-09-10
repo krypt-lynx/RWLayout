@@ -174,7 +174,7 @@ namespace RWLayoutMod
                 Changed = (_, value) => settings.patchWindowResize = value,
             });
 
-            settingsGui.StackTop(true, false, ClStrength.Strong, (layoutDebug, layoutDebug.intrinsicHeight), 2, (showExamples, showExamples.intrinsicHeight), 10, (patchLog, patchLog.intrinsicHeight), 2, (patchResize, patchResize.intrinsicHeight));
+            settingsGui.StackTop(StackOptions.Create(intrinsicIfNotSet: true, constrainEnd: false), layoutDebug, 2, showExamples, 10, patchLog, 2, patchResize);
 
             var examplesButton = settingsGui.AddElement(new CButton
             {

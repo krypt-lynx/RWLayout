@@ -11,6 +11,23 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+    /*
+      stacking direction ---->
+    +--------------------------------------- - - -
+    |             SideA       
+    |         +-----------+                   +-- - -
+    |         |           |                   |         
+    | Leading |<--Sizes-->| Traling   Leading |<- - -
+    |         |           |                   |
+    |         +-----------+                   +-- - -
+    |             SideB       
+    +--------------------------------------- - - -
+     
+    multipler: 
+        1 if (leading -> traling) coordinates accending        
+       -1 if (leading -> traling) coordinates deсending
+     */
+
     struct AnchorMapper
     {
         public string debug;
@@ -20,7 +37,52 @@ namespace RWLayout.alpha2
         public Func<CElement, ClVariable> SideA;
         public Func<CElement, ClVariable> SideB;
         public Func<CElement, ClVariable> Size;
+        public Func<CElement, ClVariable> IntrinsicSize;
         public double multipler;
+
+        public Func<EdgeInsets, double> LeadingInset;
+        public Func<EdgeInsets, double> TrailingInset;
+        public Func<EdgeInsets, double> SideAInset;
+        public Func<EdgeInsets, double> SideBInset;
+    }
+
+    public struct StackOptions
+    {
+        public bool ConstrainStart;
+        public bool ConstrainSides;
+        public bool ConstrainEnd;
+        public ClStrength Strength;
+        public EdgeInsets Insets;
+        public bool IntrinsicIfNotSet;
+
+        public static StackOptions Default = new StackOptions
+        {
+            ConstrainStart = true,
+            ConstrainSides = true,
+            ConstrainEnd = true,
+            Strength = ClStrength.Strong,
+            Insets = EdgeInsets.Zero,
+            IntrinsicIfNotSet = false,
+        };
+
+        public static StackOptions Create(
+            bool constrainStart = true,
+            bool constrainSides = true,
+            bool constrainEnd = true,
+            ClStrength strength = null,
+            EdgeInsets? insets = null,
+            bool intrinsicIfNotSet = false)
+        {
+            var options = new StackOptions();
+            options.ConstrainStart = constrainStart;
+            options.ConstrainSides = constrainSides;
+            options.ConstrainEnd = constrainEnd;
+            options.Strength = strength ?? ClStrength.Strong;
+            options.Insets = insets.HasValue ? insets.Value : EdgeInsets.Zero; 
+            options.IntrinsicIfNotSet = intrinsicIfNotSet;
+
+            return options;
+        }
     }
 
     public static class ConstraintTools
@@ -33,7 +95,12 @@ namespace RWLayout.alpha2
             SideA = x => x.top,
             SideB = x => x.bottom,
             Size = x => x.width,
+            IntrinsicSize = x => x.intrinsicWidth,
             multipler = 1,
+            LeadingInset = x => x.left,
+            TrailingInset = x => x.right,
+            SideAInset = x => x.top,
+            SideBInset = x => x.bottom,
         };
         private static AnchorMapper toLeft = new AnchorMapper
         {
@@ -43,17 +110,27 @@ namespace RWLayout.alpha2
             SideA = x => x.bottom,
             SideB = x => x.top,
             Size = x => x.width,
+            IntrinsicSize = x => x.intrinsicWidth,
             multipler = -1,
+            LeadingInset = x => x.right,
+            TrailingInset = x => x.left,
+            SideAInset = x => x.bottom,
+            SideBInset = x => x.top,
         };
         private static AnchorMapper toBotton = new AnchorMapper
         {
-            debug = "toBotton",
+            debug = "toBottom",
             Leading = x => x.top,
             Trailing = x => x.bottom,
             SideA = x => x.left,
             SideB = x => x.right,
             Size = x => x.height,
+            IntrinsicSize = x => x.intrinsicHeight,
             multipler = 1,
+            LeadingInset = x => x.top,
+            TrailingInset = x => x.bottom,
+            SideAInset = x => x.left,
+            SideBInset = x => x.right,
         };
         private static AnchorMapper toTop = new AnchorMapper
         {
@@ -63,7 +140,12 @@ namespace RWLayout.alpha2
             SideA = x => x.right,
             SideB = x => x.left,
             Size = x => x.height,
+            IntrinsicSize = x => x.intrinsicHeight,
             multipler = -1,
+            LeadingInset = x => x.bottom,
+            TrailingInset = x => x.top,
+            SideAInset = x => x.right,
+            SideBInset = x => x.left,
         };
 
         private static ClLinearExpression toLinearExpression(object obj)
@@ -121,29 +203,51 @@ namespace RWLayout.alpha2
             element.AddConstraint(new ClLinearEquation(element.height, toLinearExpression(height), strength));
         }
 
-        public static void StackLeft(this CElement parent, bool constrainSides, bool constrainEnd, ClStrength strength, params object[] items)
+        public static void StackLeft(this CElement parent, StackOptions options, params object[] items)
         {
-            Stack(parent, toRight, items, constrainEnd, constrainSides, strength);
+            Stack(parent, toRight, options, items);
         }
 
-        public static void StackTop(this CElement parent, bool constrainSides, bool constrainEnd, ClStrength strength, params object[] items)
+        public static void StackTop(this CElement parent, StackOptions options, params object[] items)
         {
-            Stack(parent, toBotton, items, constrainEnd, constrainSides, strength);
+            Stack(parent, toBotton, options, items);
         }
 
-        public static void StackRight(this CElement parent, bool constrainSides, bool constrainEnd, ClStrength strength, params object[] items)
+        public static void StackRight(this CElement parent, StackOptions options, params object[] items)
         {
-            Stack(parent, toLeft, items, constrainEnd, constrainSides, strength);
+            Stack(parent, toLeft, options, items);
         }
 
-        public static void StackBottom(this CElement parent, bool constrainSides, bool constrainEnd, ClStrength strength, params object[] items)
+        public static void StackBottom(this CElement parent, StackOptions options, params object[] items)
         {
-            Stack(parent, toTop, items, constrainEnd, constrainSides, strength);
+            Stack(parent, toTop, options, items);
         }
 
-        private static void Stack(CElement parent, AnchorMapper mapper, IEnumerable<object> items, bool constrainEnd, bool constrainSides, ClStrength strength)
+
+        public static void StackLeft(this CElement parent, params object[] items)
         {
-            ClLinearExpression trailing = new ClLinearExpression(mapper.Leading(parent));
+            Stack(parent, toRight, StackOptions.Default, items);
+        }
+
+        public static void StackTop(this CElement parent, params object[] items)
+        {
+            Stack(parent, toBotton, StackOptions.Default, items);
+        }
+
+        public static void StackRight(this CElement parent, params object[] items)
+        {
+            Stack(parent, toLeft, StackOptions.Default, items);
+        }
+
+        public static void StackBottom(this CElement parent, params object[] items)
+        {
+            Stack(parent, toTop, StackOptions.Default, items);
+        }
+
+
+        private static void Stack(CElement parent, AnchorMapper mapper, StackOptions options, IEnumerable<object> items)
+        {
+            ClLinearExpression trailing = mapper.Leading(parent) + mapper.LeadingInset(options.Insets) * mapper.multipler;
             foreach (var item in items)
             {
                 CElement element = null;
@@ -170,18 +274,22 @@ namespace RWLayout.alpha2
                 if (element != null)
                 {
                     var child = element;
-                    parent.AddConstraint(new ClLinearEquation(trailing, new ClLinearExpression(mapper.Leading(child)), strength));
+                    parent.AddConstraint(new ClLinearEquation(trailing, new ClLinearExpression(mapper.Leading(child)), options.Strength));
                     trailing = new ClLinearExpression(mapper.Trailing(child));
 
                     if (size != null)
                     {
-                        parent.AddConstraint(new ClLinearEquation(mapper.Size(child), size, strength));
-                    }
-                    if (constrainSides)
+                        parent.AddConstraint(new ClLinearEquation(mapper.Size(child), size, options.Strength));
+                    } 
+                    else if (options.IntrinsicIfNotSet)
                     {
-                        parent.AddConstraints(strength,
-                            mapper.SideA(parent) ^ mapper.SideA(child),
-                            mapper.SideB(parent) ^ mapper.SideB(child)
+                        parent.AddConstraint(mapper.Size(child) ^ mapper.IntrinsicSize(child));
+                    }
+                    if (options.ConstrainSides)
+                    {
+                        parent.AddConstraints(options.Strength,
+                            mapper.SideA(child) ^ mapper.SideA(parent) + mapper.SideAInset(options.Insets) * mapper.multipler,
+                            mapper.SideB(child) ^ mapper.SideB(parent) - mapper.SideBInset(options.Insets) * mapper.multipler
                         );
                     }
                 }
@@ -191,11 +299,9 @@ namespace RWLayout.alpha2
                 }
             }
 
-            if (constrainEnd)
+            if (options.ConstrainEnd)
             {
-                var c = new ClLinearEquation(trailing, mapper.Trailing(parent), strength);
-
-                parent.AddConstraint(c);
+                parent.AddConstraint(trailing + mapper.TrailingInset(options.Insets) * mapper.multipler ^ mapper.Trailing(parent), options.Strength);
             }
         }
     }

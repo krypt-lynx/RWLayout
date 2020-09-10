@@ -43,7 +43,7 @@ namespace RWLayoutMod.ScrollDemo
             scroll2.AddConstraint(scroll2.Content.height ^ 400);
 
 
-            Gui.StackLeft(true, true, ClStrength.Strong, scroll1, 10, (scroll2, scroll1.width));
+            Gui.StackLeft(scroll1, 10, (scroll2, scroll1.width));
             //Gui.StackLeft(true, true, ClStrength.Strong, scroll2);
 
             InnerSize = new Vector2(300, 300);
