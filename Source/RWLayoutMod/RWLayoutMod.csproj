@@ -77,6 +77,7 @@
     <Compile Include="BrickDemo\Figure.cs" />
     <Compile Include="BrickDemo\TestWindow_Brick.cs" />
     <Compile Include="CLabelIntrinsicSize\TestWindow_CLabel.cs" />
+    <Compile Include="HarmonyPatches.cs" />
     <Compile Include="ListViewDemo\TestWindow_ListView.cs" />
     <Compile Include="NativeWindow\NativeWindow_Harmony.cs" />
     <Compile Include="NativeWindow\WindowTest_NativeWindow.cs" />

@@ -172,7 +172,7 @@ namespace RWLayout.alpha2
         {
             if (position < 0 && position >= elements.Count())
             {
-                throw new ArgumentException("position is out of bouds", "position");
+                throw new ArgumentException("position is out of bounds", "position");
             }
             if (!elements.Remove(element))
             {

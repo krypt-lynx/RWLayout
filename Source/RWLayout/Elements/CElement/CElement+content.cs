@@ -31,7 +31,7 @@ namespace RWLayout.alpha2
         public virtual Vector2 tryFit(Vector2 size) { return Vector2.zero; }
 
         /// <summary>
-        /// Remders the view and its children
+        /// Renders the view and its children
         /// </summary>
         public void DoElementContent()
         {
@@ -64,7 +64,7 @@ namespace RWLayout.alpha2
         public static bool DebugDraw = false;
 
         /// <summary>
-        /// Remders the view
+        /// Renders the view
         /// </summary>
         public virtual void DoContent()
         {

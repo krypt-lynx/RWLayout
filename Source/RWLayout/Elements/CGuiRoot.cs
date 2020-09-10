@@ -55,10 +55,10 @@ namespace RWLayout.alpha2
         {
             Debug.WriteLine(InRect.width);
 
-            UpdateStayConstrait(ref left_, InRect.xMin);
-            UpdateStayConstrait(ref right_, InRect.xMax);
-            UpdateStayConstrait(ref top_, InRect.yMin);
-            UpdateStayConstrait(ref bottom_, InRect.yMax);
+            UpdateCreateIfNeededStayConstrait(ref left_, InRect.xMin, () => { var _ = this.left; });
+            UpdateCreateIfNeededStayConstrait(ref right_, InRect.xMax, () => { var _ = this.right; });
+            UpdateCreateIfNeededStayConstrait(ref top_, InRect.yMin, () => { var _ = this.top; });
+            UpdateCreateIfNeededStayConstrait(ref bottom_, InRect.yMax, () => { var _ = this.bottom; });
 
             base.UpdateLayout();
         }

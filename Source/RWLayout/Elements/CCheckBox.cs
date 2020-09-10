@@ -24,6 +24,8 @@ namespace RWLayout.alpha2
         /// <remarks>first argument is wrapper itself, second argument is Checked state</remarks>
         public Action<CCheckBox, bool> Changed = null;
 
+        public TipSignal? Tip = null;
+
         public override Vector2 tryFit(Vector2 size)
         {            
             return tryFitText(size, new Vector2(10 + 24, 0));
@@ -33,6 +35,15 @@ namespace RWLayout.alpha2
         {
             base.DoContent();
             bool oldChecked = Checked;
+
+            if (Tip != null)
+            {
+                if (Mouse.IsOver(BoundsRounded))
+                {
+                    Widgets.DrawHighlight(BoundsRounded);
+                }
+                TooltipHandler.TipRegion(BoundsRounded, Tip.Value);
+            }
 
             ApplyAll();
             Widgets.CheckboxLabeled(BoundsRounded, Title, ref Checked);

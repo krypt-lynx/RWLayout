@@ -9,15 +9,88 @@ using HarmonyLib;
 using UnityEngine;
 using Verse;
 using System.IO;
+using Cassowary;
 
 namespace RWLayoutMod
 {
-    public class RWLayoutMod : Mod
+    public class Settings : ModSettings
+    {
+        public bool layoutDebug = false;
+        public bool showExamplesButtom = false;
+
+        public bool patchLog = false;
+        public bool patchWindowResize = false;
+
+        public override void ExposeData()
+        {
+            Scribe_Values.Look(ref layoutDebug, "layoutDebug", false);
+            Scribe_Values.Look(ref showExamplesButtom, "showExamplesButtom", false);
+            Scribe_Values.Look(ref patchLog, "patchLog", false);
+            Scribe_Values.Look(ref patchWindowResize, "patchWindowResize", false);
+
+            CElement.DebugDraw = layoutDebug;
+
+            base.ExposeData();
+        }
+    }
+
+    sealed public class RWLayoutMod : Mod
     {
         public static string packageIdOfMine = null;
+        public static Settings settings = null;
         public static string commitInfo = null;
 
         public RWLayoutMod(ModContentPack content) : base(content)
+        {
+            ReadModInfo(content);
+            settings = GetSettings<Settings>();
+
+            Harmony harmony = new Harmony(packageIdOfMine);
+
+            ApplyPatches(harmony);
+        }
+
+        private static void ApplyPatches(Harmony harmony)
+        {
+            // Extra button in devmode toolbar
+            if (settings.showExamplesButtom)
+            {
+                harmony.Patch(AccessTools.Method(typeof(DebugWindowsOpener), "DevToolStarterOnGUI"),
+                   postfix: new HarmonyMethod(typeof(DevToolsPatches), "DevToolStarterOnGUI_postfix"));
+                harmony.Patch(AccessTools.Method(typeof(DebugWindowsOpener), "DrawButtons"),
+                    postfix: new HarmonyMethod(typeof(DevToolsPatches), "DrawButtons_postfix"));
+            }
+            // CWindow resize injection
+            harmony.Patch(AccessTools.Method(typeof(WindowResizer), "DoResizeControl"),
+                prefix: new HarmonyMethod(typeof(RWLayoutResizerPatches), "DoResizeControl_prefix"));
+
+            // RWLayout harmony example
+            NativeWindow.MixedUseExamplePatches.Prepare();
+            harmony.Patch(AccessTools.PropertyGetter(typeof(NativeWindow.WindowTest_NativeWindow), "InitialSize"),
+                postfix: new HarmonyMethod(typeof(NativeWindow.MixedUseExamplePatches), "InitialSize_postfix"));
+            harmony.Patch(AccessTools.Method(typeof(NativeWindow.WindowTest_NativeWindow), "DoWindowContents"),
+                prefix: new HarmonyMethod(typeof(NativeWindow.MixedUseExamplePatches), "DoWindowContents_prefix"));
+
+            // bugfixes should not be there but in separate mod, but those are annoying during development and I'm lazy to create a new one
+            // bugfixes:
+            // missing null checks in Log class
+            if (settings.patchLog)
+            {
+                harmony.Patch(AccessTools.Constructor(typeof(LogMessage), new Type[] { typeof(string) }),
+                    prefix: new HarmonyMethod(typeof(MiscFixes), "LogMessage_ctor_string_prefix"));
+                harmony.Patch(AccessTools.Constructor(typeof(LogMessage), new Type[] { typeof(LogMessageType), typeof(string), typeof(string) }),
+                    prefix: new HarmonyMethod(typeof(MiscFixes), "LogMessage_ctor_LogMessageType_string_string_prefix"));
+            }
+
+            // window resizing issues
+            if (settings.patchWindowResize)
+            {
+                harmony.Patch(AccessTools.Method(typeof(WindowResizer), "DoResizeControl"),
+                    postfix: new HarmonyMethod(typeof(MiscFixes), "DoResizeControl_postfix"));
+            }
+        }
+
+        private static void ReadModInfo(ModContentPack content)
         {
             packageIdOfMine = content.PackageId;
 
@@ -36,149 +109,92 @@ namespace RWLayoutMod
             {
                 commitInfo = null;
             }
-
-
-
-            Harmony harmony = new Harmony(packageIdOfMine);
-
-            harmony.Patch(AccessTools.Method(typeof(DebugWindowsOpener), "DevToolStarterOnGUI"),
-                postfix: new HarmonyMethod(typeof(DevToolsPatches), "DevToolStarterOnGUI_postfix"));
-            harmony.Patch(AccessTools.Method(typeof(DebugWindowsOpener), "DrawButtons"),
-                postfix: new HarmonyMethod(typeof(DevToolsPatches), "DrawButtons_postfix"));
-
-
-            harmony.Patch(AccessTools.Method(typeof(WindowResizer), "DoResizeControl"),
-                prefix: new HarmonyMethod(typeof(RWLayoutResizerPatches), "DoResizeControl_prefix"));
-
-
-            NativeWindow.MixedUseExamplePatches.Prepare();
-            harmony.Patch(AccessTools.PropertyGetter(typeof(NativeWindow.WindowTest_NativeWindow), "InitialSize"),
-                postfix: new HarmonyMethod(typeof(NativeWindow.MixedUseExamplePatches), "InitialSize_postfix"));
-            harmony.Patch(AccessTools.Method(typeof(NativeWindow.WindowTest_NativeWindow), "DoWindowContents"),
-                prefix: new HarmonyMethod(typeof(NativeWindow.MixedUseExamplePatches), "DoWindowContents_prefix"));
-
-            // bugfixes should not be there but in separate mod, but those are annoying doring development and I'm lazy to create a new one
-            // bugfixes:
-            // missing null checks in Log class
-            harmony.Patch(AccessTools.Constructor(typeof(LogMessage), new Type[] { typeof(string) }),
-                prefix: new HarmonyMethod(typeof(MiscFixes), "LogMessage_ctor_string_prefix"));
-            harmony.Patch(AccessTools.Constructor(typeof(LogMessage), new Type[] { typeof(LogMessageType), typeof(string), typeof(string) }),
-                prefix: new HarmonyMethod(typeof(MiscFixes), "LogMessage_ctor_LogMessageType_string_string_prefix"));
-            // window resizing issues
-            harmony.Patch(AccessTools.Method(typeof(WindowResizer), "DoResizeControl"),
-                postfix: new HarmonyMethod(typeof(MiscFixes), "DoResizeControl_postfix"));
-           
-            //harmony.Patch(AccessTools.Method(typeof(GenUI), "Rounded", new Type[] { typeof(Rect) }),
-            //    prefix: new HarmonyMethod(typeof(MiscFixes), "Rounded_prefix"));
         }
 
+        CGuiRoot settingsGui = null;
+        CGuiRoot SettingsGui
+        {
+            get
+            {
+                if (settingsGui == null)
+                {
+                    settingsGui = new CGuiRoot();
+                    ConstructSettingsGUI(settingsGui);
+                }
+                return settingsGui;
+            }
+        }
+
+        public override void WriteSettings()
+        {
+            base.WriteSettings();
+
+            settingsGui = null; // this method is called after settings window close
+        }
 
         public override string SettingsCategory()
         {
             return "RWLayout";
         }
 
+
+        private void ConstructSettingsGUI(CGuiRoot settingsGui)
+        {
+            var layoutDebug = settingsGui.AddElement(new CCheckBox
+            {
+                Title = "Layout debug",
+                Checked = settings.layoutDebug,
+                Changed = (_, value) => {
+                    settings.layoutDebug = value;
+                    CElement.DebugDraw = value;
+                },
+            });
+
+            var showExamples = settingsGui.AddElement(new CCheckBox
+            {
+                Title = "Show examples button (requires restart)",
+                Tip = "Show examples button in dev mode tools panel",
+                Checked = settings.showExamplesButtom,
+                Changed = (_, value) => settings.showExamplesButtom = value,
+            });
+
+            var patchLog = settingsGui.AddElement(new CCheckBox
+            {
+                Title = "Patch missing Log null check (requires restart)",
+                Tip = "Fixes Log.Message, Log.Warning, and Log.Error breaking LogWindow if called with null argument",
+                Checked = settings.patchLog,
+                Changed = (_, value) => settings.patchLog = value,
+            });
+
+            var patchResize = settingsGui.AddElement(new CCheckBox
+            {
+                Title = "Patch sticky window resizing bug (requires restart)",
+                Tip = "Fixes windows missing mouse up event during resizing if mouse was outside the window at the moment of event",
+                Checked = settings.patchWindowResize,
+                Changed = (_, value) => settings.patchWindowResize = value,
+            });
+
+            settingsGui.StackTop(true, false, ClStrength.Strong, (layoutDebug, layoutDebug.intrinsicHeight), 2, (showExamples, showExamples.intrinsicHeight), 10, (patchLog, patchLog.intrinsicHeight), 2, (patchResize, patchResize.intrinsicHeight));
+
+            var examplesButton = settingsGui.AddElement(new CButton
+            {
+                Title = "RWLayout Examples",
+                Action = (_) => Find.WindowStack.Add(new TestsListWindow()),
+            });
+
+            examplesButton.ConstrainSize(200, 35);
+            settingsGui.AddConstraint(examplesButton.left ^ settingsGui.left);
+            settingsGui.AddConstraint(examplesButton.top ^ patchResize.bottom + 10);
+        }
+
         public override void DoSettingsWindowContents(Rect inRect)
         {
             base.DoSettingsWindowContents(inRect);
 
-            var options = new Listing_Standard();
-            options.maxOneColumn = true;
-
-            options.Begin(inRect);
-
-
-            if (options.ButtonText("break everything"))
-            {
-                Log.Message(null);
-            }
-
-            options.End();
-        }
-
-        static class MiscFixes
-        {
-            static bool LogMessage_ctor_string_prefix(ref string text)
-            {
-                text = text ?? "null";
-                return true;
-            }
-
-            static bool LogMessage_ctor_LogMessageType_string_string_prefix(ref string text)
-            {
-                text = text ?? "null";
-                return true;
-            }
-
-            static bool Rounded_prefix(Rect r, ref Rect __result)
-            {
-                __result = r.GUIRounded();
-
-                return false;
-            }
-
-
-            static void DoResizeControl_postfix(WindowResizer __instance)
-            {
-                var field = typeof(WindowResizer).GetField("isResizing", BindingFlags.NonPublic | BindingFlags.Instance);
-
-                bool isResizing = (bool)field.GetValue(__instance);
-                if (isResizing)
-                {
-                    if (!Input.GetMouseButton(0))
-                    {
-                        field.SetValue(__instance, false);
-                    }
-                }
-            }
-        }
-
-        static class RWLayoutResizerPatches
-        {
-            static bool DoResizeControl_prefix(WindowResizer __instance, ref Rect __result, Rect winRect)
-            {
-                if (__instance is CWindowResizer resizer)
-                {
-                    __result = resizer.override_DoResizeControl(winRect);
-                    return false;
-                }
-
-                return true;
-            }
-
-        }
-
-        [StaticConstructorOnStartup]
-        static class DevToolsPatches
-        {
-
-
-            static void DevToolStarterOnGUI_postfix()
-            {
-                var windows = (List<Window>)typeof(WindowStack).GetField("windows", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Find.WindowStack);
-                var devWindow = windows.FirstOrDefault(x => x.ID == -1593759361);
-
-                if (devWindow != null)
-                {
-                    var oldRect = devWindow.windowRect;
-                    devWindow.windowRect = Rect.MinMaxRect(oldRect.xMin, oldRect.yMin, oldRect.xMax + 28, oldRect.yMax);
-                }
-            }
-
-            static WidgetRow widgetRow(DebugWindowsOpener obj)
-            {
-                return (WidgetRow)typeof(DebugWindowsOpener).GetField("widgetRow", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(obj);
-            }
-
-            public static readonly Texture2D OpenInspectSettings = ContentFinder<Texture2D>.Get("UI/Buttons/DevRoot/ToggleTweak", true);
-
-            static void DrawButtons_postfix(DebugWindowsOpener __instance)
-            {                
-                if (widgetRow(__instance).ButtonIcon(OpenInspectSettings, "Open RWLayout tests list."))
-                {
-                    Find.WindowStack.Add(new TestsListWindow());
-                }
-            }
+            var settingsGui = SettingsGui;
+            settingsGui.InRect = inRect;
+            settingsGui.UpdateLayoutIfNeeded();
+            settingsGui.DoElementContent();
         }
     }
 }

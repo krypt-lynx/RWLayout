@@ -255,5 +255,16 @@ namespace RWLayout.alpha2
                 }
             }
         }
+
+
+        public void UpdateCreateIfNeededStayConstrait(ref Anchor pair, double value, Action initVariable)
+        {
+            if (pair.var == null)
+            {
+                initVariable();
+            }
+
+            UpdateStayConstrait(ref pair, value);
+        }
     }
 }
