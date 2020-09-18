@@ -14,11 +14,18 @@ namespace RWLayout.alpha2
     /// </summary>
     internal class CScrollContent : COwnedElement
     {
-        public override ClSimplexSolver Solver
+        Func<ClSimplexSolver> getSolver;
+
+        public CScrollContent(Func<ClSimplexSolver> getSolver)
+        {
+            this.getSolver = getSolver;
+        }
+
+        protected override ClSimplexSolver Solver
         {
             get
             {
-                return Owner.Solver;
+                return getSolver();
             }
         }
 
@@ -60,7 +67,6 @@ namespace RWLayout.alpha2
         /// Inner width (scroll width without scroll bar width)
         /// </summary>
         public ClVariable width => Parent?.GetVariable(ref width_, "cW");
-
         /// <summary>
         /// Inner height (scroll height without scroll bar height)
         /// </summary>
@@ -104,7 +110,7 @@ namespace RWLayout.alpha2
 
         public CScrollView()
         {
-            content = new CScrollContent();
+            content = new CScrollContent(() => Solver);
             content.Owner = this;
             content.AddConstraint(Content.left ^ 0, ClStrength.Required);
             content.AddConstraint(Content.top ^ 0, ClStrength.Required);
@@ -164,13 +170,6 @@ namespace RWLayout.alpha2
             // todo: use intrinsic size (currently intrinsic is not implemented)
 
             InnerSizeGuide.UpdateVars(vBarWidth, hBarHeight);
-
-
-            //Log.Message($"{NamePrefix()} vBarWidth: {vBarWidth}, hBarHeight: {hBarHeight}");
-            //Log.Message($"CScrollViewGuide: {InnerSizeGuide.width}, {InnerSizeGuide.height}");
-            //Log.Message($"CScrollView: {this.width}, {this.height}");
-
-            //Log.Message($"{AllConstraintsString()}");
         }
 
         public override CElement hitTest(Vector2 point)
@@ -198,12 +197,16 @@ namespace RWLayout.alpha2
             base.DoContent();
 
             Widgets.BeginScrollView(Bounds, ref ScrollPosition, Content.Bounds);
-            
-            Content.DoElementContent();
+
+            DoScrollContent();
 
             Widgets.EndScrollView();
         }
 
+        public virtual void DoScrollContent()
+        {
+            Content.DoElementContent();
+        }
         // override 
     }
 }

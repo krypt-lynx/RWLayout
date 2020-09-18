@@ -11,7 +11,7 @@ namespace RWLayout.alpha2
     /// <summary>
     /// Frame 
     /// </summary>
-    /// <remarks>For the gods sake, does not use it for that 1px wide white boxes around every element currently infesting mod GUIs. It looks terrible, and if you think otherwise I question your taste.</remarks>
+    /// <remarks>For the gods sake, do not use it for that 1px wide white boxes around every element currently infesting mod GUIs. It looks terrible, and if you think otherwise I question your taste.</remarks>
     public class CFrame : CElement
     {
         /// <summary>
@@ -19,7 +19,7 @@ namespace RWLayout.alpha2
         /// </summary>
         public EdgeInsets Insets = EdgeInsets.One;
         /// <summary>
-        /// Frame Coloe
+        /// Frame Color
         /// </summary>
         public Color Color = new Color(1, 1, 1, 0.3f);
 

@@ -24,7 +24,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// Cassowary Simplex Solver. Responsible for constraints resolving.
         /// </summary>
-        public virtual ClSimplexSolver Solver { // todo: protected
+        protected virtual ClSimplexSolver Solver { // todo: protected
             get {
                 var parent = Parent;
                 if (parent == null)
@@ -37,7 +37,7 @@ namespace RWLayout.alpha2
                 }
                 else
                 {
-                    return Parent.Solver;
+                    return parent.Solver;
                 }
             }
         }
@@ -50,14 +50,14 @@ namespace RWLayout.alpha2
         /// <remarks>Every variable of the constraint should belong to current view tree</remarks>
         public void AddConstraint(ClConstraint constraint, ClStrength strength = null)
         {
-            ValidateVariables(constraint);
+            //ValidateVariables(constraint);
 
             if (strength != null)
             {
                 constraint.SetStrength(strength);
             }
 
-            Solver?.AddConstraint(constraint);
+            Solver.AddConstraint(constraint);
 
             SetNeedsUpdateLayout();
         }

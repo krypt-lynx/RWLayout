@@ -174,7 +174,6 @@ namespace RWLayout.alpha2
             return Rect.MinMaxRect(rect.xMin - insets.left, rect.yMin - insets.top, rect.xMax + insets.right, rect.yMax + insets.bottom);
         }
 
-        // Token: 0x06001CF4 RID: 7412 RVA: 0x000B0312 File Offset: 0x000AE512
         public static Rect ContractedBy(this Rect rect, EdgeInsets insets)
         {
             return Rect.MinMaxRect(rect.xMin + insets.left, rect.yMin + insets.top, rect.xMax - insets.right, rect.yMax - insets.bottom);
@@ -199,8 +198,6 @@ namespace RWLayout.alpha2
 
             return new Rect(rect.xMin, rect.yMin,
                 GUIScale(rect.width, scale), GUIScale(rect.height, scale));
-
-
         }
     }
 }

@@ -70,7 +70,7 @@ namespace RWLayout.alpha2
         {
             if (DebugDraw)
             {
-                GuiTools.UsingColor(new Color(1, 0, 0, 0.2f), () => GuiTools.Box(Bounds, new EdgeInsets(1, 1, 1, 1)));
+                GuiTools.UsingColor(new Color(1, 0, 0, 0.2f), () => GuiTools.Box(Bounds, new EdgeInsets(1)));
                 GuiTools.UsingColor(new Color(1, 1, 1, 0.2f), () => GuiTools.UsingFont(GameFont.Tiny, () =>
                 {
                     Widgets.Label(Bounds, Bounds.ToString());

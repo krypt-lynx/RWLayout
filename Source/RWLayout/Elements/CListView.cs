@@ -9,6 +9,7 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+
     /// <summary>
     /// Constraints controlled list view implementation
     /// </summary>
@@ -25,6 +26,12 @@ namespace RWLayout.alpha2
         public Vector2 ScrollPosition = Vector2.zero;
 
         List<CListingRow> rows = new List<CListingRow>();
+        public IReadOnlyList<CListingRow> Rows { get => rows; }
+
+        public EdgeInsets Margin = EdgeInsets.Zero;
+
+        private CGuiRoot background = new CGuiRoot();
+        public CElement Background { get => background; }
 
         /// <summary>
         /// Than to show scroll bars.
@@ -39,7 +46,7 @@ namespace RWLayout.alpha2
         }
 
         /// <summary>
-        /// Returnns true if verstical scrollbar is visible
+        /// Returns true if vertical scrollbar is visible
         /// </summary>
         /// <returns></returns>
         public bool IsScrollBarVisible()
@@ -83,16 +90,19 @@ namespace RWLayout.alpha2
 
             var skin = GUI.skin.verticalScrollbar;
 
-            float y = 0;
+            float y = Margin.top;
             float w = BoundsRounded.width - (IsScrollBarVisible() ? (skin.fixedWidth + skin.margin.left) : 0);
             foreach (var row in rows)
             {
-                row.InRect = new Rect(0, y, w, float.NaN);
+                row.InRect = new Rect(Margin.left, y, w - Margin.left - Margin.right, 0);
                 row.UpdateLayoutIfNeeded();
                 y += row.Bounds.height;
             }
+            y += Margin.bottom;
             contentHeight = y;
-            innerRect = new Rect(0, 0, w, contentHeight);
+            innerRect = new Rect(0, 0, w, contentHeight).GUIRoundedPreserveOrigin();
+            background.InRect = innerRect;
+            background.UpdateLayoutIfNeeded();
         }
 
         public override void DoContent()
@@ -100,9 +110,17 @@ namespace RWLayout.alpha2
             base.DoContent();
             bool showScrollBar = IsScrollBarVisible();
 
-            showScrollBar = true;
+            //showScrollBar = true;
             Widgets.BeginScrollView(BoundsRounded, ref ScrollPosition, innerRect, showScrollBar);
 
+            DoScrollContent();
+
+            Widgets.EndScrollView();
+        }
+
+        public virtual void DoScrollContent()
+        {
+            Background.DoElementContent();
             foreach (var element in rows)
             {
                 if ((element.BoundsRounded.yMax > ScrollPosition.y) && (element.BoundsRounded.yMin < (ScrollPosition.y + this.BoundsRounded.height)))
@@ -110,8 +128,6 @@ namespace RWLayout.alpha2
                     element.DoElementContent();
                 }
             }
-
-            Widgets.EndScrollView();
         }
 
         /// <summary>

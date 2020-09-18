@@ -31,6 +31,36 @@ namespace RWLayout.alpha2
 
         public float top, right, bottom, left;
 
+
+        public override int GetHashCode()
+        {
+            int iTop = top.GetHashCode();
+            int iRight = right.GetHashCode();
+            iRight = iRight << 8 | iRight >> 24;
+            int iBottom = bottom.GetHashCode();
+            iBottom = iBottom << 16 | iBottom >> 16;
+            int iLeft = left.GetHashCode();
+            iLeft = iLeft << 24 | iLeft >> 8;
+
+            return iTop ^ iRight ^ iBottom ^ iLeft;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is EdgeInsets other)
+            {
+                return
+                    top == other.top &&
+                    right == other.right &&
+                    bottom == other.bottom &&
+                    left == other.left;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public override string ToString()
         {
             return ((FormattableString)$"{{{top}, {right}, {bottom}, {left}}}").ToString(CultureInfo.InvariantCulture);

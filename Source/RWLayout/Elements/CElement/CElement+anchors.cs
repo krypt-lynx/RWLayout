@@ -54,7 +54,7 @@ namespace RWLayout.alpha2
     }
 
     /// <summary>
-    /// Simple list of variables. Can be used to inject exatra variable into simplex solver
+    /// Simple list of variables. Can be used to inject extra variables into simplex solver
     /// </summary>
     public class CVarListGuide : CLayoutGuide
     {

@@ -41,7 +41,7 @@ namespace RWLayout.alpha2
                 // TODO: invalid CalcMinMaxWidth result
                 //       hypothesize: CalcMinMaxWidth uses different font texture to calc size. 
                 //       question: Why single character ('G') is wrapped? 
-                //       Maybe it is possimle to create custom GUIStyle with custom font witting actual size?
+                //       Maybe it is possimle to create custom GUIStyle with custom font fitting actual size?
 
                 var x = Mathf.Min(upper, size.x);
 

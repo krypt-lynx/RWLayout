@@ -43,8 +43,8 @@ namespace RWLayout.alpha2
             element.Parent = this;
             if (element.solver != null)
             {
-                //Solver.MergeWith(element.solver); // todo: fix MergeWith
-                Solver.AddConstraints(element.solver.AllConstraints()); // the same but slow
+                Solver.MergeWith(element.solver); // todo: fix MergeWith
+                //Solver.AddConstraints(element.solver.AllConstraints()); // the same but slow
                 element.solver = null;
             }
 
