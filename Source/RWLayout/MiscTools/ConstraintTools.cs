@@ -174,10 +174,10 @@ namespace RWLayout.alpha2
             {
                 strength = ClStrength.Strong;
             }
-            parent.AddConstraint(new ClLinearEquation(parent.top, child.top, strength));
-            parent.AddConstraint(new ClLinearEquation(parent.right, child.right, strength));
-            parent.AddConstraint(new ClLinearEquation(parent.bottom, child.bottom, strength));
-            parent.AddConstraint(new ClLinearEquation(parent.left, child.left, strength));
+            parent.AddConstraint(new ClLinearConstraint(parent.top, child.top, strength));
+            parent.AddConstraint(new ClLinearConstraint(parent.right, child.right, strength));
+            parent.AddConstraint(new ClLinearConstraint(parent.bottom, child.bottom, strength));
+            parent.AddConstraint(new ClLinearConstraint(parent.left, child.left, strength));
         }
         
         public static void Embed(this CElement parent, CElement child, EdgeInsets insets, ClStrength strength = null)
@@ -186,10 +186,10 @@ namespace RWLayout.alpha2
             {
                 strength = ClStrength.Strong;
             }
-            parent.AddConstraint(new ClLinearEquation(parent.top, child.top - insets.top, strength));
-            parent.AddConstraint(new ClLinearEquation(parent.right, child.right + insets.right, strength));
-            parent.AddConstraint(new ClLinearEquation(parent.bottom, child.bottom + insets.bottom, strength));
-            parent.AddConstraint(new ClLinearEquation(parent.left, child.left - insets.left, strength));
+            parent.AddConstraint(new ClLinearConstraint(parent.top, child.top - insets.top, strength));
+            parent.AddConstraint(new ClLinearConstraint(parent.right, child.right + insets.right, strength));
+            parent.AddConstraint(new ClLinearConstraint(parent.bottom, child.bottom + insets.bottom, strength));
+            parent.AddConstraint(new ClLinearConstraint(parent.left, child.left - insets.left, strength));
         }
 
         public static void ConstrainSize(this CElement element, double width, double height, ClStrength strength = null)
@@ -199,8 +199,8 @@ namespace RWLayout.alpha2
                 strength = ClStrength.Strong;
             }
 
-            element.AddConstraint(new ClLinearEquation(element.width, toLinearExpression(width), strength));
-            element.AddConstraint(new ClLinearEquation(element.height, toLinearExpression(height), strength));
+            element.AddConstraint(new ClLinearConstraint(element.width, toLinearExpression(width), strength));
+            element.AddConstraint(new ClLinearConstraint(element.height, toLinearExpression(height), strength));
         }
 
         public static void StackLeft(this CElement parent, StackOptions options, params object[] items)
@@ -274,12 +274,12 @@ namespace RWLayout.alpha2
                 if (element != null)
                 {
                     var child = element;
-                    parent.AddConstraint(new ClLinearEquation(trailing, new ClLinearExpression(mapper.Leading(child)), options.Strength));
+                    parent.AddConstraint(new ClLinearConstraint(trailing, new ClLinearExpression(mapper.Leading(child)), options.Strength));
                     trailing = new ClLinearExpression(mapper.Trailing(child));
 
                     if (size != null)
                     {
-                        parent.AddConstraint(new ClLinearEquation(mapper.Size(child), size, options.Strength));
+                        parent.AddConstraint(new ClLinearConstraint(mapper.Size(child), size, options.Strength));
                     } 
                     else if (options.IntrinsicIfNotSet)
                     {

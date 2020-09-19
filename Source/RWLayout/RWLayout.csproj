@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Elements\CFrame.cs" />
+    <Compile Include="Elements\CListView_vNext.cs" />
     <Compile Include="Elements\CScrollView.cs" />
     <Compile Include="CWindow\CWindow.cs" />
     <Compile Include="CWindow\CWindowResizer.cs" />

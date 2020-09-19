@@ -182,14 +182,14 @@ namespace RWLayout.alpha2
             SetNeedsUpdateLayout();
         }
 
-        WeakReference parent_ = null;
+        Verse.WeakReference<CElement> parent_ = null;
         /// <summary>
         /// Parent view if this view
         /// </summary>
         public CElement Parent
         {
-            get { return parent_?.IsAlive ?? false ? parent_.Target as CElement : null; }
-            protected set { parent_ = new WeakReference(value, false); }
+            get => parent_?.Target;
+            protected set => parent_ = new Verse.WeakReference<CElement>(value); 
         }
 
         /// <summary>

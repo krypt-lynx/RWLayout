@@ -15,13 +15,18 @@ namespace RWLayout.alpha2
     public class CFrame : CElement
     {
         /// <summary>
-        /// Thickness of sizes
+        /// Thickness of sides
         /// </summary>
         public EdgeInsets Insets = EdgeInsets.One;
         /// <summary>
         /// Frame Color
         /// </summary>
         public Color Color = new Color(1, 1, 1, 0.3f);
+
+        public override Vector2 tryFit(Vector2 size)
+        {
+            return new Vector2(Insets.left + Insets.right, Insets.top + Insets.bottom);
+        }
 
         public override void DoContent()
         {

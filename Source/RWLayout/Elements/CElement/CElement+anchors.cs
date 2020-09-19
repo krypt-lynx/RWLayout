@@ -41,15 +41,15 @@ namespace RWLayout.alpha2
         /// <returns></returns>
         public abstract IEnumerable<ClVariable> enumerateAnchors();
 
-        WeakReference parent_ = null;
+        Verse.WeakReference<CElement> parent_ = null;
 
         /// <summary>
         /// Weak reverese to parent element
         /// </summary>
         internal CElement Parent
         {
-            get { return parent_?.IsAlive ?? false ? parent_.Target as CElement : null; }
-            set { parent_ = new WeakReference(value, false); }
+            get => parent_?.Target;
+            set => parent_ = new Verse.WeakReference<CElement>(value);
         }
     }
 

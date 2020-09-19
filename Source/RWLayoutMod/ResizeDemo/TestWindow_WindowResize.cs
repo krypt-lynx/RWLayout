@@ -12,8 +12,8 @@ namespace RWLayoutMod.ResizeDemo
 {
     class TestWindow_WindowResize : CWindow
     {
-        ClLinearEquation widthLock;
-        ClLinearEquation heightLock;
+        ClLinearConstraint widthLock;
+        ClLinearConstraint heightLock;
 
         public override void ConstructGui()
         {

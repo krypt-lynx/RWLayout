@@ -18,15 +18,15 @@ namespace RWLayout.alpha2
     /// </summary>
     public class COwnedElement : CElement
     {
-        WeakReference owner_ = null;
+        Verse.WeakReference<CElement> owner_ = null;
 
         /// <summary>
         /// Weak reverese to owning element
         /// </summary>
         public CElement Owner
         {
-            get { return owner_?.IsAlive ?? false ? owner_.Target as CElement : null; }
-            set { owner_ = new WeakReference(value, false); }
+            get { return owner_?.Target; }
+            set { owner_ = new Verse.WeakReference<CElement>(value); }
         }
     }
 
