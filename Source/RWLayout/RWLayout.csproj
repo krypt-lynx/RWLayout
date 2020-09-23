@@ -75,6 +75,7 @@
     <Compile Include="Elements\Controls\CFrame.cs" />
     <Compile Include="Elements\Controls\CListView_vNext.cs" />
     <Compile Include="Elements\Controls\CScrollView.cs" />
+    <Compile Include="Elements\Controls\CImage.cs" />
     <Compile Include="CWindow\CWindow.cs" />
     <Compile Include="CWindow\CWindowResizer.cs" />
     <Compile Include="Elements\CElement\CElement+anchors.cs" />
