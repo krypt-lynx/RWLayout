@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace RWLayout.moddiff
+namespace RWLayout.alpha2
 {
     public static partial class GuiTools
     {

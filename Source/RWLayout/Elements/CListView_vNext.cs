@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Cassowary_moddiff;
+using Cassowary;
 using UnityEngine;
 using UnityEngine.Experimental.PlayerLoop;
 using Verse;
 
-namespace RWLayout.moddiff
+namespace RWLayout.alpha2
 {
     public interface IListViewDataSource
     {
