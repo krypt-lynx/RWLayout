@@ -26,7 +26,7 @@ namespace RWLayout.alpha2
         /// <returns></returns>
         public static Rect ExpandedBy(this Rect rect, EdgeInsets insets)
         {
-            return Rect.MinMaxRect(rect.xMin - insets.left, rect.yMin - insets.top, rect.xMax + insets.right, rect.yMax + insets.bottom);
+            return Rect.MinMaxRect(rect.xMin - insets.Left, rect.yMin - insets.Top, rect.xMax + insets.Right, rect.yMax + insets.Bottom);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace RWLayout.alpha2
         /// <returns></returns>
         public static Rect ContractedBy(this Rect rect, EdgeInsets insets)
         {
-            return Rect.MinMaxRect(rect.xMin + insets.left, rect.yMin + insets.top, rect.xMax - insets.right, rect.yMax - insets.bottom);
+            return Rect.MinMaxRect(rect.xMin + insets.Left, rect.yMin + insets.Top, rect.xMax - insets.Right, rect.yMax - insets.Bottom);
         }
 
         /// <summary>
@@ -76,8 +76,8 @@ namespace RWLayout.alpha2
         public static Rect SizeCenteredIn(Rect bounds, EdgeInsets insets, Vector2 size)
         {
             return new Rect(
-                bounds.xMin + insets.left + (bounds.width - size.x - insets.left - insets.right) / 2,
-                bounds.yMin + insets.top + (bounds.height - size.y - insets.top - insets.bottom) / 2,
+                bounds.xMin + insets.Left + (bounds.width - size.x - insets.Left - insets.Right) / 2,
+                bounds.yMin + insets.Top + (bounds.height - size.y - insets.Top - insets.Bottom) / 2,
                 size.x, size.y);
         }
 

@@ -22,22 +22,22 @@ namespace RWLayout.alpha2
             float width = rect.width;
             float height = rect.height;
 
-            if (insets.left > width)
+            if (insets.Left > width)
             {
-                insets.left = width;
+                insets.Left = width;
             }
-            if (insets.right > width - insets.left)
+            if (insets.Right > width - insets.Left)
             {
-                insets.right = width - insets.left;
+                insets.Right = width - insets.Left;
             }
 
-            if (insets.top > height)
+            if (insets.Top > height)
             {
-                insets.top = height;
+                insets.Top = height;
             }
-            if (insets.bottom > height - insets.top)
+            if (insets.Bottom > height - insets.Top)
             {
-                insets.bottom = height - insets.top;
+                insets.Bottom = height - insets.Top;
             }
 
             //    insets.left = GUIScale(insets.left, scale);
@@ -46,13 +46,13 @@ namespace RWLayout.alpha2
             //    insets.bottom = GUIScale(insets.bottom, scale);
 
             GUI.DrawTexture(Rect.MinMaxRect(GUIScale(left, scale), GUIScale(top, scale),
-                GUIScale((left + insets.left), scale), GUIScale(bottom, scale)), BaseContent.WhiteTex);
-            GUI.DrawTexture(Rect.MinMaxRect(GUIScale((right - insets.right), scale), GUIScale(top, scale),
-               GUIScale((right - insets.right + insets.right), scale), GUIScale(bottom, scale)), BaseContent.WhiteTex);
-            GUI.DrawTexture(Rect.MinMaxRect(GUIScale((left + insets.left), scale), GUIScale((top), scale),
-                GUIScale((right - insets.right), scale), GUIScale((top + insets.top), scale)), BaseContent.WhiteTex);
-            GUI.DrawTexture(Rect.MinMaxRect(GUIScale((left + insets.left), scale), GUIScale((bottom - insets.bottom), scale),
-                GUIScale((right - insets.right), scale), GUIScale(bottom, scale)), BaseContent.WhiteTex);
+                GUIScale((left + insets.Left), scale), GUIScale(bottom, scale)), BaseContent.WhiteTex);
+            GUI.DrawTexture(Rect.MinMaxRect(GUIScale((right - insets.Right), scale), GUIScale(top, scale),
+               GUIScale((right - insets.Right + insets.Right), scale), GUIScale(bottom, scale)), BaseContent.WhiteTex);
+            GUI.DrawTexture(Rect.MinMaxRect(GUIScale((left + insets.Left), scale), GUIScale((top), scale),
+                GUIScale((right - insets.Right), scale), GUIScale((top + insets.Top), scale)), BaseContent.WhiteTex);
+            GUI.DrawTexture(Rect.MinMaxRect(GUIScale((left + insets.Left), scale), GUIScale((bottom - insets.Bottom), scale),
+                GUIScale((right - insets.Right), scale), GUIScale(bottom, scale)), BaseContent.WhiteTex);
         }
 
     }

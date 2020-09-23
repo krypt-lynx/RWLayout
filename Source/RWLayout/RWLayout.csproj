@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -72,9 +72,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Resource.cs" />
-    <Compile Include="Elements\CFrame.cs" />
-    <Compile Include="Elements\CListView_vNext.cs" />
-    <Compile Include="Elements\CScrollView.cs" />
+    <Compile Include="Elements\Controls\CFrame.cs" />
+    <Compile Include="Elements\Controls\CListView_vNext.cs" />
+    <Compile Include="Elements\Controls\CScrollView.cs" />
     <Compile Include="CWindow\CWindow.cs" />
     <Compile Include="CWindow\CWindowResizer.cs" />
     <Compile Include="Elements\CElement\CElement+anchors.cs" />
@@ -85,16 +85,16 @@
     <Compile Include="Elements\CElement\CElement+hierarchy.cs" />
     <Compile Include="Elements\CElement\CElement.cs" />
     <Compile Include="Elements\CElement\CElementHost.cs" />
-    <Compile Include="Elements\CGuiRoot.cs" />
-    <Compile Include="Elements\CButton.cs" />
-    <Compile Include="Elements\CCheckBox.cs" />
-    <Compile Include="Elements\CLabel.cs" />
-    <Compile Include="Elements\CListView.cs" />
+    <Compile Include="Elements\GuiHosts\CGuiRoot.cs" />
+    <Compile Include="Elements\Controls\CButton.cs" />
+    <Compile Include="Elements\Controls\CCheckBox.cs" />
+    <Compile Include="Elements\Controls\CLabel.cs" />
+    <Compile Include="Elements\Controls\CListView.cs" />
     <Compile Include="Elements\CTitledElement.cs" />
-    <Compile Include="Elements\CWidget.cs" />
+    <Compile Include="Elements\Controls\CWidget.cs" />
     <Compile Include="CWindow\CWindowRoot.cs" />
-    <Compile Include="Elements\ListingStandard\CListingRow.cs" />
-    <Compile Include="Elements\ListingStandard\CListingStandart.cs" />
+    <Compile Include="Elements\GuiHosts\CListingRow.cs" />
+    <Compile Include="Elements\CListingStandart.cs" />
     <Compile Include="MiscTools\ConstraintTools.cs" />
     <Compile Include="Classes\EdgeInsets.cs" />
     <Compile Include="MiscTools\GUIStyleExtension.cs" />

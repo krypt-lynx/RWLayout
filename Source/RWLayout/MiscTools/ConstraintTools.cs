@@ -1,7 +1,4 @@
-﻿// This is an open source non-commercial project. Dear PVS-Studio, please check it.
-// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -97,10 +94,10 @@ namespace RWLayout.alpha2
             Size = x => x.width,
             IntrinsicSize = x => x.intrinsicWidth,
             multipler = 1,
-            LeadingInset = x => x.left,
-            TrailingInset = x => x.right,
-            SideAInset = x => x.top,
-            SideBInset = x => x.bottom,
+            LeadingInset = x => x.Left,
+            TrailingInset = x => x.Right,
+            SideAInset = x => x.Top,
+            SideBInset = x => x.Bottom,
         };
         private static AnchorMapper toLeft = new AnchorMapper
         {
@@ -112,10 +109,10 @@ namespace RWLayout.alpha2
             Size = x => x.width,
             IntrinsicSize = x => x.intrinsicWidth,
             multipler = -1,
-            LeadingInset = x => x.right,
-            TrailingInset = x => x.left,
-            SideAInset = x => x.bottom,
-            SideBInset = x => x.top,
+            LeadingInset = x => x.Right,
+            TrailingInset = x => x.Left,
+            SideAInset = x => x.Bottom,
+            SideBInset = x => x.Top,
         };
         private static AnchorMapper toBotton = new AnchorMapper
         {
@@ -127,10 +124,10 @@ namespace RWLayout.alpha2
             Size = x => x.height,
             IntrinsicSize = x => x.intrinsicHeight,
             multipler = 1,
-            LeadingInset = x => x.top,
-            TrailingInset = x => x.bottom,
-            SideAInset = x => x.left,
-            SideBInset = x => x.right,
+            LeadingInset = x => x.Top,
+            TrailingInset = x => x.Bottom,
+            SideAInset = x => x.Left,
+            SideBInset = x => x.Right,
         };
         private static AnchorMapper toTop = new AnchorMapper
         {
@@ -142,10 +139,10 @@ namespace RWLayout.alpha2
             Size = x => x.height,
             IntrinsicSize = x => x.intrinsicHeight,
             multipler = -1,
-            LeadingInset = x => x.bottom,
-            TrailingInset = x => x.top,
-            SideAInset = x => x.right,
-            SideBInset = x => x.left,
+            LeadingInset = x => x.Bottom,
+            TrailingInset = x => x.Top,
+            SideAInset = x => x.Right,
+            SideBInset = x => x.Left,
         };
 
         private static ClLinearExpression toLinearExpression(object obj)
@@ -186,10 +183,10 @@ namespace RWLayout.alpha2
             {
                 strength = ClStrength.Strong;
             }
-            parent.AddConstraint(new ClLinearConstraint(parent.top, child.top - insets.top, strength));
-            parent.AddConstraint(new ClLinearConstraint(parent.right, child.right + insets.right, strength));
-            parent.AddConstraint(new ClLinearConstraint(parent.bottom, child.bottom + insets.bottom, strength));
-            parent.AddConstraint(new ClLinearConstraint(parent.left, child.left - insets.left, strength));
+            parent.AddConstraint(new ClLinearConstraint(parent.top, child.top - insets.Top, strength));
+            parent.AddConstraint(new ClLinearConstraint(parent.right, child.right + insets.Right, strength));
+            parent.AddConstraint(new ClLinearConstraint(parent.bottom, child.bottom + insets.Bottom, strength));
+            parent.AddConstraint(new ClLinearConstraint(parent.left, child.left - insets.Left, strength));
         }
 
         public static void ConstrainSize(this CElement element, double width, double height, ClStrength strength = null)

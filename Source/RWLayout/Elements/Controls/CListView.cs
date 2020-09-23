@@ -5,89 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Cassowary;
 using UnityEngine;
-using UnityEngine.Experimental.PlayerLoop;
 using Verse;
 
 namespace RWLayout.alpha2
 {
-    public interface IListViewDataSource
-    {
-        int NumberOfRows();
-        float HeightForRowAt(int index);
-        CListingRow ListingRowForRowAt(int index);
-    }
-
-
-    public partial class CListView_vNext  //  DataSource accessors
-    {
-        CListingRow[] rows = { };
-        float[] rowIntgHeights = { };
-
-        bool needUpdateRows = true;
-
-        void SetNeedsUpdateRows()
-        {
-            needUpdateRows = true;
-        }
-
-        void UpdateRowsIfNeeded()
-        {
-            if (needUpdateRows)
-            {
-                needUpdateRows = false;
-                var oldRows = rows;
-                rows = new CListingRow[NumberOfRows()];
-                Array.Copy(oldRows, rows, Mathf.Min(oldRows.Length, rows.Length));
-                rowIntgHeights = new float[rows.Length];
-            }
-        }
-
-        Verse.WeakReference<IListViewDataSource> dataSource = null;
-        public IListViewDataSource DataSource { get => dataSource?.Target; set => dataSource = new Verse.WeakReference<IListViewDataSource>(value); }
-
-        public IReadOnlyList<CListingRow> Rows { get => rows; }
-
-        int NumberOfRows()
-        {
-            return DataSource?.NumberOfRows() ?? 0;
-        }
-
-        /*
-        float HeightForRowAt(int index)
-        {
-            if (index == 0)
-            {
-                return rowIntgHeights[0];
-            }
-            else
-            {
-                return rowIntgHeights[index] - rowIntgHeights[index - 1];
-            }
-        }*/
-
-        CListingRow ListingRowForRowAt(int index)
-        {
-            var row = rows[index];
-            if (row == null)
-            {
-                row = DataSource?.ListingRowForRowAt(index);
-                rows[index] = row;
-            }
-
-            return row;
-        }
-    }
-
-
 
     /// <summary>
-    /// This will become next version of CListView. It has better performance, but currently missing important chunks of API.
+    /// Constraints controlled list view implementation
     /// </summary>
     /// <remarks>
     /// Contrants cannot be set between rows and external layout. This tradeoff was made to avoid performance hit. 
     /// If you really need such constraints - you can use CScrolView with .StackTop method. Maybe I will do something with it later.
     /// </remarks>
-    public partial class CListView_vNext : CElement
+    public class CListView : CElement
     {
         Rect innerRect;
         /// <summary>
@@ -95,12 +25,13 @@ namespace RWLayout.alpha2
         /// </summary>
         public Vector2 ScrollPosition = Vector2.zero;
 
+        List<CListingRow> rows = new List<CListingRow>();
+        public IReadOnlyList<CListingRow> Rows { get => rows; }
 
         public EdgeInsets Margin = EdgeInsets.Zero;
 
         private CGuiRoot background = new CGuiRoot();
         public CElement Background { get => background; }
-
 
         /// <summary>
         /// Than to show scroll bars.
@@ -138,7 +69,7 @@ namespace RWLayout.alpha2
 
                 foreach (var row in rows)
                 {
-                    var element = row?.hitTest(listPoint);
+                    var element = row.hitTest(listPoint);
                     if (element != null)
                     {
                         return element;
@@ -146,7 +77,7 @@ namespace RWLayout.alpha2
                 }
 
                 return this;
-            }
+            } 
             else
             {
                 return null;
@@ -157,39 +88,18 @@ namespace RWLayout.alpha2
         {
             base.PostLayoutUpdate();
 
-            UpdateRowsIfNeeded();
-
             var skin = GUI.skin.verticalScrollbar;
 
-            float rowButtom = Margin.top;
-            float w = BoundsRounded.width - (IsScrollBarVisible() ? (skin.fixedWidth + skin.margin.left) : 0) - Margin.left - Margin.right;
-
-            float viewTop = ScrollPosition.y;
-            float viewButtom = ScrollPosition.y + this.BoundsRounded.height;
-
-            var rowTop = rowButtom;
-
-
-            for (int i = 0, imax = NumberOfRows(); i < imax; i++)
+            float y = Margin.Top;
+            float w = BoundsRounded.width - (IsScrollBarVisible() ? (skin.fixedWidth + skin.margin.left) : 0);
+            foreach (var row in rows)
             {
-                rowButtom += DataSource?.HeightForRowAt(i) ?? 100;
-                rowIntgHeights[i] = rowButtom;
-
-
-                if (rowButtom >= viewTop &&
-                    rowTop < viewButtom)
-                {
-                    var row = ListingRowForRowAt(i);
-
-                    row.InRect = new Rect(Margin.left, rowTop, w, 0);
-                    row.UpdateLayoutIfNeeded();
-                }
-
-                rowTop = rowButtom;
+                row.InRect = new Rect(Margin.Left, y, w - Margin.Left - Margin.Right, 0);
+                row.UpdateLayoutIfNeeded();
+                y += row.Bounds.height;
             }
-
-            rowButtom += Margin.bottom;
-            contentHeight = rowButtom;
+            y += Margin.Bottom;
+            contentHeight = y;
             innerRect = new Rect(0, 0, w, contentHeight).GUIRoundedPreserveOrigin();
             background.InRect = innerRect;
             background.UpdateLayoutIfNeeded();
@@ -200,6 +110,7 @@ namespace RWLayout.alpha2
             base.DoContent();
             bool showScrollBar = IsScrollBarVisible();
 
+            //showScrollBar = true;
             Widgets.BeginScrollView(BoundsRounded, ref ScrollPosition, innerRect, showScrollBar);
 
             DoScrollContent();
@@ -210,35 +121,15 @@ namespace RWLayout.alpha2
         public virtual void DoScrollContent()
         {
             Background.DoElementContent();
-
-            float viewTop = ScrollPosition.y;
-            float viewButtom = ScrollPosition.y + this.BoundsRounded.height;
-
-            var rowTop = Margin.top;
-
-            var skin = GUI.skin.verticalScrollbar;
-            float w = BoundsRounded.width - (IsScrollBarVisible() ? (skin.fixedWidth + skin.margin.left) : 0) - Margin.left - Margin.right;
-
-            for (int i = 0, imax = NumberOfRows(); i < imax; i++)
+            foreach (var element in rows)
             {
-                var rowButtom = rowIntgHeights[i];
-
-                if (rowButtom >= viewTop &&
-                    rowTop < viewButtom)
+                if ((element.BoundsRounded.yMax > ScrollPosition.y) && (element.BoundsRounded.yMin < (ScrollPosition.y + this.BoundsRounded.height)))
                 {
-                    var row = ListingRowForRowAt(i);
-
-                    row.InRect = new Rect(Margin.left, rowTop, w, 0);
-                    row.UpdateLayoutIfNeeded();
-
-                    row.DoElementContent();
+                    element.DoElementContent();
                 }
-
-                rowTop = rowButtom;
             }
         }
 
-        /*
         /// <summary>
         /// Append a row to CListView.
         /// </summary>
@@ -329,6 +220,5 @@ namespace RWLayout.alpha2
         {
             return rows.IndexOf(row);
         }
-        */
     }
 }

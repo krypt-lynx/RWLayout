@@ -25,7 +25,7 @@ namespace RWLayout.alpha2
 
         public override Vector2 tryFit(Vector2 size)
         {
-            return new Vector2(Insets.left + Insets.right, Insets.top + Insets.bottom);
+            return new Vector2(Insets.Left + Insets.Right, Insets.Top + Insets.Bottom);
         }
 
         public override void DoContent()
