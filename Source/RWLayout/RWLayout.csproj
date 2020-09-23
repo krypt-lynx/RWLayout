@@ -71,6 +71,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Resource.cs" />
     <Compile Include="Elements\CFrame.cs" />
     <Compile Include="Elements\CListView_vNext.cs" />
     <Compile Include="Elements\CScrollView.cs" />
@@ -95,9 +96,11 @@
     <Compile Include="Elements\ListingStandard\CListingRow.cs" />
     <Compile Include="Elements\ListingStandard\CListingStandart.cs" />
     <Compile Include="MiscTools\ConstraintTools.cs" />
-    <Compile Include="MiscTools\EdgeInsets.cs" />
+    <Compile Include="Classes\EdgeInsets.cs" />
     <Compile Include="MiscTools\GUIStyleExtension.cs" />
-    <Compile Include="MiscTools\GuiTools.cs" />
+    <Compile Include="MiscTools\GuiTools+Drawing.cs" />
+    <Compile Include="MiscTools\GuiTools+Text.cs" />
+    <Compile Include="MiscTools\GuiTools+Geometry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

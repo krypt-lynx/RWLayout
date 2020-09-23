@@ -23,7 +23,7 @@ namespace RWLayout.alpha2
 
         public override Vector2 tryFit(Vector2 size)
         {
-            return tryFitText(size, new Vector2(14, 10));
+            return tryFitText(size, new Vector2(16, 10));
         }
 
         public override void DoContent()
