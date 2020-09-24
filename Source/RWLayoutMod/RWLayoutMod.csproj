@@ -110,6 +110,8 @@
   <PropertyGroup>
     <PreBuildEvent>git describe --tag  --dirty --always &gt; "$(ProjectDir)\git.txt"
 
-rem rmdir /q /s "$(TargetDir)"</PreBuildEvent>
+rem rmdir /q /s "$(TargetDir)"
+cd "$(TargetDir)"
+del /Q *.*</PreBuildEvent>
   </PropertyGroup>
 </Project>
