@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Resource.cs" />
+    <Compile Include="CMod.cs" />
     <Compile Include="Elements\Controls\CFrame.cs" />
     <Compile Include="Elements\Controls\CListView_vNext.cs" />
     <Compile Include="Elements\Controls\CScrollView.cs" />

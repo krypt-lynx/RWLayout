@@ -48,7 +48,7 @@ namespace RWLayout.alpha2
         /// <param name="constraint">the constraint</param>
         /// <param name="strength">constraints strengh override. Not changed if null</param>
         /// <remarks>Every variable of the constraint should belong to current view tree</remarks>
-        public void AddConstraint(ClConstraint constraint, ClStrength strength = null)
+        public CElement AddConstraint(ClConstraint constraint, ClStrength strength = null)
         {
             //ValidateVariables(constraint);
 
@@ -60,6 +60,8 @@ namespace RWLayout.alpha2
             Solver.AddConstraint(constraint);
 
             SetNeedsUpdateLayout();
+
+            return this;
         }
 
         /// <summary>
@@ -80,7 +82,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// Removes contraint.
         /// </summary>
-        public void RemoveConstraint(ClConstraint constraint)
+        public CElement RemoveConstraint(ClConstraint constraint)
         {
             //if (!constraints.Contains(constraint))
             //{
@@ -90,6 +92,7 @@ namespace RWLayout.alpha2
             //constraints.Remove(constraint);
             Solver?.RemoveConstraint(constraint);
             SetNeedsUpdateLayout();
+            return this;
         }
 
         /// <summary>
@@ -151,12 +154,13 @@ namespace RWLayout.alpha2
         /// <param name="strength">constraints strengh override. Not changed if null</param>
         /// <param name="constraints">constraints list</param>
         /// <remarks>Every variable of the constraint should belong to current view tree</remarks>
-        public void AddConstraints(ClStrength strength, IEnumerable<ClConstraint> constraints)
+        public CElement AddConstraints(ClStrength strength, IEnumerable<ClConstraint> constraints)
         {
             foreach (var cn in constraints)
             {
                 AddConstraint(cn, strength);
             }
+            return this;
         }
 
         /// <summary>
@@ -165,9 +169,10 @@ namespace RWLayout.alpha2
         /// <param name="strength">constraints strengh override. Not changed if null</param>
         /// <param name="constraints">constraints list</param>
         /// <remarks>Every variable of the constraint should belong to current view tree</remarks>
-        public void AddConstraints(ClStrength strength, params ClConstraint[] constraints)
+        public CElement AddConstraints(ClStrength strength, params ClConstraint[] constraints)
         {
             AddConstraints(strength, (IEnumerable<ClConstraint>)constraints);
+            return this;
         }
 
         /// <summary>
@@ -175,12 +180,13 @@ namespace RWLayout.alpha2
         /// </summary>
         /// <param name="constraints">constraints list</param>
         /// <remarks>Every variable of the constraint should belong to current view tree</remarks>
-        public void AddConstraints(IEnumerable<ClConstraint> constraints)
+        public CElement AddConstraints(IEnumerable<ClConstraint> constraints)
         {
             foreach (var cn in constraints)
             {
                 AddConstraint(cn);
             }
+            return this;
         }
 
         /// <summary>
@@ -188,28 +194,31 @@ namespace RWLayout.alpha2
         /// </summary>
         /// <param name="constraints">constraints list</param>
         /// <remarks>Every variable of the constraint should belong to current view tree</remarks>
-        public void AddConstraints(params ClConstraint[] constraints)
+        public CElement AddConstraints(params ClConstraint[] constraints)
         {
             AddConstraints((IEnumerable<ClConstraint>)constraints);
+            return this;
         }
 
         /// <summary>
         /// Removes contraints.
         /// </summary>
-        public void RemoveConstraint(IEnumerable<ClConstraint> constraints)
+        public CElement RemoveConstraint(IEnumerable<ClConstraint> constraints)
         {
             foreach (var cn in constraints)
             {
                 RemoveConstraint(cn);
             }
+            return this;
         }
 
         /// <summary>
         /// Removes contraints.
         /// </summary>
-        public void RemoveConstraint(params ClConstraint[] constraints)
+        public CElement RemoveConstraint(params ClConstraint[] constraints)
         {
             RemoveConstraint((IEnumerable<ClConstraint>)constraints);
+            return this;
         }
 
     }

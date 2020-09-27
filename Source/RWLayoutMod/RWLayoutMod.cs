@@ -34,7 +34,7 @@ namespace RWLayoutMod
         }
     }
 
-    sealed public class RWLayoutMod : Mod
+    sealed public class RWLayoutMod : CMod
     {
         public static string packageIdOfMine = null;
         public static Settings settings = null;
@@ -110,27 +110,7 @@ namespace RWLayoutMod
                 commitInfo = null;
             }
         }
-
-        CGuiRoot settingsGui = null;
-        CGuiRoot SettingsGui
-        {
-            get
-            {
-                if (settingsGui == null)
-                {
-                    settingsGui = new CGuiRoot();
-                    ConstructSettingsGUI(settingsGui);
-                }
-                return settingsGui;
-            }
-        }
-
-        public override void WriteSettings()
-        {
-            base.WriteSettings();
-
-            settingsGui = null; // this method is called after settings window close
-        }
+         
 
         public override string SettingsCategory()
         {
@@ -138,63 +118,64 @@ namespace RWLayoutMod
         }
 
 
-        private void ConstructSettingsGUI(CGuiRoot settingsGui)
+        public override void ConstructGui()
         {
-            var layoutDebug = settingsGui.AddElement(new CCheckBox
-            {
-                Title = "Layout debug",
-                Checked = settings.layoutDebug,
-                Changed = (_, value) => {
-                    settings.layoutDebug = value;
-                    CElement.DebugDraw = value;
-                },
-            });
+            CElement patchResize;
 
-            var showExamples = settingsGui.AddElement(new CCheckBox
-            {
-                Title = "Show examples button (requires restart)",
-                Tip = "Show examples button in dev mode tools panel",
-                Checked = settings.showExamplesButtom,
-                Changed = (_, value) => settings.showExamplesButtom = value,
-            });
+            Gui.StackTop(StackOptions.Create(intrinsicIfNotSet: true, constrainEnd: false),
+                Gui.AddElement(new CCheckBox
+                {
+                    Title = "Layout debug",
+                    Checked = settings.layoutDebug,
+                    Changed = (_, value) =>
+                    {
+                        settings.layoutDebug = value;
+                        CElement.DebugDraw = value;
+                    },
+                }), 2,
+                Gui.AddElement(new CCheckBox
+                {
+                    Title = "Show examples button (requires restart)",
+                    Tip = "Show examples button in dev mode tools panel",
+                    Checked = settings.showExamplesButtom,
+                    Changed = (_, value) => settings.showExamplesButtom = value,
+                }), 10,
+                Gui.AddElement(new CCheckBox
+                {
+                    Title = "Patch missing Log null check (requires restart)",
+                    Tip = "Fixes Log.Message, Log.Warning, and Log.Error breaking LogWindow if called with null argument",
+                    Checked = settings.patchLog,
+                    Changed = (_, value) => settings.patchLog = value,
+                }), 2,
+                patchResize = Gui.AddElement(new CCheckBox
+                {
+                    Title = "Patch sticky window resizing bug (requires restart)",
+                    Tip = "Fixes windows missing mouse up event during resizing if mouse was outside the window at the moment of event",
+                    Checked = settings.patchWindowResize,
+                    Changed = (_, value) => settings.patchWindowResize = value,
+                }));
 
-            var patchLog = settingsGui.AddElement(new CCheckBox
-            {
-                Title = "Patch missing Log null check (requires restart)",
-                Tip = "Fixes Log.Message, Log.Warning, and Log.Error breaking LogWindow if called with null argument",
-                Checked = settings.patchLog,
-                Changed = (_, value) => settings.patchLog = value,
-            });
 
-            var patchResize = settingsGui.AddElement(new CCheckBox
-            {
-                Title = "Patch sticky window resizing bug (requires restart)",
-                Tip = "Fixes windows missing mouse up event during resizing if mouse was outside the window at the moment of event",
-                Checked = settings.patchWindowResize,
-                Changed = (_, value) => settings.patchWindowResize = value,
-            });
-
-            settingsGui.StackTop(StackOptions.Create(intrinsicIfNotSet: true, constrainEnd: false), layoutDebug, 2, showExamples, 10, patchLog, 2, patchResize);
-
-            var examplesButton = settingsGui.AddElement(new CButton
+            var examplesButton = Gui.AddElement(new CButton
             {
                 Title = "RWLayout Examples",
                 Action = (_) => Find.WindowStack.Add(new TestsListWindow()),
             });
 
             examplesButton.ConstrainSize(200, 35);
-            settingsGui.AddConstraint(examplesButton.left ^ settingsGui.left);
-            settingsGui.AddConstraint(examplesButton.top ^ patchResize.bottom + 10);
-        }
+            Gui.AddConstraints(
+                examplesButton.left ^ Gui.left,
+                examplesButton.top ^ patchResize.bottom + 10);
 
-        public override void DoSettingsWindowContents(Rect inRect)
-        {
-            base.DoSettingsWindowContents(inRect);
-
-            var settingsGui = SettingsGui;
-            settingsGui.InRect = inRect;
-            settingsGui.UpdateLayoutIfNeeded();
-            settingsGui.DoElementContent();
+            var versionInfo = Gui.AddElement(new CLabel
+            {
+                Title = $"RWLayout version: {RWLayoutMod.commitInfo}",
+                //Multiline = true,
+                Color = new Color(1, 1, 1, 0.5f),
+                Font = GameFont.Tiny,
+                TextAlignment = TextAnchor.UpperRight,
+            });
+            Gui.StackBottom(StackOptions.Create(intrinsicIfNotSet: true, constrainEnd: false), versionInfo);
         }
     }
 }
