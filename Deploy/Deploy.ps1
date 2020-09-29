@@ -5,7 +5,7 @@ $outputFormat   = '..\..\RWLayout-{0}.zip'
 $internalPath   = 'RWLayout'
 $pathsToRemove  = '.git', '.gitattributes', '.gitignore', 'Source', 'Deploy', '*/Assemblies/git.txt', 'Dependencies', '*.md'
 
-$packageId      = 'name.krypt.rimworld.rwlayout.alpha1'
+$packageId      = 'name.krypt.rimworld.rwlayout.alpha2'
 $packageName    = 'RWLayout'
 
 [Console]::ResetColor()
