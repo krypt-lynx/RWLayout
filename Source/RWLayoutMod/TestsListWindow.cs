@@ -51,11 +51,16 @@ namespace RWLayoutMod
 
             var debugCheck = buttonsColumn2.AddElement(new CCheckBox
             {
-                Title = "Layout Debug",
+                Title = "Layout debug",
                 Checked = CElement.DebugDraw,
                 Changed = (_, x) => CElement.DebugDraw = x,
             });
-
+            var timeCheck = buttonsColumn2.AddElement(new CCheckBox
+            {
+                Title = "Show drawing time",
+                Checked = CWindow.ShowWindowDrawingTime,
+                Changed = (_, x) => CWindow.ShowWindowDrawingTime = x,
+            });
             var versionInfo = Gui.AddElement(new CLabel
             {
                 Title = $"RWLayout version: {RWLayoutMod.commitInfo}",
@@ -69,7 +74,7 @@ namespace RWLayoutMod
             buttonsPanel.AddConstraint(buttonsColumn1.top ^ buttonsPanel.top, ClStrength.Strong);
             buttonsPanel.AddConstraint(buttonsColumn2.top ^ buttonsPanel.top, ClStrength.Strong);
             buttonsColumn1.StackTop(buttons);
-            buttonsColumn2.StackTop((debugCheck, 30));
+            buttonsColumn2.StackTop((debugCheck, 28), 2, (timeCheck, 28));
 
             buttonsColumn1.AddConstraint(buttonsColumn1.bottom <= buttonsPanel.bottom, ClStrength.Medium);
             buttonsColumn2.AddConstraint(buttonsColumn2.bottom <= buttonsPanel.bottom, ClStrength.Medium);

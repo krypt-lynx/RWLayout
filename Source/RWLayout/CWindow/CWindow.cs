@@ -46,6 +46,9 @@ namespace RWLayout.alpha2
         public CWindowRoot Gui { get; private set; }
         private Vector2 initSize = new Vector2(100, 100);
 
+        public static bool ShowWindowDrawingTime = false;
+        Stopwatch timer = new Stopwatch();
+
         /// <summary>
         /// Intitial size of the view (native RW method)
         /// </summary>
@@ -62,9 +65,14 @@ namespace RWLayout.alpha2
         /// </summary>
         /// <returns></returns>
         public Vector2 MarginsSize()
+        {            
+            return new Vector2(Margin * 2, Margin * 2 + (optionalTitle == null ? 0 : Margin + 25f)) + GuiScaleFix();
+        }
+
+        public EdgeInsets MarginInsets()
         {
-            var size = new Vector2(Margin * 2, Margin * 2 + (optionalTitle == null ? 0 : Margin + 25f)) + GuiScaleFix(); 
-            return size;
+            var scaleFix = GuiScaleFix();
+            return new EdgeInsets(Margin + (optionalTitle == null ? 0 : Margin + 25f), Margin + scaleFix.x, Margin + scaleFix.y, Margin);
         }
 
         /// <summary>
@@ -109,9 +117,7 @@ namespace RWLayout.alpha2
         /// </summary>
         public override void PreOpen()
         {
-            var timer = new Stopwatch();
-
-            timer.Start();
+            timer.Restart();
             ConstructGui();
 
 
@@ -184,11 +190,36 @@ namespace RWLayout.alpha2
         /// <param name="inRect"></param>
         public override void DoWindowContents(Rect inRect)
         {
+            bool debug = ShowWindowDrawingTime;
+            if (debug)
+            {
+                timer.Restart();
+            }
+
             var fix = GuiScaleFix();
             inRect.width -= fix.x;
             inRect.height -= fix.y;
 
             Gui.UpdateAndDoContent(inRect, resizer.IsResizing);
+
+            if (debug)
+            {
+                GUI.EndGroup(); // escaping group to draw on window margin
+                timer.Stop();
+
+                var rect = new Rect(4, 0, 75, Margin);
+
+                //Log.Message($"{this.GetType().Name}: gui constructed in: {((decimal)timer.Elapsed.Ticks) / 10000000:0.0000000}");
+                //GuiTools.UsingColor(Color.black, () => GUI.DrawTexture(rect, BaseContent.WhiteTex));
+
+                GuiTools.PushFont(GameFont.Tiny);
+                GuiTools.PushColor(Color.green);
+                Widgets.Label(rect, $"{((decimal)timer.Elapsed.Ticks) / 10000000:0.0000000}s");
+                GuiTools.PopColor();
+                GuiTools.PopFont();
+                var margins = MarginInsets();
+                GUI.BeginGroup(new Rect(margins.Left, margins.Top, inRect.width, inRect.height)); // recovering group
+            }
         }
 
         /// <summary>
