@@ -40,6 +40,5 @@ Current one is RWLayout.alpha1
 SteamWorkshop mod to reference: https://steamcommunity.com/sharedfiles/filedetails/?edit=true&id=2209393954
 
 # Known issues
-- Removed views cannot be readded.
 - Unit tests are missing
 - Intrinsic size anchors are functional only for CLabel, CListView, and CListingStandart
