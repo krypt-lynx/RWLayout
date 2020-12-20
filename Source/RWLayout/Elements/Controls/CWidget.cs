@@ -15,7 +15,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// shout provide smallest size fitting content of the widget. Argument is current desized size
         /// </summary>
-        public Func<Vector2, Vector2> TryFitContect;
+        public Func<Vector2, Vector2> TryFitContent;
 
         /// <summary>
         /// Do native content. Works in the same way as DoWindowContent of Verse.Window class. First argument is the CWidget itself. Second is CWidget's bounds rounded to whole screen pixels (*not to integers*)
@@ -24,13 +24,13 @@ namespace RWLayout.alpha2
 
         public override Vector2 tryFit(Vector2 size)
         {
-            if (TryFitContect == null)
+            if (TryFitContent == null)
             {
                 return base.tryFit(size);
             }
             else
             {
-                return TryFitContect(size);
+                return TryFitContent(size);
             }
         }
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace RWLayout.moddiff
+namespace RWLayout.alpha2
 {
     /// <summary>
     /// Simple resource accessor wrapper. Reinitializes resource if resource was destroyed (by language switch routine, for example)
