@@ -55,6 +55,8 @@ namespace RWLayout.alpha2
             return point; // todo: implement
         }
 
+        public TipSignal? Tip = null;
+
         /// <summary>
         /// Controls debug overlay
         /// </summary>
@@ -72,6 +74,15 @@ namespace RWLayout.alpha2
                 {
                     Widgets.Label(Bounds, Bounds.ToString());
                 }));
+            }
+
+            if (Tip != null)
+            {
+                if (Mouse.IsOver(BoundsRounded))
+                {
+                    Widgets.DrawHighlight(BoundsRounded);
+                }
+                TooltipHandler.TipRegion(BoundsRounded, Tip.Value);
             }
         }
     }
