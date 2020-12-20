@@ -15,11 +15,20 @@ namespace RWLayoutMod
 {
     public class Settings : ModSettings
     {
+        public enum ForceOnGUIMode
+        {
+            All,
+            Requested,
+        }
+
         public bool layoutDebug = false;
         public bool showExamplesButtom = false;
 
         public bool patchLog = false;
         public bool patchWindowResize = false;
+
+        public ForceOnGUIMode forceOnGUIFor_WindowStack_Add = ForceOnGUIMode.Requested;
+        public HashSet<Type> forceOnGUIFor_WindowTypes = new HashSet<Type>();
 
         public override void ExposeData()
         {
@@ -27,6 +36,7 @@ namespace RWLayoutMod
             Scribe_Values.Look(ref showExamplesButtom, "showExamplesButtom", false);
             Scribe_Values.Look(ref patchLog, "patchLog", false);
             Scribe_Values.Look(ref patchWindowResize, "patchWindowResize", false);
+            Scribe_Values.Look(ref forceOnGUIFor_WindowStack_Add, "forceOnGUIFor_WindowStack_Add", ForceOnGUIMode.Requested);
 
             CElement.DebugDraw = layoutDebug;
 
@@ -48,6 +58,13 @@ namespace RWLayoutMod
             Harmony harmony = new Harmony(packageIdOfMine);
 
             ApplyPatches(harmony);
+
+            Init();
+        }
+
+        private void Init()
+        {
+            settings.forceOnGUIFor_WindowTypes.Add(typeof(CWindow));
         }
 
         private static void ApplyPatches(Harmony harmony)
@@ -70,6 +87,14 @@ namespace RWLayoutMod
                 postfix: new HarmonyMethod(typeof(NativeWindow.MixedUseExamplePatches), "InitialSize_postfix"));
             harmony.Patch(AccessTools.Method(typeof(NativeWindow.WindowTest_NativeWindow), "DoWindowContents"),
                 prefix: new HarmonyMethod(typeof(NativeWindow.MixedUseExamplePatches), "DoWindowContents_prefix"));
+
+
+            harmony.Patch(AccessTools.Method(typeof(UIRoot), "UIRootOnGUI"),
+                prefix: new HarmonyMethod(typeof(WindowStackAddPatches), "UIRoot_UIRootOnGUI_prefix"),
+                postfix: new HarmonyMethod(typeof(WindowStackAddPatches), "UIRoot_UIRootOnGUI_postfix"));
+            harmony.Patch(AccessTools.Method(typeof(WindowStack), "Add"),
+                prefix: new HarmonyMethod(typeof(WindowStackAddPatches), "WindowStack_Add_prefix"));
+
 
             // bugfixes should not be there but in separate mod, but those are annoying during development and I'm lazy to create a new one
             // bugfixes:
@@ -120,7 +145,7 @@ namespace RWLayoutMod
 
         public override void ConstructGui()
         {
-            CElement patchResize;
+            CElement last;
 
             Gui.StackTop(StackOptions.Create(intrinsicIfNotSet: true, constrainEnd: false),
                 Gui.AddElement(new CCheckBox
@@ -147,14 +172,32 @@ namespace RWLayoutMod
                     Checked = settings.patchLog,
                     Changed = (_, value) => settings.patchLog = value,
                 }), 2,
-                patchResize = Gui.AddElement(new CCheckBox
+                Gui.AddElement(new CCheckBox
                 {
                     Title = "Patch sticky window resizing bug (requires restart)",
                     Tip = "Fixes windows missing mouse up event during resizing if mouse was outside the window at the moment of event",
                     Checked = settings.patchWindowResize,
                     Changed = (_, value) => settings.patchWindowResize = value,
-                }));
+                }), 10,
+                last = Gui.AddElement(new CWidget {
+                    Tip = "Forcefully move calls of WindowStack.Add into OnGUI method. Allows to access theme data before Window constructed, but may cause conflicts",
+                    TryFitContent = (x) => new Vector2(30f, 30f),
+                    DoWidgetContent = (_, bounds) =>
+                    {
+                        Widgets.Label(bounds.LeftHalf(), "Invoke OnGUI for WindowStack.Add()");
+                        if (Widgets.ButtonText(bounds.RightHalf(), settings.forceOnGUIFor_WindowStack_Add.ToString()))
+                        {
+                            List<FloatMenuOption> onGuiModes = new List<FloatMenuOption>();
+                            foreach (Settings.ForceOnGUIMode mode in Enum.GetValues(typeof(Settings.ForceOnGUIMode)))
+                            {
+                                onGuiModes.Add(new FloatMenuOption(mode.ToString(), () => { settings.forceOnGUIFor_WindowStack_Add = mode; }));
+                            }
 
+                            Find.WindowStack.Add(new FloatMenu(onGuiModes));
+                        }
+                    }
+                })
+                );
 
             var examplesButton = Gui.AddElement(new CButton
             {
@@ -165,7 +208,7 @@ namespace RWLayoutMod
             examplesButton.ConstrainSize(200, 35);
             Gui.AddConstraints(
                 examplesButton.left ^ Gui.left,
-                examplesButton.top ^ patchResize.bottom + 10);
+                examplesButton.top ^ last.bottom + 10);
 
             var versionInfo = Gui.AddElement(new CLabel
             {

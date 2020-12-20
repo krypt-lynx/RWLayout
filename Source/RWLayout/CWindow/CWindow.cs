@@ -11,10 +11,15 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+    public interface IWindow
+    {
+        public bool ForceOnGUI { get; }
+    }
+
     /// <summary>
     /// Window subclass providing host for constraint based views and methods for window geometry 
     /// </summary>
-    public class CWindow : Window
+    public class CWindow : Window, IWindow
     {
         CWindowResizer resizer;
 
@@ -97,6 +102,14 @@ namespace RWLayout.alpha2
             {
                 initSize = value;
                 windowRect = new Rect(windowRect.position, value + MarginsSize());
+            }
+        }
+
+        public virtual bool ForceOnGUI
+        {
+            get
+            {
+                return true;
             }
         }
 

@@ -47,6 +47,62 @@ namespace RWLayoutMod
         }
     }
 
+    static class WindowStackAddPatches
+    {
+        static int inOnGuiCounter = 0;
+        static Queue<Window> windowsQueue = new Queue<Window>();
+
+        static bool WindowStack_Add_prefix(Window window)
+        {
+            if (inOnGuiCounter == 0 && NeedToInvoke(window))
+            {
+                //Log.Message($"window {window.GetType().Name} queued");
+                windowsQueue.Enqueue(window);
+                return false;
+            }
+            else
+            {
+                //Log.Message($"window {window.GetType().Name} added");
+                return true;
+            }
+        }
+
+        private static bool NeedToInvoke(Window window)
+        {
+            if (window is IWindow wnd)
+            {
+                return wnd.ForceOnGUI;
+            }
+            else
+            {
+                switch (RWLayoutMod.settings.forceOnGUIFor_WindowStack_Add)
+                {
+
+                    case Settings.ForceOnGUIMode.All:
+                        return true;
+                    case Settings.ForceOnGUIMode.Requested:
+                        return RWLayoutMod.settings.forceOnGUIFor_WindowTypes.Contains(window.GetType());
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        static void UIRoot_UIRootOnGUI_prefix()
+        {
+            inOnGuiCounter++;
+            while (windowsQueue.Count > 0)
+            {
+                Find.WindowStack.Add(windowsQueue.Dequeue());
+            }
+        }
+
+        static void UIRoot_UIRootOnGUI_postfix()
+        {
+            inOnGuiCounter--;
+        }
+    }
+
     static class RWLayoutResizerPatches
     {
         static bool DoResizeControl_prefix(WindowResizer __instance, ref Rect __result, Rect winRect)
