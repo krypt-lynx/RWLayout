@@ -55,7 +55,16 @@ namespace RWLayout.alpha2
             return point; // todo: implement
         }
 
+        /// <summary>
+        /// Hint for element
+        /// </summary>
         public TipSignal? Tip = null;
+
+        /// <summary>
+        /// Highligh the element if tip is available 
+        /// </summary>
+        public bool IndicateTipAvailable = true;
+
 
         /// <summary>
         /// Controls debug overlay
@@ -78,7 +87,7 @@ namespace RWLayout.alpha2
 
             if (Tip != null)
             {
-                if (Mouse.IsOver(BoundsRounded))
+                if (IndicateTipAvailable && Mouse.IsOver(BoundsRounded))
                 {
                     Widgets.DrawHighlight(BoundsRounded);
                 }
