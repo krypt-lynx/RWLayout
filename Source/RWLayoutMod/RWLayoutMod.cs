@@ -77,6 +77,7 @@ namespace RWLayoutMod
                 harmony.Patch(AccessTools.Method(typeof(DebugWindowsOpener), "DrawButtons"),
                     postfix: new HarmonyMethod(typeof(DevToolsPatches), "DrawButtons_postfix"));
             }
+
             // CWindow resize injection
             harmony.Patch(AccessTools.Method(typeof(WindowResizer), "DoResizeControl"),
                 prefix: new HarmonyMethod(typeof(RWLayoutResizerPatches), "DoResizeControl_prefix"));
@@ -143,9 +144,11 @@ namespace RWLayoutMod
         }
 
 
+        CElement test = null;
+
         public override void ConstructGui()
         {
-            CElement last;
+            CElement forceOnGUI;
 
             Gui.StackTop(StackOptions.Create(intrinsicIfNotSet: true, constrainEnd: false),
                 Gui.AddElement(new CCheckBox
@@ -179,13 +182,24 @@ namespace RWLayoutMod
                     Checked = settings.patchWindowResize,
                     Changed = (_, value) => settings.patchWindowResize = value,
                 }), 10,
-                last = Gui.AddElement(new CWidget {
+                forceOnGUI = Gui.AddElement(new CWidget {
                     Tip = "Forcefully move calls of WindowStack.Add into OnGUI method. Allows to access theme data before Window constructed, but may cause conflicts",
                     TryFitContent = (x) => new Vector2(30f, 30f),
+                })
+                );
+
+
+            forceOnGUI.StackLeft(
+                (forceOnGUI.AddElement(new CLabel
+                {
+                    Title = "Invoke OnGUI for WindowStack.Add()",
+                    TextAlignment = TextAnchor.MiddleLeft,
+                }), forceOnGUI.width / 2),
+                forceOnGUI.AddElement(new CWidget
+                {
                     DoWidgetContent = (_, bounds) =>
                     {
-                        Widgets.Label(bounds.LeftHalf(), "Invoke OnGUI for WindowStack.Add()");
-                        if (Widgets.ButtonText(bounds.RightHalf(), settings.forceOnGUIFor_WindowStack_Add.ToString()))
+                        if (Widgets.ButtonText(bounds, settings.forceOnGUIFor_WindowStack_Add.ToString()))
                         {
                             List<FloatMenuOption> onGuiModes = new List<FloatMenuOption>();
                             foreach (Settings.ForceOnGUIMode mode in Enum.GetValues(typeof(Settings.ForceOnGUIMode)))
@@ -208,7 +222,7 @@ namespace RWLayoutMod
             examplesButton.ConstrainSize(200, 35);
             Gui.AddConstraints(
                 examplesButton.left ^ Gui.left,
-                examplesButton.top ^ last.bottom + 10);
+                examplesButton.top ^ forceOnGUI.bottom + 10);
 
             var versionInfo = Gui.AddElement(new CLabel
             {
