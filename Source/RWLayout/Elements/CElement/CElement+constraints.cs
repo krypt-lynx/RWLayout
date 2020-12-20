@@ -50,7 +50,7 @@ namespace RWLayout.alpha2
         /// <remarks>Every variable of the constraint should belong to current view tree</remarks>
         public CElement AddConstraint(ClConstraint constraint, ClStrength strength = null)
         {
-            //ValidateVariables(constraint);
+            ValidateVariables(constraint);
 
             if (strength != null)
             {
