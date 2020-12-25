@@ -86,7 +86,7 @@
     <Compile Include="Elements\CElement\CElement+events.cs" />
     <Compile Include="Elements\CElement\CElement+hierarchy.cs" />
     <Compile Include="Elements\CElement\CElement.cs" />
-    <Compile Include="Elements\CElement\CElementHost.cs" />
+    <Compile Include="Elements\GuiHosts\CElementHost.cs" />
     <Compile Include="Elements\GuiHosts\CGuiRoot.cs" />
     <Compile Include="Elements\Controls\CButton.cs" />
     <Compile Include="Elements\Controls\CCheckBox.cs" />

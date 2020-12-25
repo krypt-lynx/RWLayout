@@ -17,6 +17,7 @@ namespace RWLayout.alpha2
         public override void AddImpliedConstraints()
         {
             base.AddImpliedConstraints();
+            
 
             CreateConstraintIfNeeded(ref left_, () => new ClStayConstraint(left, ClStrength.Required));
             CreateConstraintIfNeeded(ref right_, () => new ClStayConstraint(right, ClStrength.Required));
@@ -25,9 +26,9 @@ namespace RWLayout.alpha2
 
         public override void UpdateLayout()
         {
-            UpdateStayConstrait(ref left_, InRect.xMin);
-            UpdateStayConstrait(ref right_, InRect.xMax);
-            UpdateStayConstrait(ref top_, InRect.yMin);
+            UpdateCreateIfNeededStayConstrait(ref left_, InRect.xMin, () => new ClStayConstraint(left, ClStrength.Required));
+            UpdateCreateIfNeededStayConstrait(ref right_, InRect.xMax, () => new ClStayConstraint(right, ClStrength.Required));
+            UpdateCreateIfNeededStayConstrait(ref top_, InRect.yMin, () => new ClStayConstraint(top, ClStrength.Required));
 
             base.UpdateLayout();
         }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -69,6 +69,11 @@ namespace RWLayoutMod
 
         private static bool NeedToInvoke(Window window)
         {
+            if (window == null)
+            {
+                return false;
+            }
+
             if (window is IWindow wnd)
             {
                 return wnd.ForceOnGUI;

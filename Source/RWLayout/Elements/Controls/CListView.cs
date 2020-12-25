@@ -220,5 +220,17 @@ namespace RWLayout.alpha2
         {
             return rows.IndexOf(row);
         }
+
+        /// <summary>
+        /// Removes all rows
+        /// </summary>
+        public void ClearRows() 
+        {
+            foreach (var row in rows)
+            {
+                row.Owner = null;
+            }
+            rows.Clear();
+        }
     }
 }
