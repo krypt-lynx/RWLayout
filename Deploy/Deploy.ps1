@@ -4,6 +4,7 @@ $packing        = 'packing'
 $outputFormat   = '..\..\RWLayout-{0}.zip'
 $internalPath   = 'RWLayout'
 $solution       = '..\Source\RWLayout.sln'
+$target         = 'RWLayoutMod'
 $pathsToRemove  = '.git', '.gitattributes', '.gitignore', 'Source', 'Deploy', '*/Assemblies/git.txt', 'Dependencies', '*.md'
 
 $packageId      = 'name.krypt.rimworld.rwlayout.alpha2'
@@ -69,7 +70,7 @@ Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -CurrentOper
 pushd $rw
 git checkout tags/1.1
 popd 
-& $msbuild $solution /t:RWLayoutMod /p:Configuration="1.1" /p:Platform="Any CPU" /p:BuildProjectReferences=true
+& $msbuild $solution /t:$target /p:Configuration="1.1" /p:Platform="Any CPU" /p:BuildProjectReferences=true
 
 $Task = "Building 1.2..."
 $Step++
@@ -78,7 +79,7 @@ Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -CurrentOper
 pushd $rw
 git checkout tags/1.2
 popd 
-& $msbuild $solution /t:RWLayoutMod /p:Configuration="1.2" /p:Platform="Any CPU" /p:BuildProjectReferences=true
+& $msbuild $solution /t:$target /p:Configuration="1.2" /p:Platform="Any CPU" /p:BuildProjectReferences=true
 
 # Prepating data
 $Task = "Copying..."
