@@ -51,16 +51,33 @@ namespace RWLayout.alpha2
         public ClStrength Strength;
         public EdgeInsets Insets;
         public bool IntrinsicIfNotSet;
+        /// <summary>
+        /// is not implemented
+        /// </summary>
+        public bool AlignToCenter; // todo: implement
 
         public static StackOptions Default = new StackOptions
         {
             ConstrainStart = true,
             ConstrainSides = true,
             ConstrainEnd = true,
-            Strength = ClStrength.Strong,
+            Strength = ClStrength.Default,
             Insets = EdgeInsets.Zero,
             IntrinsicIfNotSet = false,
+            AlignToCenter = false,
         };
+
+        [Obsolete("This method is present for binary compatibility only")]
+        public static StackOptions Create(
+            bool constrainStart,
+            bool constrainSides,
+            bool constrainEnd,
+            ClStrength strength,
+            EdgeInsets? insets,
+            bool intrinsicIfNotSet)
+        {
+            return Create(constrainStart, constrainSides, constrainEnd, strength, insets, intrinsicIfNotSet, false);
+        }
 
         public static StackOptions Create(
             bool constrainStart = true,
@@ -68,15 +85,17 @@ namespace RWLayout.alpha2
             bool constrainEnd = true,
             ClStrength strength = null,
             EdgeInsets? insets = null,
-            bool intrinsicIfNotSet = false)
+            bool intrinsicIfNotSet = false,
+            bool alignToCenter = false)
         {
             var options = new StackOptions();
             options.ConstrainStart = constrainStart;
             options.ConstrainSides = constrainSides;
             options.ConstrainEnd = constrainEnd;
-            options.Strength = strength ?? ClStrength.Strong;
+            options.Strength = strength ?? ClStrength.Default;
             options.Insets = insets.HasValue ? insets.Value : EdgeInsets.Zero; 
             options.IntrinsicIfNotSet = intrinsicIfNotSet;
+            options.AlignToCenter = alignToCenter;
 
             return options;
         }
@@ -169,7 +188,7 @@ namespace RWLayout.alpha2
         {
             if (strength == null)
             {
-                strength = ClStrength.Strong;
+                strength = ClStrength.Default;
             }
             parent.AddConstraint(new ClLinearConstraint(parent.top, child.top, strength));
             parent.AddConstraint(new ClLinearConstraint(parent.right, child.right, strength));
@@ -181,7 +200,7 @@ namespace RWLayout.alpha2
         {
             if (strength == null)
             {
-                strength = ClStrength.Strong;
+                strength = ClStrength.Default;
             }
             parent.AddConstraint(new ClLinearConstraint(parent.top, child.top - insets.Top, strength));
             parent.AddConstraint(new ClLinearConstraint(parent.right, child.right + insets.Right, strength));
@@ -189,11 +208,55 @@ namespace RWLayout.alpha2
             parent.AddConstraint(new ClLinearConstraint(parent.left, child.left - insets.Left, strength));
         }
 
+        public static void MakeSizeIntristic(this CElement element, ClStrength strength = null)
+        {
+            if (strength == null)
+            {
+                strength = ClStrength.Default;
+            }
+
+            element.AddConstraint(element.width ^ element.intrinsicWidth, strength);
+            element.AddConstraint(element.height ^ element.intrinsicHeight, strength);
+        }
+
+        public static void MakeSizeIntristic(this CElement element, EdgeInsets insets, ClStrength strength = null)
+        {
+            if (strength == null)
+            {
+                strength = ClStrength.Default;
+            }
+
+            element.AddConstraint(element.width ^ element.intrinsicWidth + insets.Width, strength);
+            element.AddConstraint(element.height ^ element.intrinsicHeight + insets.Height, strength);
+        }
+
+        public static void Center(this CElement parent, CElement child, ClStrength strength = null)
+        {
+            if (strength == null)
+            {
+                strength = ClStrength.Default;
+            }
+
+            parent.AddConstraint(parent.centerX ^ child.centerX, strength);
+            parent.AddConstraint(parent.centerY ^ child.centerY, strength);
+        }
+
+        public static void Center(this CElement parent, CElement child, EdgeInsets insets, ClStrength strength = null)
+        {
+            if (strength == null)
+            {
+                strength = ClStrength.Default;
+            }
+
+            parent.AddConstraint(parent.centerX ^ ((insets.Left - insets.Right) / 2) + child.centerX, strength);
+            parent.AddConstraint(parent.centerY ^ ((insets.Top - insets.Bottom) / 2) + child.centerY, strength);
+        }
+
         public static void ConstrainSize(this CElement element, double width, double height, ClStrength strength = null)
         {
             if (strength == null)
             {
-                strength = ClStrength.Strong;
+                strength = ClStrength.Default;
             }
 
             element.AddConstraint(new ClLinearConstraint(element.width, toLinearExpression(width), strength));

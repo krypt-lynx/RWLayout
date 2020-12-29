@@ -11,7 +11,7 @@ namespace RWLayout.alpha2
     /// Statuc Image
     /// </summary>
     /// <remarks>Untested. Added at last moment because it was missing</remarks>
-    class CImage : CElement
+    public class CImage : CElement
     {
         /// <summary>
         /// Texture to draw

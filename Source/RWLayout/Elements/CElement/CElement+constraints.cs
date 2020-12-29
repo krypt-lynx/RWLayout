@@ -74,7 +74,7 @@ namespace RWLayout.alpha2
             {
                 if (!anchors.Contains(var))
                 {
-                    throw new InvalidOperationException($"Constraint {constraint} contains variable {var} from outside current elements tree");
+                    throw new InvalidOperationException($"Constraint {constraint} contains variable {var} from outside current elements tree {Root.NamePrefix()}");
                 }
             }
         }

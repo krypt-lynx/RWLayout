@@ -79,6 +79,39 @@ namespace RWLayout.alpha2
         /// </summary>
         public float Left;
 
+        /// <summary>
+        /// total width of insets
+        /// </summary>
+        public float Width
+        {
+            get
+            {
+                return Left + Right;
+            }
+        }
+
+        /// <summary>
+        /// total height of insets
+        /// </summary>
+        public float Height
+        {
+            get
+            {
+                return Top + Bottom;
+            }
+        }
+
+        /// <summary>
+        /// total size of insets
+        /// </summary>
+        public Vector2 Size
+        {
+            get
+            {
+                return new Vector2(Width, Height);
+            }
+        }
+
 
         public override int GetHashCode()
         {
