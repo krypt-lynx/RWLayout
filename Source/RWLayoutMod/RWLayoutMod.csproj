@@ -31,6 +31,24 @@
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.1|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\1.1\Assemblies\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.2|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\1.2\Assemblies\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>D:\Program Files (x86)\Steam\steamapps\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
@@ -94,13 +112,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\..\..\..\Repo\Cassowary.net\Cassowary\Cassowary.csproj">
-      <Project>{f01578a3-ba19-47e6-b333-40e41158658b}</Project>
-      <Name>Cassowary</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RWLayout\RWLayout.csproj">
       <Project>{859869af-24c5-4aba-a111-f95a794ed7a3}</Project>
       <Name>RWLayout</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\Repo\Cassowary.net\Cassowary\Cassowary.csproj">
+      <Project>{f01578a3-ba19-47e6-b333-40e41158658b}</Project>
+      <Name>Cassowary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
