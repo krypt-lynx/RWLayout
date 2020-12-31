@@ -84,7 +84,7 @@ namespace RWLayout.alpha2
     /// This will become next version of CListView. It has better performance, but currently missing important chunks of API.
     /// </summary>
     /// <remarks>
-    /// Contrants cannot be set between rows and external layout. This tradeoff was made to avoid performance hit. 
+    /// Constrants cannot be set between rows and external layout. This tradeoff was made to avoid performance hit. 
     /// If you really need such constraints - you can use CScrolView with .StackTop method. Maybe I will do something with it later.
     /// </remarks>
     public partial class CListView_vNext : CElement

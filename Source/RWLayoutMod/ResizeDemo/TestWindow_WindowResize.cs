@@ -58,7 +58,7 @@ namespace RWLayoutMod.ResizeDemo
             Gui.AddConstraint(label.height ^ label.intrinsicHeight);
             
             // show/hide window title switch
-            var titleCkeck = Gui.AddElement(new CCheckBox
+            var titleCkeck = Gui.AddElement(new CCheckboxLabeled
             {
                 Title = "show title",
                 Checked = false,
@@ -92,7 +92,7 @@ namespace RWLayoutMod.ResizeDemo
                 resetBtn.height ^ 24);
             
             // lock window width switch
-            var lockWidth = Gui.AddElement(new CCheckBox
+            var lockWidth = Gui.AddElement(new CCheckboxLabeled
             {
                 Title = "lock width",
                 Checked = false,
@@ -119,7 +119,7 @@ namespace RWLayoutMod.ResizeDemo
                 lockWidth.height ^ 24);
 
             // lock window height switch
-            var lockHeight = Gui.AddElement(new CCheckBox
+            var lockHeight = Gui.AddElement(new CCheckboxLabeled
             {
                 Title = "lock height",
                 Checked = false,

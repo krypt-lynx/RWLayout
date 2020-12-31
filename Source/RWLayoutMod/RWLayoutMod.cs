@@ -143,15 +143,12 @@ namespace RWLayoutMod
             return "RWLayout";
         }
 
-
-        CElement test = null;
-
         public override void ConstructGui()
         {
             CElement forceOnGUI;
 
             Gui.StackTop(StackOptions.Create(intrinsicIfNotSet: true, constrainEnd: false),
-                Gui.AddElement(new CCheckBox
+                Gui.AddElement(new CCheckboxLabeled
                 {
                     Title = "Layout debug",
                     Checked = settings.layoutDebug,
@@ -161,21 +158,21 @@ namespace RWLayoutMod
                         CElement.DebugDraw = value;
                     },
                 }), 2,
-                Gui.AddElement(new CCheckBox
+                Gui.AddElement(new CCheckboxLabeled
                 {
                     Title = "Show examples button (requires restart)",
                     Tip = "Show examples button in dev mode tools panel",
                     Checked = settings.showExamplesButtom,
                     Changed = (_, value) => settings.showExamplesButtom = value,
                 }), 10,
-                Gui.AddElement(new CCheckBox
+                Gui.AddElement(new CCheckboxLabeled
                 {
                     Title = "Patch missing Log null check (requires restart)",
                     Tip = "Fixes Log.Message, Log.Warning, and Log.Error breaking LogWindow if called with null argument",
                     Checked = settings.patchLog,
                     Changed = (_, value) => settings.patchLog = value,
                 }), 2,
-                Gui.AddElement(new CCheckBox
+                Gui.AddElement(new CCheckboxLabeled
                 {
                     Title = "Patch sticky window resizing bug (requires restart)",
                     Tip = "Fixes windows missing mouse up event during resizing if mouse was outside the window at the moment of event",

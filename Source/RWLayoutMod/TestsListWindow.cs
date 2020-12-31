@@ -49,13 +49,13 @@ namespace RWLayoutMod
                 .Select(x => (object)(x, 30)).ToArray();
 
 
-            var debugCheck = buttonsColumn2.AddElement(new CCheckBox
+            var debugCheck = buttonsColumn2.AddElement(new CCheckboxLabeled
             {
                 Title = "Layout debug",
                 Checked = CElement.DebugDraw,
                 Changed = (_, x) => CElement.DebugDraw = x,
             });
-            var timeCheck = buttonsColumn2.AddElement(new CCheckBox
+            var timeCheck = buttonsColumn2.AddElement(new CCheckboxLabeled
             {
                 Title = "Show drawing time",
                 Checked = CWindow.ShowWindowDrawingTime,

@@ -5,7 +5,7 @@ $outputFormat   = '..\..\RWLayout-{0}.zip'
 $internalPath   = 'RWLayout'
 $solution       = '..\Source\RWLayout.sln'
 $target         = 'RWLayoutMod'
-$pathsToRemove  = '.git', '.gitattributes', '.gitignore', 'Source', 'Deploy', '*/Assemblies/git.txt', 'Dependencies', '*.md'
+$pathsToRemove  = '.git', '.vs', '.gitattributes', '.gitignore', 'Source', 'Deploy', '*/Assemblies/git.txt', 'Dependencies', '*.md'
 
 $packageId      = 'name.krypt.rimworld.rwlayout.alpha2'
 $packageName    = 'RWLayout'

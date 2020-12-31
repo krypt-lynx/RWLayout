@@ -36,13 +36,13 @@ namespace RWLayoutMod.CLabelIntrinsicSize
                 TextAlignment = TextAnchor.MiddleCenter
             };
 
-            var wordWrap = panel1.AddElement(new CCheckBox
+            var wordWrap = panel1.AddElement(new CCheckboxLabeled
             {
                 Title = "Word Wrap",
                 Changed = (_, x) => testLabel.WordWrap = x,
                 Checked = testLabel.WordWrap
             }); 
-            var width = panel1.AddElement(new CCheckBox
+            var width = panel1.AddElement(new CCheckboxLabeled
             {
                 Title = "Intrinsic width",
                 Changed = (_, x) =>
@@ -59,7 +59,7 @@ namespace RWLayoutMod.CLabelIntrinsicSize
                     }
                 }
             });
-            var height = panel1.AddElement(new CCheckBox
+            var height = panel1.AddElement(new CCheckboxLabeled
             {
                 Title = "Intrinsic height",
                 Changed = (_, x) =>

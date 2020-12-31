@@ -68,7 +68,9 @@ namespace RWLayout.alpha2
             base.DoContent();
             if (Texture != null)
             {
+                GuiTools.PushColor(TintColor);
                 GUI.DrawTexture(BoundsRounded, Texture, ScaleMode, AlphaBlend, ImageAspect, TintColor, borderWidths, BorderRadiuses);
+                GuiTools.PopColor();
             }
         }
     }
