@@ -17,7 +17,7 @@ namespace RWLayout.alpha2
     /// Contrants cannot be set between rows and external layout. This tradeoff was made to avoid performance hit. 
     /// If you really need such constraints - you can use CScrolView with .StackTop method. Maybe I will do something with it later.
     /// </remarks>
-    public class CListView : CElement
+    public class CListView : CElement // todo: subclass of CScrollView
     {
         Rect innerRect;
         /// <summary>

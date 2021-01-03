@@ -43,7 +43,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// Weak reverese to parent element
         /// </summary>
-        internal CElement Parent
+        public CElement Parent
         {
             get => parent_?.Target;
             set => parent_ = new Verse.WeakReference<CElement>(value);
