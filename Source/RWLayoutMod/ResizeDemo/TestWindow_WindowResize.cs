@@ -76,7 +76,7 @@ namespace RWLayoutMod.ResizeDemo
                 titleCkeck.height ^ 24);
             
             // reset window size button
-            var resetBtn = Gui.AddElement(new CButton
+            var resetBtn = Gui.AddElement(new CButtonText
             {
                 Title = "reset size",
                 Action = (sender) =>

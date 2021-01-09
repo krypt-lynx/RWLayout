@@ -86,7 +86,7 @@ namespace RWLayoutMod.BrickDemo
 
             // add figure button
 
-            var btnAdd = Gui.AddElement(new CButton
+            var btnAdd = Gui.AddElement(new CButtonText
             {
                 Title = "Throw",
                 Action = AddFigure,
@@ -98,7 +98,7 @@ namespace RWLayoutMod.BrickDemo
             Gui.AddConstraint(btnAdd.height ^ 2 * grid);
 
             // remove figure button
-            var btnRemove = Gui.AddElement(new CButton {
+            var btnRemove = Gui.AddElement(new CButtonText {
                 Title = "Destroy",
                 Action = RemoveFigure,
             });
@@ -108,7 +108,7 @@ namespace RWLayoutMod.BrickDemo
             Gui.AddConstraint(btnRemove.top ^ btnAdd.bottom + grid);
             Gui.AddConstraint(btnRemove.height ^ 2 * grid);
 
-            var btnTest = Gui.AddElement(new CButton
+            var btnTest = Gui.AddElement(new CButtonText
             {
                 Title = "Stress test",
                 Action = RepeatTest,
@@ -130,7 +130,7 @@ namespace RWLayoutMod.BrickDemo
             Gui.AddConstraint(debugInfoLabel.top ^ btnTest.bottom + grid);
 
             // log constraints button
-            var logCnsBtn = Gui.AddElement(new CButton
+            var logCnsBtn = Gui.AddElement(new CButtonText
             {
                 Title = "log cns",
                 Action = (sender) =>
@@ -146,7 +146,7 @@ namespace RWLayoutMod.BrickDemo
             Gui.AddConstraint(logCnsBtn.height ^ grid);
 
             // log variables button
-            var logVarsBtn = Gui.AddElement(new CButton
+            var logVarsBtn = Gui.AddElement(new CButtonText
             {
                 Title = "log vars",
                 Action = (sender) =>

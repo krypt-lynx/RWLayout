@@ -17,13 +17,29 @@ namespace RWLayout.alpha2
         /// <summary>
         /// the title of view
         /// </summary>
-        public string Title // TODO: Taggedstring support. Requires some extansive caching for performance
+        public string Title
         {
             get => title; 
             set {
                 if (title != value)
                 {
                     title = value;
+                    taggedTitle = value;
+                    SetNeedsUpdateLayout();
+                }
+            }
+        }
+
+        TaggedString taggedTitle = null;
+        public TaggedString TaggedTitle
+        {
+            get => taggedTitle;
+            set
+            {
+                if (title != value)
+                {
+                    title = value;
+                    taggedTitle = value;
                     SetNeedsUpdateLayout();
                 }
             }

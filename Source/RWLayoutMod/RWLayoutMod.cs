@@ -210,7 +210,7 @@ namespace RWLayoutMod
                 })
                 );
 
-            var examplesButton = Gui.AddElement(new CButton
+            var examplesButton = Gui.AddElement(new CButtonText
             {
                 Title = "RWLayout Examples",
                 Action = (_) => Find.WindowStack.Add(new TestsListWindow()),

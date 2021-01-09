@@ -73,6 +73,8 @@
   <ItemGroup>
     <Compile Include="Classes\Resource.cs" />
     <Compile Include="CMod.cs" />
+    <Compile Include="Elements\Controls\CButtonImage.cs" />
+    <Compile Include="Elements\Controls\CButtonText.cs" />
     <Compile Include="Elements\Controls\CCheckbox.cs" />
     <Compile Include="Elements\Controls\CCheckboxLabeled.cs" />
     <Compile Include="Elements\Controls\CFrame.cs" />
@@ -88,10 +90,11 @@
     <Compile Include="Elements\CElement\CElement+events.cs" />
     <Compile Include="Elements\CElement\CElement+hierarchy.cs" />
     <Compile Include="Elements\CElement\CElement.cs" />
+    <Compile Include="Elements\CTextuteElement.cs" />
     <Compile Include="Elements\CTintedElement.cs" />
     <Compile Include="Elements\GuiHosts\CElementHost.cs" />
     <Compile Include="Elements\GuiHosts\CGuiRoot.cs" />
-    <Compile Include="Elements\Controls\CButton.cs" />
+    <Compile Include="Elements\Controls\Obsolete\CButton.cs" />
     <Compile Include="Elements\Controls\Obsolete\CCheckBox.cs" />
     <Compile Include="Elements\Controls\CLabel.cs" />
     <Compile Include="Elements\Controls\CListView.cs" />

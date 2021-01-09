@@ -23,7 +23,7 @@ namespace RWLayout.alpha2
             base.DoContent();
 
             ApplyAll();
-            Widgets.Label(Bounds, Title);
+            Widgets.Label(Bounds, TaggedTitle);
             RestoreAll();
         }
     }

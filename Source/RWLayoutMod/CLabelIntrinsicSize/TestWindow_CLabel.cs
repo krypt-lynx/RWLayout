@@ -78,7 +78,7 @@ namespace RWLayoutMod.CLabelIntrinsicSize
             });
 
             var panel2 = Gui.AddElement(new CElement());
-            var downsizeFast = panel2.AddElement(new CButton
+            var downsizeFast = panel2.AddElement(new CButtonText
             {
                 Title = "-10",
                 Action = (_) =>
@@ -88,7 +88,7 @@ namespace RWLayoutMod.CLabelIntrinsicSize
                     InnerSize = sz;
                 }
             });
-            var downsize = panel2.AddElement(new CButton
+            var downsize = panel2.AddElement(new CButtonText
             {
                 Title = "-1",
                 Action = (_) =>
@@ -98,7 +98,7 @@ namespace RWLayoutMod.CLabelIntrinsicSize
                     InnerSize = sz;
                 }
             });
-            var fitWidth = panel2.AddElement(new CButton
+            var fitWidth = panel2.AddElement(new CButtonText
             {
                 Title = "fit width",
                 Action = (_) =>
@@ -108,7 +108,7 @@ namespace RWLayoutMod.CLabelIntrinsicSize
                     InnerSize = sz;
                 }
             });
-            var upsize = panel2.AddElement(new CButton
+            var upsize = panel2.AddElement(new CButtonText
             {
                 Title = "+1",
                 Action = (_) =>
@@ -118,7 +118,7 @@ namespace RWLayoutMod.CLabelIntrinsicSize
                     InnerSize = sz;
                 }
             });
-            var upsizeFast = panel2.AddElement(new CButton
+            var upsizeFast = panel2.AddElement(new CButtonText
             {
                 Title = "+10",
                 Action = (_) =>

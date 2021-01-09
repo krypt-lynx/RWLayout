@@ -22,7 +22,7 @@ namespace RWLayoutMod.ScrollDemo
             base.ConstructGui();
             
             var scroll1 = Gui.AddElement(new CScrollView());
-            var test1 = scroll1.Content.AddElement(new CButton
+            var test1 = scroll1.Content.AddElement(new CButtonText
             {
                 Title = "Test",
                 Action = (_) => Log.Message("Click!"),

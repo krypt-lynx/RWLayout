@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace RWLayout.alpha2.Elements.Controls
+namespace RWLayout.alpha2
 {
     /// <summary>
     /// Widgets.Checkbox wrapper
@@ -41,7 +41,7 @@ namespace RWLayout.alpha2.Elements.Controls
             bool oldChecked = Checked;
 
             ApplyAll();
-            Widgets.Checkbox(BoundsRounded.min, ref Checked, 24, Disabled, Paintable, TextureChecked, TextureUnchecked);
+            Widgets.Checkbox(BoundsRounded.min, ref Checked, Mathf.Min(BoundsRounded.width, BoundsRounded.height), Disabled, Paintable, TextureChecked, TextureUnchecked);
             RestoreAll();
 
             if (oldChecked != Checked)

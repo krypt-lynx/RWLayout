@@ -44,7 +44,7 @@ namespace RWLayoutMod.VisibilityDemo
 
             lightsFrame.AddConstraints(lightsFrame.width ^ 100, lightsFrame.height ^ 300);
 
-            var switchLightsBtn = Gui.AddElement(new CButton
+            var switchLightsBtn = Gui.AddElement(new CButtonText
             {
                 Title = "Next",
                 Action = NextLight

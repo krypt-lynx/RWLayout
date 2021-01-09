@@ -11,7 +11,7 @@ namespace RWLayout.alpha2
     /// <summary>
     /// Widgets.ButtonText wrapper
     /// </summary>
-    public class CButton : CTitledElement
+    public class CButtonText : CTitledElement
     {
         /// <summary>
         /// Called then button is pressed
@@ -24,7 +24,7 @@ namespace RWLayout.alpha2
         }
 
         public override void DoContent()
-        {           
+        {
             base.DoContent();
             ApplyAll();
             if (Widgets.ButtonText(BoundsRounded, Title, doMouseoverSound: true))
@@ -34,4 +34,5 @@ namespace RWLayout.alpha2
             RestoreAll();
         }
     }
+
 }

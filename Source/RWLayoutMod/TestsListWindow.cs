@@ -41,7 +41,7 @@ namespace RWLayoutMod
             var buttonsColumn1 = buttonsPanel.AddElement(new CElement());
             var buttonsColumn2 = buttonsPanel.AddElement(new CElement());
 
-            var buttons = tests.Select(x => buttonsColumn1.AddElement(new CButton
+            var buttons = tests.Select(x => buttonsColumn1.AddElement(new CButtonText
             {
                 Title = x.Item1,
                 Action = (_) => Find.WindowStack.Add(x.Item2())
