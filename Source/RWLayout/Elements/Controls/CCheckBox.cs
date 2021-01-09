@@ -6,6 +6,23 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
+namespace RWLayout.alpha2.Elements.Controls
+{
+    [Obsolete("For binary compatimility. Use RWLayout.alpha2.CCheckbox instead")]
+    public class CCheckbox : RWLayout.alpha2.CCheckbox
+    {
+        public CCheckbox() : base()
+        {
+            ((RWLayout.alpha2.CCheckbox)this).Changed = (sender, value) =>
+            {
+                this.Changed?.Invoke((CCheckbox)sender, value);
+            };
+        }
+
+        new public Action<CCheckbox, bool> Changed = null;
+    } 
+}
+
 namespace RWLayout.alpha2
 {
     /// <summary>
