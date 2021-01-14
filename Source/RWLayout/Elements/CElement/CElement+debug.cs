@@ -28,7 +28,7 @@ namespace RWLayout.alpha2
             } 
             else
             {
-                return $"{GetType().Name}_{Name}_{ID}";
+                return $"{GetType().Name}_{ID}_{Name}";
             }
         }
 

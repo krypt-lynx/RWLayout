@@ -11,7 +11,7 @@ namespace RWLayout.alpha2
     /// <summary>
     /// Geometry Anchor. A variable and its defining constraint.
     /// </summary>
-    public struct Anchor
+    public struct Anchor // todo: resolved flag?
     {
         public ClVariable var;
         public ClConstraint cn;

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -41,6 +41,10 @@
       <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>D:\Program Files (x86)\Steam\steamapps\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>	
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -103,6 +107,7 @@
     <Compile Include="CWindow\CWindowRoot.cs" />
     <Compile Include="Elements\GuiHosts\CListingRow.cs" />
     <Compile Include="Elements\CListingStandart.cs" />
+    <Compile Include="RWLayoutHarmonyPatches.cs" />
     <Compile Include="MiscTools\ConstraintTools.cs" />
     <Compile Include="Classes\EdgeInsets.cs" />
     <Compile Include="MiscTools\GUIStyleExtension.cs" />

@@ -63,7 +63,7 @@ namespace RWLayoutMod
             });
             var versionInfo = Gui.AddElement(new CLabel
             {
-                Title = $"RWLayout version: {RWLayoutMod.commitInfo}",
+                Title = $"RWLayout version: {RWLayoutMod.VersionString()}",
                 //Multiline = true,
                 Color = new Color(1, 1, 1, 0.5f),
                 Font = GameFont.Tiny,

@@ -30,7 +30,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// Renders the view and its children
         /// </summary>
-        public void DoElementContent()
+        public virtual void DoElementContent()
         {
             if (!Hidden)
             {
@@ -60,11 +60,8 @@ namespace RWLayout.alpha2
         /// </summary>
         public TipSignal? Tip = null;
 
-        /// <summary>
-        /// Highligh the element if tip is available 
-        /// </summary>
+        [Obsolete("For binarry compatibility, does nothing")]
         public bool IndicateTipAvailable = true;
-
 
         /// <summary>
         /// Controls debug overlay
@@ -78,19 +75,12 @@ namespace RWLayout.alpha2
         {
             if (DebugDraw)
             {
-                GuiTools.UsingColor(new Color(1, 0, 0, 0.2f), () => GuiTools.Box(Bounds, new EdgeInsets(1)));
-                GuiTools.UsingColor(new Color(1, 1, 1, 0.2f), () => GuiTools.UsingFont(GameFont.Tiny, () =>
-                {
-                    Widgets.Label(Bounds, Bounds.ToString());
-                }));
+                GuiTools.UsingColor(new Color(1, 0, 0, 0.2f), () => GuiTools.Box(Bounds, new EdgeInsets(1)));                
+                TooltipHandler.TipRegion(Bounds, $"{NamePrefix()}:\n{{x:{Bounds.x} y:{Bounds.y} w:{Bounds.width} h:{Bounds.height}}}");
             }
 
             if (Tip != null)
             {
-                if (IndicateTipAvailable && Mouse.IsOver(BoundsRounded))
-                {
-                    Widgets.DrawHighlight(BoundsRounded);
-                }
                 TooltipHandler.TipRegion(BoundsRounded, Tip.Value);
             }
         }

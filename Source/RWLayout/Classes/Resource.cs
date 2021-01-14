@@ -33,6 +33,15 @@ namespace RWLayout.alpha2
             this.itemPath = itemPath;
         }
 
+        public Resource(T value)
+        {
+            this.itemPath = value.ToString();
+            this.value = value;
+        }
+
+
         public static implicit operator T(Resource<T> resource) => resource.Value;
+        public static implicit operator Resource<T>(T value) => new Resource<T>(value);
+
     }
 }

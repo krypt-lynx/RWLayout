@@ -20,7 +20,7 @@ namespace RWLayout.alpha2
         public int ID { get; }
         public CElement()
         {
-            ID = nextId++;
+            ID = nextId++; // todo: thread safety 
         }
      
         /// <summary>
@@ -78,6 +78,7 @@ namespace RWLayout.alpha2
             }
 
             var newIntrinsicSize = this.tryFit(Bounds.size);
+         
             if (intrinsicSize.HasValue && newIntrinsicSize != intrinsicSize.Value)
             {
                 //Log.Message($"{NamePrefix()}: intrinsicSize: {intrinsicSize}; newIntrinsicSize: {newIntrinsicSize}");
