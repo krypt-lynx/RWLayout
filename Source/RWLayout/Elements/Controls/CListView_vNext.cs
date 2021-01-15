@@ -153,8 +153,10 @@ namespace RWLayout.alpha2
             }
         }
 
+
         public override void PostLayoutUpdate()
         {
+            //Log.Message("CListView_vNext PostLayoutUpdate"); // todo: why PostLayoutUpdate is called each frame without SetNeedsUpdateLayout called?
             base.PostLayoutUpdate();
 
             UpdateRowsIfNeeded();
@@ -236,6 +238,13 @@ namespace RWLayout.alpha2
 
                 rowTop = rowButtom;
             }
+        }
+
+        public void UpdateList()
+        {
+            rows = new CListingRow[] { };
+            SetNeedsUpdateRows();
+            SetNeedsUpdateLayout();
         }
 
         /*
