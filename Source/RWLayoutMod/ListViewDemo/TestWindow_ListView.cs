@@ -143,7 +143,7 @@ namespace RWLayoutMod.ListViewDemo
                 }
 
                 sb.Append(element.NamePrefix());
-                if (element is COwnedElement host)
+                if (element is IOwnedElement host)
                 {
                     sb.Append(" + ");
                     element = host.Owner;

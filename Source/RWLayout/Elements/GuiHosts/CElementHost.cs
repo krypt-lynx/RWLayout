@@ -11,9 +11,17 @@ using Verse;
 namespace RWLayout.alpha2
 {
     /// <summary>
-    /// This view can be oftend by other view without actually adding it as a child
+    /// CElement with this interface can be owned by other view without actually adding it as a child
     /// </summary>
-    public class COwnedElement : CElement
+    public interface IOwnedElement
+    {
+        public CElement Owner { get; set; }
+    }
+
+    /// <summary>
+    /// This view can be owned by other view without actually adding it as a child
+    /// </summary>
+    public class COwnedElement : CElement, IOwnedElement
     {
         Verse.WeakReference<CElement> owner_ = null;
 
