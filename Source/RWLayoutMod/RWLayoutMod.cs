@@ -39,7 +39,7 @@ namespace RWLayoutMod
 
         public static string VersionString()
         {
-            return commitInfo + (isDevBuild ? "-dev" : "");
+            return commitInfo;
         }
 
         public static string GetLibVersionString()
@@ -70,17 +70,48 @@ namespace RWLayoutMod
             Harmony harmony = new Harmony(PackageIdOfMine);
 
             ApplyPatches(harmony);
+
+            // ShowMismatchMessage();
+        }
+
+        static bool showMismatchMessageOnce = true;
+        private static void ShowMismatchMessage()
+        {
+            if (showMismatchMessageOnce)
+            {
+                showMismatchMessageOnce = false;
+
+                var modVer = VersionString();
+                var libVer = GetLibVersionString();
+
+                if (modVer != libVer)
+                {
+                    Log.Warning($"RWLayout version mismatch: mod {modVer}; lib {libVer}");
+
+                    Find.WindowStack.Add(new Dialog_MessageBox(
+                        text:
+                        $"RWLayout service mod version does not match lib version.\n" +
+                        $"\n" +
+                        $"It can be caused by wrong mod order and mod embedding a version of the lib. Ensure RWLayout it placed right after core mods\n" +
+                        $"\n" +
+                        $"Mod version:\t{modVer}\n" +
+                        $"Lib version:\t{libVer}",
+                        title: "Unexpected RWLayout version"));
+                }
+            }
         }
 
         private static void ApplyPatches(Harmony harmony)
         {
+            // Version tester
+            harmony.Patch(AccessTools.Method(typeof(UIRoot_Entry), nameof(UIRoot_Entry.Init)),
+                postfix: new HarmonyMethod(typeof(RWLayoutMod), nameof(RWLayoutMod.ShowMismatchMessage)));
+
             // bugfixes should not be there but in separate mod, but those are annoying during development and I'm lazy to create a new one
             // bugfixes:
             // missing null checks in Log class
             if (settings.patchLog)
             {
-                
-
                 harmony.Patch(AccessTools.Constructor(typeof(LogMessage), new Type[] { typeof(string) }),
                     prefix: new HarmonyMethod(typeof(MiscFixes), nameof(MiscFixes.LogMessage_ctor_string_prefix)));
                 harmony.Patch(AccessTools.Constructor(typeof(LogMessage), new Type[] { typeof(LogMessageType), typeof(string), typeof(string) }),
