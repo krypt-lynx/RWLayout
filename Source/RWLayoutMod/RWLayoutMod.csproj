@@ -110,12 +110,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <None Include="prebuild.ps1" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>git describe --tag  --dirty --always &gt; "$(ProjectDir)\git.txt"
-
-rem rmdir /q /s "$(TargetDir)"
-cd "$(TargetDir)"
-del /Q *.*</PreBuildEvent>
+      <PreBuildEvent>
+	  set ProjectDir=$(ProjectDir)
+	  set TargetDir=$(TargetDir)
+	  PowerShell -NoProfile -ExecutionPolicy Bypass -Command "&amp; ""$(ProjectDir)prebuild.ps1\"" "</PreBuildEvent>
   </PropertyGroup>
 </Project>
