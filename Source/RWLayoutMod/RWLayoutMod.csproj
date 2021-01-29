@@ -91,25 +91,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BrickDemo\Curtain.cs" />
-    <Compile Include="BrickDemo\Figure.cs" />
-    <Compile Include="BrickDemo\TestWindow_Brick.cs" />
-    <Compile Include="CLabelIntrinsicSize\TestWindow_CLabel.cs" />
     <Compile Include="HarmonyPatches.cs" />
-    <Compile Include="ListViewDemo\TestWindow_ListView.cs" />
-    <Compile Include="NativeWindow\NativeWindow_Harmony.cs" />
-    <Compile Include="NativeWindow\WindowTest_NativeWindow.cs" />
-    <Compile Include="ResizeDemo\TestWindow_WindowResize.cs" />
-    <Compile Include="ScrollDemo\TestWindow_ScrollView.cs" />
-    <Compile Include="VisibilityDemo\TestWindow_Visibility.cs" />
+    <Compile Include="RWLayoutSettingsView.cs" />
     <Compile Include="RWLayoutMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestsListWindow.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="git.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="git.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RWLayout\RWLayout.csproj">
@@ -121,9 +109,7 @@
       <Name>Cassowary</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ListingStandardDemo\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>git describe --tag  --dirty --always &gt; "$(ProjectDir)\git.txt"
