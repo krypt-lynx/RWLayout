@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -44,7 +44,7 @@
     <Reference Include="0Harmony">
       <HintPath>D:\Program Files (x86)\Steam\steamapps\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
       <Private>False</Private>
-    </Reference>	
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -107,6 +107,8 @@
     <Compile Include="CWindow\CWindowRoot.cs" />
     <Compile Include="Elements\GuiHosts\CListingRow.cs" />
     <Compile Include="Elements\CListingStandart.cs" />
+    <Compile Include="LogHelper.cs" />
+    <Compile Include="RWLayout.cs" />
     <Compile Include="RWLayoutHarmonyPatches.cs" />
     <Compile Include="MiscTools\ConstraintTools.cs" />
     <Compile Include="Classes\EdgeInsets.cs" />
@@ -122,5 +124,15 @@
       <Name>Cassowary</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="git.txt">
+      <LogicalName>git.txt</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>git describe --tag  --dirty --always &gt; "$(ProjectDir)\git.txt"
+
+</PreBuildEvent>
+  </PropertyGroup>
 </Project>

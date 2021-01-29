@@ -17,29 +17,25 @@ namespace RWLayout.alpha2
 
     public static class RWLayoutHarmonyPatches
     {
-        const string rwLayoutHarmonyId = "rwlayout.alpha2";
-        static bool patchesApplied = false;
 
+        [Obsolete("patches are invoked by lib itself")]
         public static void PatchOnce()
         {
-            if (patchesApplied)
-            {
-                return;
-            }
-            patchesApplied = true;
 
-            Harmony harmony = new Harmony(rwLayoutHarmonyId);
+        }
 
+        internal static void Patch(Harmony harmony)
+        {
             // CWindow resize injection
-            harmony.Patch(AccessTools.Method(typeof(WindowResizer), "DoResizeControl"),
-                prefix: new HarmonyMethod(typeof(RWLayoutResizerPatches), "DoResizeControl_prefix"));
+            harmony.Patch(AccessTools.Method(typeof(WindowResizer), nameof(WindowResizer.DoResizeControl)),
+                prefix: new HarmonyMethod(typeof(RWLayoutResizerPatches), nameof(RWLayoutResizerPatches.DoResizeControl_prefix)));
 
             // WindowStack.Add redirect to OnGUI method
-            harmony.Patch(AccessTools.Method(typeof(UIRoot), "UIRootOnGUI"),
-                prefix: new HarmonyMethod(typeof(WindowStackAddPatches), "UIRoot_UIRootOnGUI_prefix"),
-                postfix: new HarmonyMethod(typeof(WindowStackAddPatches), "UIRoot_UIRootOnGUI_postfix"));
-            harmony.Patch(AccessTools.Method(typeof(WindowStack), "Add"),
-                prefix: new HarmonyMethod(typeof(WindowStackAddPatches), "WindowStack_Add_prefix"));
+            harmony.Patch(AccessTools.Method(typeof(UIRoot), nameof(UIRoot.UIRootOnGUI)),
+                prefix: new HarmonyMethod(typeof(WindowStackAddPatches), nameof(WindowStackAddPatches.UIRoot_UIRootOnGUI_prefix)),
+                postfix: new HarmonyMethod(typeof(WindowStackAddPatches), nameof(WindowStackAddPatches.UIRoot_UIRootOnGUI_postfix)));
+            harmony.Patch(AccessTools.Method(typeof(WindowStack), nameof(WindowStack.Add)),
+                prefix: new HarmonyMethod(typeof(WindowStackAddPatches), nameof(WindowStackAddPatches.WindowStack_Add_prefix)));
 
         }
     }
@@ -49,7 +45,7 @@ namespace RWLayout.alpha2
         static int inOnGuiCounter = 0;
         static Queue<Window> windowsQueue = new Queue<Window>();
 
-        static bool WindowStack_Add_prefix(Window window)
+        internal static bool WindowStack_Add_prefix(Window window)
         {
             if (inOnGuiCounter == 0 && NeedToInvoke(window))
             {
@@ -81,7 +77,7 @@ namespace RWLayout.alpha2
             }
         }
 
-        static void UIRoot_UIRootOnGUI_prefix()
+        internal static void UIRoot_UIRootOnGUI_prefix()
         {
             inOnGuiCounter++;
             while (windowsQueue.Count > 0)
@@ -90,7 +86,7 @@ namespace RWLayout.alpha2
             }
         }
 
-        static void UIRoot_UIRootOnGUI_postfix()
+        internal static void UIRoot_UIRootOnGUI_postfix()
         {
             inOnGuiCounter--;
         }
@@ -98,7 +94,7 @@ namespace RWLayout.alpha2
 
     static class RWLayoutResizerPatches
     {
-        static bool DoResizeControl_prefix(WindowResizer __instance, ref Rect __result, Rect winRect)
+        internal static bool DoResizeControl_prefix(WindowResizer __instance, ref Rect __result, Rect winRect)
         {
             if (__instance is CWindowResizer resizer)
             {
