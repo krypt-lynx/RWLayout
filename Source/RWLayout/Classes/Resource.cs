@@ -16,6 +16,10 @@ namespace RWLayout.alpha2
     {
         string itemPath;
         T value = null;
+
+        /// <summary>
+        /// The resource value
+        /// </summary>
         public T Value
         {
             get
@@ -28,17 +32,24 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Create resource wrapper with access path
+        /// </summary>
+        /// <param name="itemPath">resource path</param>
         public Resource(string itemPath)
         {
             this.itemPath = itemPath;
         }
 
+        /// <summary>
+        /// Create resource wrapper with resource
+        /// </summary>
+        /// <param name="itemPath">the resource</param>
         public Resource(T value)
         {
             this.itemPath = value.ToString();
             this.value = value;
         }
-
 
         public static implicit operator T(Resource<T> resource) => resource.Value;
         public static implicit operator Resource<T>(T value) => new Resource<T>(value);
