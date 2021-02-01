@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+	<RWLayout.alpha2.ViewDef>
+		<defName>ModSettings</defName>
+		<view>
+			<RWLayoutMod.RWLayoutSettingsView Id="root">
+				<subviews>
+					<CCheckboxLabeled Id="debug">
+						<Title translated="true">Layout debug</Title>
+					</CCheckboxLabeled>
+					<CCheckboxLabeled Id="lognull">
+						<Title>Patch missing Log null check (requires restart)</Title>
+						<Tip>Fixes Log.Message, Log.Warning, and Log.Error breaking LogWindow if called with null argument</Tip>
+					</CCheckboxLabeled>
+					<CCheckboxLabeled Id="sticky">
+						<Title>Patch sticky window resizing bug (requires restart)</Title>
+						<Tip>Fixes windows missing mouse up event during resizing if mouse was outside the window at the moment of event</Tip>
+					</CCheckboxLabeled>
+					<CLabel Id="noexamples">
+						<Title>Examples was moved to separate mod"</Title>
+					</CLabel>
+				</subviews>
+				<constraints>
+					strong:debug.top == root.top
+					lognull.top == debug.bottom+10
+					sticky.top == lognull.bottom+2
+					noexamples.top == sticky.bottom+10
+					
+					debug.height == debug.intrinsicHeight 
+					lognull.height == lognull.intrinsicHeight 
+					sticky.height == sticky.intrinsicHeight 
+					noexamples.height == noexamples.intrinsicHeight 
+
+					debug.left == root.left
+					lognull.left == lognull.left
+					sticky.left == sticky.left
+					noexamples.left == noexamples.left
+
+					debug.right == root.right
+					lognull.right == lognull.right
+					sticky.right == sticky.right
+					noexamples.right == noexamples.right
+				</constraints>
+			</RWLayoutMod.RWLayoutSettingsView>
+		</view>
+	</RWLayout.alpha2.ViewDef>	
+</Defs>

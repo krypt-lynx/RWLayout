@@ -107,6 +107,7 @@
     <Compile Include="CWindow\CWindowRoot.cs" />
     <Compile Include="Elements\GuiHosts\CListingRow.cs" />
     <Compile Include="Elements\CListingStandart.cs" />
+    <Compile Include="Internal\Extensions.cs" />
     <Compile Include="LogHelper.cs" />
     <Compile Include="RWLayout.cs" />
     <Compile Include="RWLayoutHarmonyPatches.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="MiscTools\GuiTools+Text.cs" />
     <Compile Include="MiscTools\GuiTools+Geometry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\ViewDef.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Repo\Cassowary.net\Cassowary\Cassowary.csproj">
@@ -134,7 +136,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-      <PreBuildEvent>set ProjectDir=$(ProjectDir)
+    <PreBuildEvent>set ProjectDir=$(ProjectDir)
 	  set TargetDir=$(TargetDir)
 	  PowerShell -NoProfile -ExecutionPolicy Bypass -Command "&amp; ""$(ProjectDir)prebuild.ps1\"" "</PreBuildEvent>
   </PropertyGroup>

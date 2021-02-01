@@ -149,7 +149,7 @@ namespace RWLayoutMod
 
         public override CSettingsView CreateSettingsView()
         {
-            return new RWLayoutSettingsView(this);
+            return (RWLayoutSettingsView)DefDatabase<ViewDef>.GetNamed("ModSettings").Instantiate();
         }
     }
 

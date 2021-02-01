@@ -20,7 +20,8 @@ namespace RWLayoutMod
             return $"Mod version: {RWLayoutMod.VersionString()}\nLib version: {RWLayoutMod.GetLibVersionString()}";
         }
 
-        public RWLayoutSettingsView(CMod mod) : base(mod)
+        public RWLayoutSettingsView() { }
+        public RWLayoutSettingsView(bool test) 
         {
             this.StackTop(StackOptions.Create(intrinsicIfNotSet: true, constrainEnd: false),
                 this.AddElement(new CCheckboxLabeled

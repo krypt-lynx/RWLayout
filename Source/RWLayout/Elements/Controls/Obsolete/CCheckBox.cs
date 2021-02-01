@@ -8,6 +8,7 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+
     /// <summary>
     /// Widgets.CheckboxLabeled wrapper
     /// </summary>

@@ -161,21 +161,11 @@ namespace RWLayout.alpha2
     /// </summary>
     public abstract class CSettingsView : CElement
     {
-        public CMod Mod { get; }
-
-        public CSettingsView(CMod mod)
-        {
-            Mod = mod;
-        }
-
         /// <summary>
         /// Mod settings category
         /// </summary>
         /// <returns></returns>
-        public virtual string Category()
-        {
-            return Mod.Content.Name;
-        }
+        public abstract string Category();
 
         /// <summary>
         /// Mod version (will be show at right if close button)
