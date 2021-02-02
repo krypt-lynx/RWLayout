@@ -11,6 +11,7 @@ namespace RWLayout.alpha2
     {
         private PropertyInfo prop = null;
         private FieldInfo field = null;
+        private MethodInfo method = null;
 
         public MemberHandler(PropertyInfo prop)
         {
@@ -20,6 +21,11 @@ namespace RWLayout.alpha2
         public MemberHandler(FieldInfo field)
         {
             this.field = field;
+        }
+
+        public MemberHandler(MethodInfo member)
+        {
+            this.method = member;
         }
 
         public bool CanWrite
@@ -34,7 +40,7 @@ namespace RWLayout.alpha2
         {
             get
             {
-                return prop?.PropertyType ?? field?.FieldType;
+                return prop?.PropertyType ?? field?.FieldType ?? null;
             }
         }
 
@@ -48,9 +54,39 @@ namespace RWLayout.alpha2
             {
                 return field.GetValue(obj);
             }
+            else if (method != null)
+            {
+                return CreateDelegate(obj);
+            }
             else
             {
                 return null;
+            }
+        }
+
+        Type delegateType = null;
+        private Type DelegateType()
+        {
+            if (delegateType == null)
+            {
+                var tArgs = new List<Type>();
+                foreach (var param in method.GetParameters())
+                    tArgs.Add(param.ParameterType);
+                tArgs.Add(method.ReturnType);
+                delegateType = System.Linq.Expressions.Expression.GetDelegateType(tArgs.ToArray());
+            }
+            return delegateType;
+        }
+
+        private object CreateDelegate(object obj)
+        {
+            var delDecltype = DelegateType();
+            if (method.IsStatic) {
+                return Delegate.CreateDelegate(delDecltype, method);
+            }
+            else
+            {
+                return Delegate.CreateDelegate(delDecltype, obj, method);
             }
         }
 
@@ -71,22 +107,17 @@ namespace RWLayout.alpha2
     {
         public static MemberHandler GetMemberHandler(this Type type, string name, BindingFlags bindingAttr)
         {
-            var prop = type.GetProperty(name, bindingAttr);
-            if (prop != null)
+            var member = type.GetMember(name, bindingAttr).First(); // todo
+            switch (member.MemberType)
             {
-                return new MemberHandler(prop);
-            } 
-            else
-            {
-                var field = type.GetField(name, bindingAttr);
-                if (field != null)
-                {
-                    return new MemberHandler(field);
-                }
-                else
-                {
+                case MemberTypes.Field:
+                    return new MemberHandler((FieldInfo)member);
+                case MemberTypes.Property:
+                    return new MemberHandler((PropertyInfo)member);
+                case MemberTypes.Method:
+                    return new MemberHandler((MethodInfo)member);
+                default:
                     return null;
-                }
             }
         }
     }

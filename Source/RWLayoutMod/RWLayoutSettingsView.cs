@@ -19,12 +19,19 @@ namespace RWLayoutMod
         {
             return $"Mod version: {RWLayoutMod.VersionString()}\nLib version: {RWLayoutMod.GetLibVersionString()}";
         }
-
+        /*
         public Action<CCheckboxLabeled, bool> SetLayoutDebug = (sender, value) =>
         {
             RWLayoutMod.settings.layoutDebug = value;
             CElement.DebugDraw = value;
         };
+        */
+
+        public void SetLayoutDebug(CCheckboxLabeled sender, bool value)
+        {
+            RWLayoutMod.settings.layoutDebug = value;
+            CElement.DebugDraw = value;
+        }
 
         public CCheckboxLabeled DebugCheck;
         public CCheckboxLabeled NullCheck;
