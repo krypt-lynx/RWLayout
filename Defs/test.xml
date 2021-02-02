@@ -6,13 +6,13 @@
 		<!-- todo: externalViews -->
 		<!-- todo: externalObjects -->
 		<!-- todo: "call" binding -->
-		<bindings>
+		<!-- <bindings>
 			<binding object="debug" target="root.DebugCheck"/>
 			<binding object="lognull" target="root.NullCheck"/>
 			<binding object="sticky" target="root.StickyCheck"/>
-		</bindings>
+		</bindings> -->
 		<view>
-			<RWLayoutMod.RWLayoutSettingsViewTest Id="root">
+			<RWLayoutMod.RWLayoutSettingsView Id="root">
 				<subviews>
 					<CCheckboxLabeled Id="debug">
 						<properties>
@@ -25,12 +25,16 @@
 						<properties>
 							<Title>Patch missing Log null check (requires restart)</Title>
 							<Tip>Fixes Log.Message, Log.Warning, and Log.Error breaking LogWindow if called with null argument</Tip>
+							<Checked object="settings.patchLog" />
+							<Changed object="root.SetPatchLog" />
 						</properties>
 					</CCheckboxLabeled>
 					<CCheckboxLabeled Id="sticky">
 						<properties>
 							<Title>Patch sticky window resizing bug (requires restart)</Title>
 							<Tip>Fixes windows missing mouse up event during resizing if mouse was outside the window at the moment of event</Tip>
+							<Checked object="settings.patchWindowResize" />
+							<Changed object="root.SetPatchWindowResize" />
 						</properties>
 					</CCheckboxLabeled>
 					<CLabel Id="noexamples">
@@ -39,7 +43,7 @@
 						</properties>
 					</CLabel>
 				</subviews>
-				<constraints> <!-- todo: binding constraints -->
+				<constraints>
 					<constraint>debug.top == root.top</constraint>
 					<constraint>strong:lognull.top == debug.bottom+10</constraint>
 					<constraint>sticky.top == lognull.bottom+2</constraint>
@@ -60,7 +64,7 @@
 					<constraint>sticky.right == root.right</constraint>
 					<constraint>noexamples.right == root.right</constraint>
 				</constraints>
-			</RWLayoutMod.RWLayoutSettingsViewTest>
+			</RWLayoutMod.RWLayoutSettingsView>
 		</view>
 	</RWLayout.alpha2.ViewDef>	
 </Defs>

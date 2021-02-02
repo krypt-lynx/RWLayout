@@ -40,13 +40,11 @@ namespace RWLayout.alpha2
 
         public CElement Instantiate(Dictionary<string, object> externalObjects = null)
         {
-            Dictionary<string, CElement> viewMap = new Dictionary<string, CElement>();
+            Dictionary<string, object> objectsMap = new Dictionary<string, object>(externalObjects);
             Dictionary<CElement, ElementPrototype> viewPrototypes = new Dictionary<CElement, ElementPrototype>();
-            CElement root = InstantiateViewsTree(Prototype, viewMap, viewPrototypes);
 
-            var objectsMap = viewMap.Select(kvp => (kvp.Key, (object)kvp.Value))
-                .Concat(externalObjects?.Select(x => (x.Key, x.Value)) ?? Enumerable.Empty<(string, object)>())
-                .ToDictionary(x => x.Item1, x => x.Item2);
+            CElement root = InstantiateViewsTree(Prototype, objectsMap, viewPrototypes);
+
 
             ApplyConstraints(objectsMap, viewPrototypes);
             ApplyProperties(objectsMap, viewPrototypes);
@@ -91,11 +89,16 @@ namespace RWLayout.alpha2
             {
                 if (kvp.Value.Constraints != null)
                 {
-                    foreach (var constraintStr in kvp.Value.Constraints)
+                    foreach (var constraintData in kvp.Value.Constraints)
                     {
                         try
                         {
-                            kvp.Key.AddConstraints(ConstraintParser.CreateConstraint(constraintStr, objectsMap));
+                            var constraint = ConstraintParser.CreateConstraint(constraintData.Item2, objectsMap);
+                            if (constraintData.Item1 != null)
+                            {
+                                objectsMap[constraintData.Item1] = constraint;
+                            }
+                            kvp.Key.AddConstraints(constraint);
                         } 
                         catch (Exception e)
                         {
@@ -106,7 +109,7 @@ namespace RWLayout.alpha2
             }
         }
 
-        private CElement InstantiateViewsTree(ElementPrototype p, Dictionary<string, CElement> viewMap, Dictionary<CElement, ElementPrototype> viewPrototypes)
+        private CElement InstantiateViewsTree(ElementPrototype p, Dictionary<string, object> objectMap, Dictionary<CElement, ElementPrototype> viewPrototypes)
         {
             var ns = "RWLayout.alpha2";
 
@@ -115,13 +118,13 @@ namespace RWLayout.alpha2
             var view = (CElement)Activator.CreateInstance(type);
             if (p.Id != null)
             {
-                viewMap[p.Id] = view;
+                objectMap[p.Id] = view;
             }
             viewPrototypes[view] = p;
             
             if (p.Subviews != null)
             {
-                view.AddElements(p.Subviews.Select(x => InstantiateViewsTree(x, viewMap, viewPrototypes)));
+                view.AddElements(p.Subviews.Select(x => InstantiateViewsTree(x, objectMap, viewPrototypes)));
             }
 
             return view;
@@ -178,7 +181,7 @@ namespace RWLayout.alpha2
     {
 
         public List<ElementPrototype> Subviews;
-        public List<string> Constraints;
+        public List<(string, string)> Constraints;
         public string Id;
         public string Class;
 
@@ -195,13 +198,16 @@ namespace RWLayout.alpha2
 
             Subviews = viewNodes.Select(x => new ElementPrototype(x)).ToList();
 
+            var constraintNodes = node.SelectNodes("constraints/constraint").Cast<XmlElement>();
+            Constraints = constraintNodes.Select(x => (x.HasAttribute("Id") ? x.GetAttribute("Id") : null, x.InnerText.Trim(" \n\r\t".ToCharArray()))).ToList();
+            /*
             var constraintNodes = node.SelectNodes("constraints/constraint/text()");
             Constraints = constraintNodes?.AsEnumerable<XmlNode>()
                 .Select(x => x?.Value)
                 .Select(x => x?.Trim(" \n\r\t".ToCharArray()))
                 .Where(x => x?.Length > 0)
                 .Where(x => x != null)
-                .ToList();
+                .ToList();*/
         }
 
 
