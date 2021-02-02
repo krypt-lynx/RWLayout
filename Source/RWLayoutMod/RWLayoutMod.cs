@@ -37,6 +37,15 @@ namespace RWLayoutMod
         public static string commitInfo { get; private set; } = null;
         public static bool isDevBuild { get; private set; } = false;
 
+        public static CMod Instance = null;
+        public static string PackageIdOfMine
+        {
+            get
+            {
+                return Instance.Content?.PackageId;
+            }
+        }
+
         public static string VersionString()
         {
             return commitInfo;
@@ -126,8 +135,9 @@ namespace RWLayoutMod
             }
         }
 
-        private static void ReadModInfo(ModContentPack content)
+        private void ReadModInfo(ModContentPack content)
         {
+            Instance = this;
             isDevBuild = PackageIdOfMine.EndsWith(".dev");
 
             var name = Assembly.GetExecutingAssembly().GetName().Name;
@@ -149,7 +159,7 @@ namespace RWLayoutMod
 
         public override CSettingsView CreateSettingsView()
         {
-            return (RWLayoutSettingsView)DefDatabase<ViewDef>.GetNamed("ModSettings").Instantiate();
+            return (CSettingsView)DefDatabase<ViewDef>.GetNamed("ModSettings").Instantiate(new Dictionary<string, object> { { "settings", settings } });
         }
     }
 

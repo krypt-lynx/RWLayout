@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -14,7 +15,9 @@ namespace RWLayout.alpha2
     {
         [Unsaved(false)]
         public ElementPrototype Prototype;
-        public string test = "";
+        [Unsaved(false)]
+        public List<BindingPrototype> Bindings;
+
         public void LoadDataFromXmlCustom(XmlNode xmlRoot)
         {
             XmlElement node = xmlRoot as XmlElement;
@@ -22,47 +25,88 @@ namespace RWLayout.alpha2
             if (node != null)
             {
                 defName = node.SelectSingleNode("defName/text()")?.Value;
-                test = defName;
                 var prototypeNode = node.SelectSingleNode("view/*") as XmlElement;
                 if (prototypeNode != null)
                 {
                     Prototype = new ElementPrototype(prototypeNode);
                 }
+                var bindingNodes = node.SelectNodes("bindings/binding");
+                Bindings = bindingNodes?.AsEnumerable<XmlElement>()
+                    .Select(x => new BindingPrototype(x))
+                    .ToList();
+
             }
         }
 
-        public CElement Instantiate()
+        public CElement Instantiate(Dictionary<string, object> externalObjects = null)
         {
             Dictionary<string, CElement> viewMap = new Dictionary<string, CElement>();
-            CElement root = InstantiateViewsTree(Prototype, viewMap);
-            ApplyConstraintsRecursive(root, Prototype, viewMap);
+            Dictionary<CElement, ElementPrototype> viewPrototypes = new Dictionary<CElement, ElementPrototype>();
+            CElement root = InstantiateViewsTree(Prototype, viewMap, viewPrototypes);
+
+            var objectsMap = viewMap.Select(kvp => (kvp.Key, (object)kvp.Value))
+                .Concat(externalObjects?.Select(x => (x.Key, x.Value)) ?? Enumerable.Empty<(string, object)>())
+                .ToDictionary(x => x.Item1, x => x.Item2);
+
+            ApplyConstraints(objectsMap, viewPrototypes);
+            ApplyProperties(objectsMap, viewPrototypes);
+            ApplyBindings(objectsMap, Bindings);
             return root;
         }
 
-        private void ApplyConstraintsRecursive(CElement owner, ElementPrototype root, Dictionary<string, CElement> viewMap)
+        private void ApplyBindings(Dictionary<string, object> objectsMap, List<BindingPrototype> bindings)
         {
-            ApplyConstraints(owner, root, viewMap);
-
-            if (root.Subviews != null)
+            foreach (var binding in bindings)
             {
-                foreach (var view in root.Subviews)
+                try
                 {
-                    ApplyConstraints(owner, view, viewMap);
+                    Binder.Bind(binding, objectsMap);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.LogException("exception during binding", e);
                 }
             }
         }
 
-        private void ApplyConstraints(CElement owner, ElementPrototype root, Dictionary<string, CElement> viewMap)
+        private void ApplyProperties(Dictionary<string, object> objectsMap, Dictionary<CElement, ElementPrototype> viewPrototypes)
         {
-            if (root.Constraints != null) {
-                foreach (var constraintStr in root.Constraints)
+            foreach (var kvp in viewPrototypes)
+            {
+                try
                 {
-                    owner.AddConstraint(CreateConstraint(constraintStr, viewMap));
+                    PropertyWriter.ApplyProperty(kvp.Key, kvp.Value.node, objectsMap);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.LogException("exception during property deserialization", e);
                 }
             }
         }
 
-        private CElement InstantiateViewsTree(ElementPrototype p, Dictionary<string, CElement> viewMap)
+
+        private void ApplyConstraints(Dictionary<string, object> objectsMap, Dictionary<CElement, ElementPrototype> viewPrototypes)
+        {
+            foreach (var kvp in viewPrototypes)
+            {
+                if (kvp.Value.Constraints != null)
+                {
+                    foreach (var constraintStr in kvp.Value.Constraints)
+                    {
+                        try
+                        {
+                            kvp.Key.AddConstraints(ConstraintParser.CreateConstraint(constraintStr, objectsMap));
+                        } 
+                        catch (Exception e)
+                        {
+                            LogHelper.LogException("exception during constraint deserialization", e);
+                        }
+                    }
+                }
+            }
+        }
+
+        private CElement InstantiateViewsTree(ElementPrototype p, Dictionary<string, CElement> viewMap, Dictionary<CElement, ElementPrototype> viewPrototypes)
         {
             var ns = "RWLayout.alpha2";
 
@@ -73,273 +117,94 @@ namespace RWLayout.alpha2
             {
                 viewMap[p.Id] = view;
             }
-
-                if (p.Subviews != null)
+            viewPrototypes[view] = p;
+            
+            if (p.Subviews != null)
             {
-                view.AddElements(p.Subviews.Select(x => InstantiateViewsTree(x, viewMap)));
+                view.AddElements(p.Subviews.Select(x => InstantiateViewsTree(x, viewMap, viewPrototypes)));
             }
-
 
             return view;
         }
     }
 
-    static class ConstraintParser
+    public struct BindingPath
     {
-        private enum ParseState
-        {
-            firstWord,
-            word,
-            anchor,
-            equality,
-            syntaxError,
-        };
+        public string Object;
+        public string Member;
 
-        static private void AddExpressionComponent(ClLinearExpression expression, char operation, ClLinearExpression value)
+        public BindingPath(string path)
         {
-            switch (operation)
+            var pathParts = path.Split('.');
+            if (pathParts.Length > 2)
             {
-                case '+':
-                    expression += value;
-                    break;
-                case '-':
-                    expression -= value;
-                    break;
-                case '*':
-                    expression *= value;
-                    break;
-                case '/':
-                    expression /= value;
-                    break;
-                default:
-                    throw new ArgumentException(nameof(operation));
+                throw new FormatException($"{path} is invalid source object path");
+            }
+
+            Object = pathParts[0].Trim();
+            if (pathParts.Length == 2)
+            {
+                Member = pathParts[1].Trim();
+            } 
+            else
+            {
+                Member = null;
             }
         }
 
-        static private Cl.Operator codeToOperator(char code)
+    }
+
+    public struct BindingPrototype
+    {
+        public BindingPath Source;
+        public BindingPath Target;
+
+        public BindingPrototype(XmlElement x)
         {
-            switch (code)
+            var src = x.GetAttribute("object");
+            Source = new BindingPath(src);
+
+            var dst = x.GetAttribute("target");
+            Target = new BindingPath(dst);
+
+            if (Target.Member == null)
             {
-                case '>':
-                    return Cl.Operator.GreaterThanOrEqualTo;
-                case '<':
-                    return Cl.Operator.LessThanOrEqualTo;
-                case '=':
-                    return Cl.Operator.EqualTo;
-                default:
-                    throw new ArgumentException(nameof(code));
-            }
-        }
-
-        static public ClConstraint CreateConstraint(string constraint, Dictionary<string, CElement> viewMap)
-        {
-            ClLinearExpression expression = new ClLinearExpression();
-
-
-            ClVariable GetAnchor(string viewId, string v)
-            {
-                if (!viewMap.ContainsKey(viewId))
-                {
-                    throw new ArgumentOutOfRangeException(nameof(viewId));
-                }
-
-                var view = viewMap[viewId];
-
-                var prop = view.GetType().GetProperty(v, typeof(ClVariable));
-                if (prop == null)
-                {
-                    throw new Exception("prop");
-                }
-
-                return prop.GetValue(view) as ClVariable;
-            }
-
-            ClStrength strength = ClStrength.Default;
-            ParseState state = ParseState.firstWord;
-            StringBuilder word = new StringBuilder();
-            string viewId = "";
-            char op = '+';
-            char eq = '\0';
-            foreach (var ch in constraint)
-            {
-                if (char.IsWhiteSpace(ch))
-                {
-                    continue;
-                }
-
-                switch (state)
-                {
-                    case ParseState.firstWord:
-                    case ParseState.word:
-                        {
-                            if (char.IsLetterOrDigit(ch))
-                            {
-                                word.Append(ch);
-                            }
-                            else if (ch == ':' && state == ParseState.firstWord)
-                            {
-                                strength = GetStrength(word.ToString());
-                                word.Clear();
-                                state = ParseState.word;
-                            }
-                            else if (ch == '.')
-                            {
-                                viewId = word.ToString();
-                                word.Clear();
-                                state = ParseState.anchor;
-                            }
-                            else if (ch == '+' || ch == '-' || ch == '*' || ch == '/')
-                            {
-                                AddExpressionComponent(expression, op, Convert.ToDouble(word.ToString(), CultureInfo.InvariantCulture));
-                                word.Clear();
-                                op = ch;
-                                state = ParseState.word;
-                            }
-                            else if (ch == '=' || ch == '<' || ch == '>')
-                            {
-                                AddExpressionComponent(expression, op, Convert.ToDouble(word.ToString(), CultureInfo.InvariantCulture));
-                                word.Clear();
-                                expression.MultiplyMe(-1);
-                                op = '+';
-
-                                if (eq == 0)
-                                {
-                                    eq = ch;
-                                    state = ParseState.equality;
-                                }
-                                else
-                                {
-                                    state = ParseState.syntaxError;
-                                }
-                            }
-                            else
-                            {
-                                state = ParseState.syntaxError;
-                            }
-                        }
-                        break;
-                    case ParseState.anchor:
-                        {
-                            if (char.IsLetterOrDigit(ch))
-                            {
-                                word.Append(ch);
-                            }
-                            else if (ch == '+' || ch == '-' || ch == '*' || ch == '/')
-                            {
-                                var anchor = GetAnchor(viewId, word.ToString());
-                                AddExpressionComponent(expression, op, anchor);
-                                word.Clear();
-                                op = ch;
-                                state = ParseState.word;
-                            }
-                            else if (ch == '=' || ch == '<' || ch == '>')
-                            {
-                                var anchor = GetAnchor(viewId, word.ToString());
-                                AddExpressionComponent(expression, op, anchor);
-                                word.Clear();
-                                expression.MultiplyMe(-1);
-                                op = '+';
-
-                                if (eq == 0)
-                                {
-                                    eq = ch;
-                                    state = ParseState.equality;
-                                }
-                                else
-                                {
-                                    state = ParseState.syntaxError;
-                                }
-                            }
-                            else
-                            {
-                                state = ParseState.syntaxError;
-                            }
-                        }
-                        break;
-                    case ParseState.equality:
-                        {
-                            if (ch == '=')
-                            {
-                                state = ParseState.word;
-                            }
-                            else
-                            {
-                                state = ParseState.syntaxError;
-                            }
-                        }
-                        break;
-                    case ParseState.syntaxError:
-                        throw new FormatException($"syntax error: {constraint}");
-                    default:
-                        throw new InvalidOperationException();
-                }
-            }
-
-            switch (state)
-            {
-                case ParseState.firstWord:
-                case ParseState.word:
-                    {
-                        AddExpressionComponent(expression, op, Convert.ToDouble(word.ToString(), CultureInfo.InvariantCulture));
-                        word.Clear();
-                    }
-                    break;
-                case ParseState.anchor:
-                    {
-                        var anchor = GetAnchor(viewId, word.ToString());
-                        AddExpressionComponent(expression, op, anchor);
-                        word.Clear();
-                    }
-                    break;
-                case ParseState.equality:
-                case ParseState.syntaxError:
-                    throw new FormatException($"syntax error: {constraint}");
-                default:
-                    throw new InvalidOperationException();
-            }
-
-            return new ClLinearConstraint(0, codeToOperator(eq), expression, strength);
-        }
-
-        private static ClStrength GetStrength(string strengthName)
-        {
-            switch (strengthName.ToLowerInvariant())
-            {
-                case "required":
-                    return ClStrength.Required;
-                case "strong":
-                    return ClStrength.Strong;
-                case "medium":
-                    return ClStrength.Medium;
-                case "weak":
-                    return ClStrength.Weak;
-                default:
-                    throw new ArgumentException(nameof(strengthName));
+                throw new FormatException($"{dst} is invalid target object path");
             }
         }
     }
 
     public class ElementPrototype
     {
+
         public List<ElementPrototype> Subviews;
         public List<string> Constraints;
         public string Id;
         public string Class;
+
+        public XmlElement node;
 
         public ElementPrototype(XmlElement node)
         {
             Class = node.Name;
             Id = node.GetAttribute("Id");
 
+            this.node = node;
+
             var viewNodes = node.SelectNodes("subviews/*").AsEnumerable<XmlNode>().Where(x => x.NodeType == XmlNodeType.Element).Cast<XmlElement>();
 
             Subviews = viewNodes.Select(x => new ElementPrototype(x)).ToList();
 
-            var constraintsStr = node.SelectSingleNode("constraints/text()")?.Value;
-            Constraints = constraintsStr?.Split('\n').Select(x => x.Trim(" \t".ToCharArray())).Where(x => x.Length > 0).ToList();
-
-           // ParseConstraints(constraintsStr);
+            var constraintNodes = node.SelectNodes("constraints/constraint/text()");
+            Constraints = constraintNodes?.AsEnumerable<XmlNode>()
+                .Select(x => x?.Value)
+                .Select(x => x?.Trim(" \n\r\t".ToCharArray()))
+                .Where(x => x?.Length > 0)
+                .Where(x => x != null)
+                .ToList();
         }
+
+
 
         internal void ParseConstraints(XmlElement prototypeNode)
         {

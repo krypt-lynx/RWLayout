@@ -51,19 +51,7 @@ namespace RWLayout.alpha2
     /// </summary>
     public abstract class CMod : Mod
     {
-        public static CMod Instance = null;
-        public static string PackageIdOfMine
-        {
-            get
-            {
-                return Instance.Content?.PackageId;
-            }
-        }
-
-        public CMod(ModContentPack content) : base(content)
-        {
-            Instance = this;
-        }
+        public CMod(ModContentPack content) : base(content) { }
 
         CGuiRoot gui = null;
         /// <summary>

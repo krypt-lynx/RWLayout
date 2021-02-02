@@ -1,26 +1,54 @@
 ﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Verse;
 
 namespace RWLayout.alpha2
 {
-    [StaticConstructorOnStartup]
-    internal class RWLayoutInit
-    {
-        const string rwLayoutHarmonyId = "rwlayout.alpha2";
+    sealed public class RWLayoutModInternal : Mod    {
+        const string rwLayoutHarmonyId = "rwlayout.alpha2.internal";
 
-        static RWLayoutInit()
+        public RWLayoutModInternal(ModContentPack content) : base(content)
         {
             Harmony harmony = new Harmony(rwLayoutHarmonyId);
-
             RWLayoutHarmonyPatches.Patch(harmony);
             CModHelper.Patch(harmony);
+            ParseHelper.Parsers<EdgeInsets>.Register(ParseEdgeInsets);
+        }
+
+        static EdgeInsets ParseEdgeInsets(string value)
+        {
+            int start = value.IndexOf('{');
+            int end = value.IndexOf('}');
+
+            if (start == -1 || end == -1 || end - start <= 0)
+            {
+                throw new FormatException("braces are not ballanced");
+            }
+
+            var values = value.Substring(start + 1, end - start - 1)
+                .Split(',')
+                .Select(x => (float)Convert.ToDouble(x, CultureInfo.InvariantCulture)).ToArray();
+
+            if (values.Length == 1)
+            {
+                return new EdgeInsets(values[0]);
+            } 
+            else if (values.Length == 4)
+            {
+                return new EdgeInsets(values[0], values[1], values[2], values[3]);
+            }
+            else
+            {
+                throw new FormatException($"unexpected number of components: given {values.Length} expected 1 or 4");
+            }
         }
     }
 

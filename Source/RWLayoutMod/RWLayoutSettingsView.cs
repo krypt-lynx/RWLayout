@@ -8,6 +8,29 @@ using Verse;
 
 namespace RWLayoutMod
 {
+    class RWLayoutSettingsViewTest : CSettingsView
+    {
+        public override string Category()
+        {
+            return "RWLayout";
+        }
+
+        public override string FooterText()
+        {
+            return $"Mod version: {RWLayoutMod.VersionString()}\nLib version: {RWLayoutMod.GetLibVersionString()}";
+        }
+
+        public Action<CCheckboxLabeled, bool> SetLayoutDebug = (sender, value) =>
+        {
+            RWLayoutMod.settings.layoutDebug = value;
+            CElement.DebugDraw = value;
+        };
+
+        public CCheckboxLabeled DebugCheck;
+        public CCheckboxLabeled NullCheck;
+        public CCheckboxLabeled StickyCheck;
+    }
+
     class RWLayoutSettingsView : CSettingsView
     {
         public override string Category()
@@ -20,8 +43,7 @@ namespace RWLayoutMod
             return $"Mod version: {RWLayoutMod.VersionString()}\nLib version: {RWLayoutMod.GetLibVersionString()}";
         }
 
-        public RWLayoutSettingsView() { }
-        public RWLayoutSettingsView(bool test) 
+        public RWLayoutSettingsView() 
         {
             this.StackTop(StackOptions.Create(intrinsicIfNotSet: true, constrainEnd: false),
                 this.AddElement(new CCheckboxLabeled
