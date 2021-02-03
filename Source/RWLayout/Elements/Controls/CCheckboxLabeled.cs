@@ -16,9 +16,12 @@ namespace RWLayout.alpha2
         /// <summary>
         /// Is checkbox checked?
         /// </summary>
-        public bool Checked = false;
-
-        public readonly Bindable<bool> CheckedProp = new Bindable<bool>();
+        public bool Checked
+        {
+            get => CheckedProp.Value;
+            set => CheckedProp.Value = value;
+        }
+        public readonly Bindable<bool> CheckedProp = new Bindable<bool>(BindingMode.Auto, BindingMode.Manual);
 
         /// <summary>
         /// Called on Checked state change
@@ -42,15 +45,15 @@ namespace RWLayout.alpha2
         {
             base.DoContent();
             CheckedProp.SynchronizeFrom();
-            bool oldChecked = Checked;
+            var newChecked = Checked;
             ApplyAll();
 
-            Widgets.CheckboxLabeled(BoundsRounded, Title, ref Checked, Disabled, TextureChecked, TextureUnchecked, PlaceCheckboxNearText);
+            Widgets.CheckboxLabeled(BoundsRounded, Title, ref newChecked, Disabled, TextureChecked, TextureUnchecked, PlaceCheckboxNearText);
             RestoreAll();
 
-            if (oldChecked != Checked)
+            if (newChecked != Checked)
             {
-                CheckedProp.SynchronizeTo();
+                Checked = newChecked;
                 Changed?.Invoke(this, Checked);
             }
         }

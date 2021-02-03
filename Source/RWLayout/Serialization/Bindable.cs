@@ -8,12 +8,52 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+    public enum BindingMode
+    {
+        Never,
+        Manual,
+        Auto
+    }
+
     public class Bindable<TProperty>
     {
         WeakReference binded;
         MemberHandler bindedMember;
 
-        public TProperty Value;
+        public BindingMode ReadMode = BindingMode.Auto;
+        public BindingMode WriteMode = BindingMode.Auto;
+
+        private TProperty value;
+
+        /// <summary>
+        /// This is the Value <i>property</i>. The write into it syncronized with binded property
+        /// </summary>
+        public TProperty Value {
+            get
+            {
+                if (ReadMode == BindingMode.Auto)
+                {
+                    SynchronizeFrom();
+                }
+                return value;
+            }
+            set
+            {
+                this.value = value;
+                if (WriteMode == BindingMode.Auto)
+                {
+                    SynchronizeTo();
+                }
+            }
+        }
+
+        public Bindable() { }
+
+        public Bindable(BindingMode readMode, BindingMode writeMode)
+        {
+            ReadMode = readMode;
+            WriteMode = writeMode;
+        }
 
         internal void Bind(object obj, MemberHandler prop)
         {
