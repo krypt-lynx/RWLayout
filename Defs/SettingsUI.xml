@@ -17,9 +17,9 @@
 					<CCheckboxLabeled Id="debug">
 						<properties>
 							<Title translated="true">Layout debug</Title>
-							<Checked bind="settings.layoutDebug"/>		
-							<Changed object="mod.DoLayoutDebugChanged" />					
-						</properties>						
+							<Checked bind="settings.layoutDebug"/>
+							<Changed object="mod.DoLayoutDebugChanged" />
+						</properties>
 					</CCheckboxLabeled>
 					<CCheckboxLabeled Id="lognull">
 						<properties>
@@ -64,5 +64,5 @@
 				</constraints>
 			</CElement>
 		</view>
-	</RWLayout.alpha2.ViewDef>	
+	</RWLayout.alpha2.ViewDef>
 </Defs>
