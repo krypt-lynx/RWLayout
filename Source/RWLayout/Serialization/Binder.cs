@@ -9,9 +9,8 @@ namespace RWLayout.alpha2
 {
     static class Binder
     {
-        internal static void Bind(BindingPrototype binding, Dictionary<string, object> objects)
+        internal static void Assign(BindingPrototype binding, Dictionary<string, object> objects)
         {
-
             object srcObj = ReadObject(binding.Source, objects);
 
             object dstObj = objects[binding.Target.Object];
@@ -20,7 +19,7 @@ namespace RWLayout.alpha2
             {
                 // todo: T? to T assignment
                 dstProp.SetValue(dstObj, srcObj);
-            } 
+            }
             else
             {
                 throw new InvalidOperationException($"object {dstObj} with id \"{binding.Target.Object}\" have no property \"{binding.Target.Member}\"");
@@ -44,5 +43,5 @@ namespace RWLayout.alpha2
             }
             return obj;
         }
-   }
+    }
 }

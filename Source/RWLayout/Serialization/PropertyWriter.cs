@@ -16,32 +16,82 @@ namespace RWLayout.alpha2
             var propNodes = node.SelectSingleNode("properties")?.ChildNodes.AsEnumerable<XmlNode>().Where(x => x.NodeType == XmlNodeType.Element).Cast<XmlElement>() ?? Enumerable.Empty<XmlElement>();
             foreach (var subnode in propNodes)
             {
-                var propName = subnode.Name;
                 try
                 {
-                    var propInfo = view.GetType().GetMemberHandler(propName, BindingFlags.Public | BindingFlags.Instance);
-
-                    if (propInfo == null)
+                    if (subnode.HasAttribute("bind"))
                     {
-                        Log.Error($"Unable to resolve node {propName} for object {view}");
-                        continue;
+                        BindProperty(view, objectsMap, subnode);
                     }
-
-                    if (!propInfo.CanWrite)
+                    else
                     {
-                        Log.Error($"Unable to assign property {propName} of object {view}");
+                        AssignProperty(view, objectsMap, subnode);
                     }
-
-                    var valueType = propInfo.MemberType;
-                    var value = TryResolve(subnode, valueType, objectsMap);
-
-                    propInfo.SetValue(view, value);
                 }
                 catch (Exception e)
                 {
                     LogHelper.LogException("Exception thrown during field assignment", e);
                 }
             }
+        }
+
+        private static bool IsCompatibleBindable(Type bindableType, Type propType)
+        {
+            if (!bindableType.IsGenericType ||
+                !bindableType.GetGenericTypeDefinition().IsAssignableFrom(typeof(Bindable<,>)))
+                return false;
+
+            var args = bindableType.GetGenericArguments();
+
+            return args.Length == 2 &&
+                args[1] == propType;
+        }
+
+        private static void BindProperty(CElement view, Dictionary<string, object> objectsMap, XmlElement node)
+        {
+            // todo exceptions
+            var propName = node.Name;
+            var srcPath = new BindingPath(node.GetAttribute("bind"));
+
+            object srcObj = objectsMap[srcPath.Object];
+            var srcProp = srcObj.GetType().GetMemberHandler(srcPath.Member, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+
+            var dstProp = view.GetType().GetMemberHandler(propName, BindingFlags.Public | BindingFlags.Instance);
+
+            if (dstProp != null && !IsCompatibleBindable(dstProp.MemberType, srcProp.MemberType))
+            {
+                dstProp = view.GetType().GetMemberHandler(propName + "Prop", BindingFlags.Public | BindingFlags.Instance);
+            }
+
+            if (dstProp != null && IsCompatibleBindable(dstProp.MemberType, srcProp.MemberType))
+            {
+                var dstObj = dstProp.GetValue(view);
+                dstProp.MemberType.GetMethod(nameof(Bindable<object, object>.Bind), BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(dstObj, new object[] { srcObj, srcProp });
+            }  
+        }
+
+        private static void AssignProperty(CElement view, Dictionary<string, object> objectsMap, XmlElement node)
+        {
+            var propName = node.Name;
+
+            var propInfo = view.GetType().GetMemberHandler(propName, BindingFlags.Public | BindingFlags.Instance);
+
+            if (propInfo == null)
+            {
+                Log.Error($"Unable to resolve node {propName} for object {view}");
+                return;
+            }
+
+            if (!propInfo.CanWrite)
+            {
+                Log.Error($"Unable to assign property {propName} of object {view}");
+                return;
+            }
+
+            var valueType = propInfo.MemberType;
+            var value = TryResolve(node, valueType, objectsMap);
+
+            propInfo.SetValue(view, value);
         }
 
         static object TryResolve(XmlElement node, Type hintType, Dictionary<string, object> objectsMap)
@@ -62,7 +112,7 @@ namespace RWLayout.alpha2
             if (node.HasAttribute("object"))
             {
                 string binding = node.GetAttribute("object");
-                return Binder.ReadObject(new BindingPath(binding), objectsMap);                
+                return Binder.ReadObject(new BindingPath(binding), objectsMap);
             }
             else
             {

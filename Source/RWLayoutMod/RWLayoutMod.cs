@@ -157,9 +157,19 @@ namespace RWLayoutMod
             }
         }
 
-        public override CSettingsView CreateSettingsView()
+        public override string FooterText()
         {
-            return (CSettingsView)DefDatabase<ViewDef>.GetNamed("ModSettings").Instantiate(new Dictionary<string, object> { { "settings", settings } });
+            return $"Mod version: {RWLayoutMod.VersionString()}\nLib version: {RWLayoutMod.GetLibVersionString()}";
+        }
+
+        public void DoLayoutDebugChanged(CCheckboxLabeled sender, bool value)
+        {
+            CElement.DebugDraw = value;
+        }
+
+        public override CElement CreateSettingsView()
+        {
+            return DefDatabase<ViewDef>.GetNamed("RWLayout_ModSettings").Instantiate(new Dictionary<string, object> { { "mod", this }, { "settings", settings } });
         }
     }
 

@@ -107,7 +107,12 @@ namespace RWLayout.alpha2
     {
         public static MemberHandler GetMemberHandler(this Type type, string name, BindingFlags bindingAttr)
         {
-            var member = type.GetMember(name, bindingAttr).First(); // todo
+            var member = type.GetMember(name, bindingAttr)?.FirstOrDefault(); // todo
+            if (member == null)
+            {
+                return null;
+            }
+
             switch (member.MemberType)
             {
                 case MemberTypes.Field:

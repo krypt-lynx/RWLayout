@@ -2,7 +2,7 @@
 <Defs>
 	<!-- prototype implementation is used! -->
 	<RWLayout.alpha2.ViewDef>
-		<defName>ModSettings</defName>
+		<defName>RWLayout_ModSettings</defName>
 		<!-- todo: externalViews -->
 		<!-- todo: externalObjects -->
 		<!-- todo: "call" binding -->
@@ -12,13 +12,13 @@
 			<binding object="sticky" target="root.StickyCheck"/>
 		</bindings> -->
 		<view>
-			<RWLayoutMod.RWLayoutSettingsView Id="root">
+			<CElement Id="root">
 				<subviews>
 					<CCheckboxLabeled Id="debug">
 						<properties>
 							<Title translated="true">Layout debug</Title>
-							<Checked object="settings.layoutDebug" />
-							<Changed object="root.SetLayoutDebug" />
+							<Checked bind="settings.layoutDebug"/>		
+							<Changed object="mod.DoLayoutDebugChanged" />					
 						</properties>						
 					</CCheckboxLabeled>
 					<CCheckboxLabeled Id="lognull">
@@ -26,7 +26,6 @@
 							<Title>Patch missing Log null check (requires restart)</Title>
 							<Tip>Fixes Log.Message, Log.Warning, and Log.Error breaking LogWindow if called with null argument</Tip>
 							<Checked object="settings.patchLog" />
-							<Changed object="root.SetPatchLog" />
 						</properties>
 					</CCheckboxLabeled>
 					<CCheckboxLabeled Id="sticky">
@@ -34,7 +33,6 @@
 							<Title>Patch sticky window resizing bug (requires restart)</Title>
 							<Tip>Fixes windows missing mouse up event during resizing if mouse was outside the window at the moment of event</Tip>
 							<Checked object="settings.patchWindowResize" />
-							<Changed object="root.SetPatchWindowResize" />
 						</properties>
 					</CCheckboxLabeled>
 					<CLabel Id="noexamples">
@@ -64,7 +62,7 @@
 					<constraint>sticky.right == root.right</constraint>
 					<constraint>noexamples.right == root.right</constraint>
 				</constraints>
-			</RWLayoutMod.RWLayoutSettingsView>
+			</CElement>
 		</view>
 	</RWLayout.alpha2.ViewDef>	
 </Defs>

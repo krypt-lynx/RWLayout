@@ -92,7 +92,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HarmonyPatches.cs" />
-    <Compile Include="RWLayoutSettingsView.cs" />
     <Compile Include="RWLayoutMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -115,7 +114,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-      <PreBuildEvent>
+    <PreBuildEvent>
 	  set ProjectDir=$(ProjectDir)
 	  set TargetDir=$(TargetDir)
 	  PowerShell -NoProfile -ExecutionPolicy Bypass -Command "&amp; ""$(ProjectDir)prebuild.ps1\"" "</PreBuildEvent>

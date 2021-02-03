@@ -16,7 +16,9 @@ namespace RWLayout.alpha2
         [Unsaved(false)]
         public ElementPrototype Prototype;
         [Unsaved(false)]
+        public List<BindingPrototype> Assignments;
         public List<BindingPrototype> Bindings;
+
 
         public void LoadDataFromXmlCustom(XmlNode xmlRoot)
         {
@@ -31,10 +33,9 @@ namespace RWLayout.alpha2
                     Prototype = new ElementPrototype(prototypeNode);
                 }
                 var bindingNodes = node.SelectNodes("bindings/binding");
-                Bindings = bindingNodes?.AsEnumerable<XmlElement>()
+                Assignments = bindingNodes?.AsEnumerable<XmlElement>()
                     .Select(x => new BindingPrototype(x))
                     .ToList();
-
             }
         }
 
@@ -48,17 +49,18 @@ namespace RWLayout.alpha2
 
             ApplyConstraints(objectsMap, viewPrototypes);
             ApplyProperties(objectsMap, viewPrototypes);
-            ApplyBindings(objectsMap, Bindings);
+            ApplyAssignments(objectsMap, Assignments);
             return root;
         }
 
-        private void ApplyBindings(Dictionary<string, object> objectsMap, List<BindingPrototype> bindings)
+
+        private void ApplyAssignments(Dictionary<string, object> objectsMap, List<BindingPrototype> assignments)
         {
-            foreach (var binding in bindings)
+            foreach (var assignment in assignments)
             {
                 try
                 {
-                    Binder.Bind(binding, objectsMap);
+                    Binder.Assign(assignment, objectsMap);
                 }
                 catch (Exception e)
                 {

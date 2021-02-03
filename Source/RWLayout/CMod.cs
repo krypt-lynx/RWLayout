@@ -70,11 +70,11 @@ namespace RWLayout.alpha2
             }
         }
 
-        CSettingsView settingsView = null;
+        CElement settingsView = null;
         /// <summary>
         /// Root Gui element
         /// </summary>
-        public virtual CSettingsView SettingsView
+        public virtual CElement SettingsView
         {
             get
             {
@@ -88,9 +88,42 @@ namespace RWLayout.alpha2
 
         public override string SettingsCategory()
         {
-            return SettingsView?.Category();
+            var method = this.GetType().GetMethod(nameof(CreateSettingsView));
+            if (method.GetBaseDefinition().DeclaringType == method.DeclaringType) // show category if settings window generator method is overriden 
+            {
+                return base.SettingsCategory();
+            }
+            else
+            {
+                return Content.Name;
+            }
         }
 
+        /// <summary>
+        /// Mod version (shown by default in the footer)
+        /// </summary>
+        /// <returns></returns>
+        public virtual string FooterText()
+        {
+            string version = Version();
+            if (version == null)
+            {
+                return null;
+            }
+            else
+            {
+                return string.Format($"Version: {0}".Translate(), version);
+            }
+        }
+
+        /// <summary>
+        /// Footer text (will be show at right if close button)
+        /// </summary>
+        /// <returns></returns>
+        public virtual string Version()
+        {
+            return null;
+        }
 
         /// <summary>
         /// Override this method to construct settings Gui in it.
@@ -102,8 +135,8 @@ namespace RWLayout.alpha2
                 Gui.Embed(Gui.AddElement(SettingsView));
             }
 
-            string footerText = null;
-            if ((footerText = SettingsView?.FooterText()) != null)
+            string footerText = FooterText();
+            if (footerText != null)
             {
                 var footer = Gui.AddElement(new CLabel
                 {
@@ -125,7 +158,7 @@ namespace RWLayout.alpha2
         /// Override this method to create settings view
         /// </summary>
         /// <returns>the settings view</returns>
-        public virtual CSettingsView CreateSettingsView() { return null; }
+        public virtual CElement CreateSettingsView() { return null; }
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
@@ -141,44 +174,6 @@ namespace RWLayout.alpha2
         {
             gui = null;
             settingsView = null;
-        }
-    }
-
-    /// <summary>
-    /// View for mod settings
-    /// </summary>
-    public abstract class CSettingsView : CElement
-    {
-        /// <summary>
-        /// Mod settings category
-        /// </summary>
-        /// <returns></returns>
-        public abstract string Category();
-
-        /// <summary>
-        /// Mod version (will be show at right if close button)
-        /// </summary>
-        /// <returns></returns>
-        public virtual string FooterText()
-        {
-            string version = Version();
-            if (version == null)
-            {
-                return null;
-            }
-            else
-            {
-                return string.Format($"Version: {0}".Translate(), version);
-            }
-        }
-
-        /// <summary>
-        /// Mod version (will be show at right if close button)
-        /// </summary>
-        /// <returns></returns>
-        public virtual string Version()
-        {
-            return null;
         }
     }
 }
