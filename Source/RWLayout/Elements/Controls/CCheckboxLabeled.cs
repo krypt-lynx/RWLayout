@@ -21,7 +21,7 @@ namespace RWLayout.alpha2
             get => CheckedProp.Value;
             set => CheckedProp.Value = value;
         }
-        public readonly Bindable<bool> CheckedProp = new Bindable<bool>(BindingMode.Auto, BindingMode.Manual);
+        public readonly Bindable<bool> CheckedProp = new Bindable<bool>(BindingMode.Manual, BindingMode.Auto);
 
         /// <summary>
         /// Called on Checked state change
