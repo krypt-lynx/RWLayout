@@ -169,7 +169,7 @@ namespace RWLayoutMod
 
         public override CElement CreateSettingsView()
         {
-            return DefDatabase<ViewDef>.GetNamed("RWLayout_ModSettings").Instantiate(new Dictionary<string, object> { { "mod", this }, { "settings", settings } });
+            return DefDatabase<LayoutDef>.GetNamed("RWLayout_ModSettings").Instantiate(new Dictionary<string, object> { { "mod", this }, { "settings", settings } });
         }
     }
 

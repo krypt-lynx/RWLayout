@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 	<!-- prototype implementation is used! -->
-	<RWLayout.alpha2.ViewDef>
+	<RWLayout.alpha2.LayoutDef>
 		<defName>RWLayout_ModSettings</defName>
 		<!-- todo: externalViews -->
 		<!-- todo: externalObjects -->
@@ -64,5 +64,5 @@
 				</constraints>
 			</CElement>
 		</view>
-	</RWLayout.alpha2.ViewDef>
+	</RWLayout.alpha2.LayoutDef>
 </Defs>

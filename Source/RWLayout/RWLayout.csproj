@@ -123,7 +123,7 @@
     <Compile Include="Serialization\ConstraintParser.cs" />
     <Compile Include="Serialization\GenReflection.cs" />
     <Compile Include="Serialization\PropertyWriter.cs" />
-    <Compile Include="Serialization\ViewDef.cs" />
+    <Compile Include="Serialization\LayoutDef.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Repo\Cassowary.net\Cassowary\Cassowary.csproj">

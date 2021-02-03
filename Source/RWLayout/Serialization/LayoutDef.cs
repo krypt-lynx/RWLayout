@@ -11,7 +11,7 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
-    public class ViewDef : Def
+    public class LayoutDef : Def
     {
         [Unsaved(false)]
         public ElementPrototype Prototype;
