@@ -9,30 +9,28 @@ namespace RWLayout.alpha2
 {
     class MemberHandler
     {
-        private PropertyInfo prop = null;
-        private FieldInfo field = null;
-        private MethodInfo method = null;
+        private MemberInfo member = null;
 
-        public MemberHandler(PropertyInfo prop)
+        public MemberHandler(MemberInfo member)
         {
-            this.prop = prop;
-        }
-
-        public MemberHandler(FieldInfo field)
-        {
-            this.field = field;
-        }
-
-        public MemberHandler(MethodInfo member)
-        {
-            this.method = member;
+            this.member = member;
         }
 
         public bool CanWrite
         {
             get
             {
-                return prop?.CanWrite ?? (field != null);
+                switch (member.MemberType)
+                {
+                    case MemberTypes.Field:
+                        return true;
+                    case MemberTypes.Property:
+                        return ((PropertyInfo)member).CanWrite;
+                    case MemberTypes.Method:
+                        return false;
+                    default:
+                        return false;
+                }
             }
         }
 
@@ -40,65 +38,74 @@ namespace RWLayout.alpha2
         {
             get
             {
-                return prop?.PropertyType ?? field?.FieldType ?? null;
+                switch (member.MemberType)
+                {
+                    case MemberTypes.Field:
+                        return ((FieldInfo)member).FieldType;
+                    case MemberTypes.Property:
+                        return ((PropertyInfo)member).PropertyType;
+                    case MemberTypes.Method:
+                        return DelegateType;
+                    default:
+                        return null;
+                }
             }
         }
 
         internal object GetValue(object obj)
         {
-            if (prop != null)
+            switch (member.MemberType)
             {
-                return prop.GetValue(obj);
-            } 
-            else if (field != null)
-            {
-                return field.GetValue(obj);
-            }
-            else if (method != null)
-            {
-                return CreateDelegate(obj);
-            }
-            else
-            {
-                return null;
+                case MemberTypes.Field:
+                    return ((FieldInfo)member).GetValue(obj);
+                case MemberTypes.Property:
+                    return ((PropertyInfo)member).GetValue(obj);
+                case MemberTypes.Method:
+                    return CreateDelegate(obj);
+                default:
+                    return null;
             }
         }
 
         Type delegateType = null;
-        private Type DelegateType()
+        private Type DelegateType
         {
-            if (delegateType == null)
+            get
             {
-                var tArgs = new List<Type>();
-                foreach (var param in method.GetParameters())
-                    tArgs.Add(param.ParameterType);
-                tArgs.Add(method.ReturnType);
-                delegateType = System.Linq.Expressions.Expression.GetDelegateType(tArgs.ToArray());
+                if (delegateType == null)
+                {
+                    var tArgs = new List<Type>();
+                    foreach (var param in ((MethodInfo)member).GetParameters())
+                        tArgs.Add(param.ParameterType);
+                    tArgs.Add(((MethodInfo)member).ReturnType);
+                    delegateType = System.Linq.Expressions.Expression.GetDelegateType(tArgs.ToArray());
+                }
+                return delegateType;
             }
-            return delegateType;
         }
 
         private object CreateDelegate(object obj)
         {
-            var delDecltype = DelegateType();
-            if (method.IsStatic) {
-                return Delegate.CreateDelegate(delDecltype, method);
+            var delDecltype = DelegateType;
+            if (((MethodInfo)member).IsStatic) {
+                return Delegate.CreateDelegate(delDecltype, ((MethodInfo)member));
             }
             else
             {
-                return Delegate.CreateDelegate(delDecltype, obj, method);
+                return Delegate.CreateDelegate(delDecltype, obj, ((MethodInfo)member));
             }
         }
 
         internal void SetValue(object obj, object value)
         {
-            if (prop != null)
+            switch (member.MemberType)
             {
-                prop.SetValue(obj, value);
-            }
-            else if (field != null)
-            {
-                field.SetValue(obj, value);
+                case MemberTypes.Field:
+                    ((FieldInfo)member).SetValue(obj, value);
+                    break;
+                case MemberTypes.Property:
+                    ((PropertyInfo)member).SetValue(obj, value);
+                    break;
             }
         }
     }
@@ -107,7 +114,7 @@ namespace RWLayout.alpha2
     {
         public static MemberHandler GetMemberHandler(this Type type, string name, BindingFlags bindingAttr)
         {
-            var member = type.GetMember(name, bindingAttr)?.FirstOrDefault(); // todo
+            var member = type.GetMember(name, bindingAttr)?.FirstOrDefault();
             if (member == null)
             {
                 return null;
@@ -116,11 +123,9 @@ namespace RWLayout.alpha2
             switch (member.MemberType)
             {
                 case MemberTypes.Field:
-                    return new MemberHandler((FieldInfo)member);
                 case MemberTypes.Property:
-                    return new MemberHandler((PropertyInfo)member);
                 case MemberTypes.Method:
-                    return new MemberHandler((MethodInfo)member);
+                    return new MemberHandler(member);
                 default:
                     return null;
             }
