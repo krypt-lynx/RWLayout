@@ -37,13 +37,12 @@ namespace RWLayout.alpha2
         private static bool IsCompatibleBindable(Type bindableType, Type propType)
         {
             if (!bindableType.IsGenericType ||
-                !bindableType.GetGenericTypeDefinition().IsAssignableFrom(typeof(Bindable<,>)))
+                !bindableType.GetGenericTypeDefinition().IsAssignableFrom(typeof(Bindable<>)))
                 return false;
 
             var args = bindableType.GetGenericArguments();
 
-            return args.Length == 2 &&
-                args[1] == propType;
+            return args.Length == 1 && args[0] == propType;
         }
 
         private static void BindProperty(CElement view, Dictionary<string, object> objectsMap, XmlElement node)
@@ -65,7 +64,7 @@ namespace RWLayout.alpha2
             if (dstProp != null && IsCompatibleBindable(dstProp.MemberType, srcProp.MemberType))
             {
                 var dstObj = dstProp.GetValue(view);
-                dstProp.MemberType.GetMethod(nameof(Bindable<object, object>.Bind), BindingFlags.Instance | BindingFlags.NonPublic)
+                dstProp.MemberType.GetMethod(nameof(Bindable<object>.Bind), BindingFlags.Instance | BindingFlags.NonPublic)
                     .Invoke(dstObj, new object[] { srcObj, srcProp });
             }  
         }

@@ -8,47 +8,34 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
-    public class Bindable<TOwner, TProperty>
+    public class Bindable<TProperty>
     {
-        WeakReference owner;
         WeakReference binded;
-        MemberHandler ownerMember;
         MemberHandler bindedMember;
 
-        public Bindable(TOwner owner, FieldInfo field)
-        {
-            this.owner = new WeakReference(owner);
-            ownerMember = new MemberHandler(field);
-        }
-
-        public Bindable(TOwner owner, PropertyInfo prop)
-        {
-            this.owner = new WeakReference(owner);
-            ownerMember = new MemberHandler(prop);
-        }
+        public TProperty Value;
 
         internal void Bind(object obj, MemberHandler prop)
         {
             Log.Message("Bindable Bind called");
             this.binded = new WeakReference(obj);
             bindedMember = prop;
+            SynchronizeFrom();
         }
 
         public void SynchronizeFrom()
         {
-            if (owner?.Target != null && binded?.Target != null)
+            if (binded?.Target != null)
             {
-                var value = bindedMember.GetValue(binded.Target);
-                ownerMember.SetValue(owner.Target, value);
+                Value = (TProperty)bindedMember.GetValue(binded.Target);
             }
         }
 
         public void SynchronizeTo()
         {
-            if (owner?.Target != null && binded?.Target != null)
+            if (binded?.Target != null)
             {
-                var value = ownerMember.GetValue(owner.Target);
-                bindedMember.SetValue(binded.Target, value);
+                bindedMember.SetValue(binded.Target, Value);
             }
         }
     }

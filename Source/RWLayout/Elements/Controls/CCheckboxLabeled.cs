@@ -18,13 +18,13 @@ namespace RWLayout.alpha2
         /// </summary>
         public bool Checked = false;
 
-        public readonly Bindable<CCheckboxLabeled, bool> CheckedProp;
+        public readonly Bindable<bool> CheckedProp = new Bindable<bool>();
 
         /// <summary>
         /// Called on Checked state change
         /// </summary>
         /// <remarks>first argument is wrapper itself, second argument is Checked state</remarks>
-        public Action<CCheckboxLabeled, bool> Changed { get; set; } = null;
+        public Action<CCheckboxLabeled, bool> Changed { get; set; }
 
 
         public bool Disabled { get; set; } = false;
@@ -32,10 +32,6 @@ namespace RWLayout.alpha2
         public Texture2D TextureUnchecked { get; set; } = null;
         public bool PlaceCheckboxNearText { get; set; } = false;
 
-        public CCheckboxLabeled()
-        {
-            CheckedProp = new Bindable<CCheckboxLabeled, bool>(this, this.GetType().GetField(nameof(Checked)));
-        }
 
         public override Vector2 tryFit(Vector2 size)
         {
