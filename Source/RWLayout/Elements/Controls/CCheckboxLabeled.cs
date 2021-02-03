@@ -24,13 +24,13 @@ namespace RWLayout.alpha2
         /// Called on Checked state change
         /// </summary>
         /// <remarks>first argument is wrapper itself, second argument is Checked state</remarks>
-        public Action<CCheckboxLabeled, bool> Changed = null;
+        public Action<CCheckboxLabeled, bool> Changed { get; set; } = null;
 
 
-        public bool Disabled = false;
-        public Texture2D TextureChecked = null;
-        public Texture2D TextureUnchecked = null;
-        public bool PlaceCheckboxNearText = false;
+        public bool Disabled { get; set; } = false;
+        public Texture2D TextureChecked { get; set; } = null;
+        public Texture2D TextureUnchecked { get; set; } = null;
+        public bool PlaceCheckboxNearText { get; set; } = false;
 
         public CCheckboxLabeled()
         {

@@ -124,15 +124,18 @@ namespace RWLayout.alpha2
             return base.allAnchors().Concat(content.exposeAnchors());
         }
 
+        Vector2 scrollPosition = Vector2.zero;
+
         /// <summary>
         /// Current scroll position
         /// </summary>
-        public Vector2 ScrollPosition;
+        public Vector2 ScrollPosition { get => scrollPosition; set => scrollPosition = value; }
+
 
         /// <summary>
         /// Guide for inner size if CScrollView (size 
         /// </summary>
-        public readonly CScrollViewGuide InnerSizeGuide;
+        public CScrollViewGuide InnerSizeGuide { get; }
 
         public override void UpdateLayout()
         {
@@ -196,7 +199,7 @@ namespace RWLayout.alpha2
         {
             base.DoContent();
 
-            Widgets.BeginScrollView(Bounds, ref ScrollPosition, Content.Bounds);
+            Widgets.BeginScrollView(Bounds, ref scrollPosition, Content.Bounds);
 
             DoScrollContent();
 

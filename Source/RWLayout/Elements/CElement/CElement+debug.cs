@@ -12,7 +12,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// View's Name. Used only for debug
         /// </summary>
-        public string Name = null;
+        public string Name { get; set; } = null;
 
         private static int nextId = 0;
 

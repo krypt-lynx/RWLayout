@@ -30,8 +30,8 @@ namespace RWLayout.alpha2
         /// </summary>
         public CElement Owner
         {
-            get { return owner_?.Target; }
-            set { owner_ = new Verse.WeakReference<CElement>(value); }
+            get => owner_?.Target;
+            set => owner_ = new Verse.WeakReference<CElement>(value);
         }
     }
 
@@ -44,7 +44,7 @@ namespace RWLayout.alpha2
         /// Indicates inability to resolve constraints
         /// </summary>
         public bool InErrorState { get; private set; } = false;
-        public Rect _inRect;
+        Rect _inRect;
 
         /// <summary>
         /// Expected view rect

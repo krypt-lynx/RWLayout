@@ -41,11 +41,11 @@ namespace RWLayout.alpha2
         /// <remarks>first argument is wrapper itself, second argument is Checked state</remarks>
         public Action<CCheckbox, bool> Changed = null;
 
-        public bool Disabled = false;
-        public bool Paintable = false;
-        public Texture2D TextureChecked = null;
-        public Texture2D TextureUnchecked = null;
-        public bool PlaceCheckboxNearText = false;
+        public bool Disabled { get; set; } = false;
+        public bool Paintable { get; set; } = false;
+        public Texture2D TextureChecked { get; set; } = null;
+        public Texture2D TextureUnchecked { get; set; } = null;
+        public bool PlaceCheckboxNearText { get; set; } = false;
 
         public override Vector2 tryFit(Vector2 size)
         {

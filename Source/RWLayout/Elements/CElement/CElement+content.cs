@@ -58,15 +58,12 @@ namespace RWLayout.alpha2
         /// <summary>
         /// Hint for element
         /// </summary>
-        public TipSignal? Tip = null;
-
-        [Obsolete("For binarry compatibility, does nothing")]
-        public bool IndicateTipAvailable = true;
+        public TipSignal? Tip { get; set; } = null;
 
         /// <summary>
         /// Controls debug overlay
         /// </summary>
-        public static bool DebugDraw = false;
+        public static bool DebugDraw { get; set; } = false;
 
         /// <summary>
         /// Renders the view

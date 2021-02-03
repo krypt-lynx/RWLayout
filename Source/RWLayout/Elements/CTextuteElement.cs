@@ -12,12 +12,12 @@ namespace RWLayout.alpha2
         /// <summary>
         /// Texture
         /// </summary>
-        public Texture2D Texture = null;
+        public Texture2D Texture { get; set; } = null;
         /// <summary>
         /// Texture tint color
         /// </summary>
         /// <remarks>does not follow GUI.color die to static nature</remarks>
-        public Color TintColor = Color.white;
+        public Color TintColor { get; set; } = Color.white;
 
         public Vector2 tryFitTex(Vector2 size, Vector2 margin)
         {

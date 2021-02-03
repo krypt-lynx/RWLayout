@@ -12,7 +12,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// tint color
         /// </summary>
-        public Color Color = UnityEngine.Color.white;
+        public Color Color { get; set; } = UnityEngine.Color.white;
 
         protected virtual void ApplyAll()
         {

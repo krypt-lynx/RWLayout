@@ -21,7 +21,7 @@ namespace RWLayout.alpha2
         /// Called if layoud got updated 
         /// </summary>
         /// <remarks>CGuiRoot guaranteed to have actual size</remarks>
-        public Action LayoutUpdated;
+        public Action LayoutUpdated { get; set; }
 
         public override void AddImpliedConstraints()
         {

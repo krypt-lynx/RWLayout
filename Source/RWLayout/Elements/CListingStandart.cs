@@ -24,7 +24,7 @@ namespace RWLayout.alpha2
 
         List<CListingRow> rows = new List<CListingRow>();
 
-        public CScrollBarMode ShowScrollBar = CScrollBarMode.Auto;
+        public CScrollBarMode ShowScrollBar { get; set; } = CScrollBarMode.Auto;
 
         float contentHeight = 0;
 

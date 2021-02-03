@@ -20,7 +20,8 @@ namespace RWLayout.alpha2
         public string Title
         {
             get => title; 
-            set {
+            set
+            {
                 if (title != value)
                 {
                     title = value;
@@ -53,7 +54,8 @@ namespace RWLayout.alpha2
         public GameFont Font 
         {
             get => font; 
-            set {
+            set 
+            {
                 if (font != value)
                 {
                     font = value;
@@ -64,7 +66,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// color for title
         /// </summary>
-        public Color? Color = null;
+        public Color? Color { get; set; } = null;
 
         bool wordWrap = false;
         /// <summary>
@@ -87,7 +89,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// Text alignment
         /// </summary>
-        public TextAnchor TextAlignment = TextAnchor.UpperLeft;
+        public TextAnchor TextAlignment { get; set; } = TextAnchor.UpperLeft;
 
         protected void ApplyGeometryOnly()
         {

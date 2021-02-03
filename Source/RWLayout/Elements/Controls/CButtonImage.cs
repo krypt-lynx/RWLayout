@@ -16,17 +16,17 @@ namespace RWLayout.alpha2
         /// <summary>
         /// Texture
         /// </summary>
-        public Texture2D Texture = null;
+        public Texture2D Texture { get; set; } = null;
         /// <summary>
         /// Texture tint color
         /// </summary>
         /// <remarks>does not follow GUI.color die to static nature</remarks>
-        public Color TintColor = Color.white;
+        public Color TintColor { get; set; } = Color.white;
         /// <summary>
         /// Texture mouse over color
         /// </summary>
         /// <remarks>does not follow GUI.color die to static nature</remarks>
-        public Color MouseOverColor = Color.white;
+        public Color MouseOverColor { get; set; } = Color.white;
 
         public Vector2 tryFitTex(Vector2 size, Vector2 margin)
         {
@@ -42,7 +42,7 @@ namespace RWLayout.alpha2
         /// </summary>
         public Action<CElement> Action { get; set; }
 
-        public bool MouseoverSound = true;
+        public bool MouseoverSound { get; set; } = true;
 
         public override Vector2 tryFit(Vector2 size)
         {

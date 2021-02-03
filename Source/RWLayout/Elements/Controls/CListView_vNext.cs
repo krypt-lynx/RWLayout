@@ -90,13 +90,16 @@ namespace RWLayout.alpha2
     public partial class CListView_vNext : CElement
     {
         Rect innerRect;
+
+        Vector2 scrollPosition = Vector2.zero;
+
         /// <summary>
         /// Scroll Location
         /// </summary>
-        public Vector2 ScrollPosition = Vector2.zero;
+        public Vector2 ScrollPosition { get => scrollPosition; set => scrollPosition = value; }
 
 
-        public EdgeInsets Margin = EdgeInsets.Zero;
+        public EdgeInsets Margin { get; set; } = EdgeInsets.Zero;
 
         private CGuiRoot background = new CGuiRoot();
         public CElement Background { get => background; }
@@ -105,7 +108,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// Than to show scroll bars.
         /// </summary>
-        public CScrollBarMode ShowScrollBar = CScrollBarMode.Auto;
+        public CScrollBarMode ShowScrollBar { get; set; } = CScrollBarMode.Auto;
 
         float contentHeight = 0;
 
@@ -202,7 +205,7 @@ namespace RWLayout.alpha2
             base.DoContent();
             bool showScrollBar = IsScrollBarVisible();
 
-            Widgets.BeginScrollView(BoundsRounded, ref ScrollPosition, innerRect, showScrollBar);
+            Widgets.BeginScrollView(BoundsRounded, ref scrollPosition, innerRect, showScrollBar);
 
             DoScrollContent();
 

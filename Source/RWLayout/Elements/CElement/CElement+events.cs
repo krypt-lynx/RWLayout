@@ -12,7 +12,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// can view able to detect interactions?
         /// </summary>
-        public bool userInteractionEnabled = true;
+        public bool userInteractionEnabled { get; set; } = true;
 
         /// <summary>
         /// searches topmost view in current view tree at given point
