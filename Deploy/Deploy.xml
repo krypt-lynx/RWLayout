@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<about>
+		<packageId>name.krypt.rimworld.rwlayout.alpha2</packageId>
+		<packageName>RWLayout</packageName>
+	</about>
+	<build>
+		<solution>..\Source\RWLayout.sln</solution>
+		<configurations>
+			<configuration>1.1</configuration>
+			<configuration>1.2</configuration>
+		</configurations>
+	</build>
+	<archive>
+		<repository>..</repository>
+		<temp>packing</temp>
+		<outputTemplate>..\..\RWLayout-{0}.zip</outputTemplate>
+		<modDirectory>RWLayout</modDirectory>
+		<exclude>
+			<path>.git</path>
+			<path>.gitattributes</path>
+			<path>.gitignore</path>
+			<path>.vs</path>
+			<path>*.md</path>
+			<path>Source</path>
+			<path>Deploy</path>
+			<path>Steam</path>
+			<path>Dependencies</path>
+		</exclude>
+	</archive>
+</config>
