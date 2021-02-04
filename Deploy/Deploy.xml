@@ -16,16 +16,23 @@
 		<temp>packing</temp>
 		<outputTemplate>..\..\RWLayout-{0}.zip</outputTemplate>
 		<modDirectory>RWLayout</modDirectory>
-		<exclude>
-			<path>.git</path>
-			<path>.gitattributes</path>
-			<path>.gitignore</path>
-			<path>.vs</path>
-			<path>*.md</path>
-			<path>Source</path>
-			<path>Deploy</path>
-			<path>Steam</path>
-			<path>Dependencies</path>
-		</exclude>
+		<prebuild>
+			<remove>
+				<path>1.*</path>	<!-- mod assemblies already present in working folders (we are rebuilding them) -->
+			</remove>
+		</prebuild>
+		<postbuild>
+			<exclude>
+				<path>.git</path>				<!-- git repo -->
+				<path>.gitattributes</path> 	<!-- git attributes file -->
+				<path>.gitignore</path> 		<!-- git ignore file -->
+				<path>.vs</path> 				<!-- vs personal data/caches -->
+				<path>*.md</path> 				<!-- github files (readme, lisence, etc) -->
+				<path>Source</path> 			<!-- mod sources -->
+				<path>Deploy</path> 			<!-- deployment script -->
+				<path>Steam</path> 				<!-- steam publishing related data -->
+				<path>Dependencies</path> 		<!-- assemblies mod dependent from; should be obtained by user -->
+			</exclude>
+		</postbuild>
 	</archive>
 </config>

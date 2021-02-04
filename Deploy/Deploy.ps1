@@ -15,12 +15,16 @@ $config = ".\Deploy.xml"
 	($_ | Select-Object -ExpandProperty Node).Value
 }
 
+[string[]]$prebuildCleanup = Select-Xml -Path $config -XPath '/config/archive/prebuild/remove/path/text()' | Foreach-Object {
+	($_ | Select-Object -ExpandProperty Node).Value
+}
+
 [string]$repo = (Select-Xml -Path $config -XPath '/config/archive/repository' | Select-Object -ExpandProperty Node).innerText
 [string]$packing = (Select-Xml -Path $config -XPath '/config/archive/temp' | Select-Object -ExpandProperty Node).innerText
 [string]$outputFormat = (Select-Xml -Path $config -XPath '/config/archive/outputTemplate' | Select-Object -ExpandProperty Node).innerText
 [string]$internalPath = (Select-Xml -Path $config -XPath '/config/archive/modDirectory' | Select-Object -ExpandProperty Node).innerText
 
-[string[]]$pathsToRemove = Select-Xml -Path $config -XPath '/config/archive/exclude/path/text()' | Foreach-Object {
+[string[]]$pathsToRemove = Select-Xml -Path $config -XPath '/config/archive/postbuild/exclude/path/text()' | Foreach-Object {
 	($_ | Select-Object -ExpandProperty Node).Value
 }
 
@@ -78,6 +82,14 @@ if (Test-Path $packing) { Remove-Item -Recurse -Force $packing }
 if (Test-Path $output) { Remove-Item $output }
 if (Test-Path $mod) { Remove-Item -Recurse -Force $mod }
 
+Push-Location -Path $repo
+
+foreach ($path in $prebuildCleanup) {
+	if (Test-Path $path) { Remove-Item -Recurse -Force $path }
+}
+
+Pop-Location
+
 $Task = "Building..."
 $Step++
 Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -CurrentOperation " " -PercentComplete ($Step / $TotalSteps * 100)
@@ -130,7 +142,7 @@ Write-Progress -Id $Id -Activity $Activity -Status (& $StatusBlock) -CurrentOper
 
 foreach ($path in $pathsToRemove) {
 	$p = $packingMod + '\' + $path
-	if (Test-Path $p) { Remove-Item -Recurse -Force $p }	
+		if (Test-Path $p) { Remove-Item -Recurse -Force $p }
 }
 
 # archiving
