@@ -1,0 +1,24 @@
+1.10a
++ layout deserialization from xml/def
+* binary comatibility with 1.9a is broken!
+
+1.9a
++ Example moved to separate mod
+* CMod (base Mod class for mod with RWLayout based mod settings) class update
+
+1.8a
++ harmony patches moved to 0RWLayout assembly
++ CListView_vNext list update method
+
+1.7a
++ CButtinImage
+* controls renamed
+
+1.6a
+* controls related changes
+
+1.5a
+* CImage class visibility fix
+
+1.4a
++ Forcefully redirecting WindowStack.Add into IMGUI's OnGUI method. This allows reliable access of theme data from Preopen Window method
