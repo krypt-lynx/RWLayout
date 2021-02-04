@@ -91,7 +91,8 @@ namespace RWLayout.alpha2
 
         public static bool PatchAllActiveAssemblies
         {
-            get => settings.patchAllActiveAssemblies;
+            //get => settings.patchAllActiveAssemblies;
+            get => false;
             set => settings.patchAllActiveAssemblies = value;
         }
         public static bool VerboseLogging
