@@ -144,8 +144,6 @@ namespace RWLayout.alpha2
             {
                 return ParseFromText(node, valueType);
             }
-
-            return null;
         }
 
         static object ParseFromText(XmlElement node, Type valueType)
