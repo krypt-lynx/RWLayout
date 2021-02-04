@@ -15,19 +15,20 @@ namespace RWLayout.alpha2
     internal class RWSettings : ModSettings
     {
         public bool patchAllActiveAssemblies = true;
-        public bool verboseLogging = true;
+        public bool verboseLogging = false;
 
         public override void ExposeData()
         {
             base.ExposeData();
 
             Scribe_Values.Look(ref patchAllActiveAssemblies, nameof(patchAllActiveAssemblies), true);
-            Scribe_Values.Look(ref verboseLogging, nameof(verboseLogging), true);
+            Scribe_Values.Look(ref verboseLogging, nameof(verboseLogging), false);
         }
     }
 
 
-    sealed public class RWLayoutModInternal : Mod    {
+    sealed public class RWLayoutModInternal : Mod
+    {
         
         const string rwLayoutHarmonyId = "rwlayout.alpha2.internal";
 

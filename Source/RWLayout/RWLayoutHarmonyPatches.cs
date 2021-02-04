@@ -41,15 +41,41 @@ namespace RWLayout.alpha2
             // GenTypes.AllActiveAssemblies returns duplicated entries. It makes game init Defs multiple times, causing errors in log
             if (RWLayoutInfo.PatchAllActiveAssemblies)
             {
+                // disabling patching for case of critical failure
+                $"attempting to patch GenTypes.AllActiveAssemblies...".Log();
+
+                RWLayoutInfo.PatchAllActiveAssemblies = false;
+                RWLayoutInfo.WriteSettings();
+
                 harmony.Patch(AccessTools.PropertyGetter(typeof(GenTypes), "AllActiveAssemblies"),
                     postfix: new HarmonyMethod(typeof(GetTypesAllActiveAssembliesFix), nameof(GetTypesAllActiveAssembliesFix.GenTypes_AllActiveAssemblies_postfix)));
+
+
+                // testing 
+                $"testing GenTypes.AllActiveAssemblies patch...".Log();
+
+                var method = typeof(GenTypes).GetProperty("AllActiveAssemblies", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
+                var test = ((IEnumerable<Assembly>)method.GetValue(null)).Count() > 0;
+
+                // We still alive? Reenabling it back
+                if (test)
+                {
+                    $"GenTypes.AllActiveAssemblies appears to be ok".Log();
+
+                    RWLayoutInfo.PatchAllActiveAssemblies = true;
+                    RWLayoutInfo.WriteSettings();
+                }
+                else
+                {
+                    $"GenTypes.AllActiveAssemblies returned no assemblies".Log(MessageType.Error);
+                }
             }
         }
     }
 
     static class GetTypesAllActiveAssembliesFix
     {
-        internal static IEnumerable<int> GenTypes_AllActiveAssemblies_postfix(IEnumerable<int> values)
+        internal static IEnumerable<Assembly> GenTypes_AllActiveAssemblies_postfix(IEnumerable<Assembly> values)
         {
             return values.Distinct();
         }
