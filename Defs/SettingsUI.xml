@@ -12,7 +12,7 @@
 			<binding object="sticky" target="root.StickyCheck"/>
 		</bindings> -->
 		<view>
-			<RWLayoutMod.TestElement Id="root">
+			<CElement Id="root">
 				<subviews>
 					<CCheckboxLabeled Id="dlayout">
 						<properties>
@@ -83,7 +83,7 @@
 					<constraint>aaass.right == root.right</constraint>
 					<constraint>noexamples.right == root.right</constraint>
 				</constraints>
-			</RWLayoutMod.TestElement>
+			</CElement>
 		</view>
 	</RWLayout.alpha2.LayoutDef>
 </Defs>

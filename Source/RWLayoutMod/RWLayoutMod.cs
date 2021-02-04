@@ -176,21 +176,11 @@ namespace RWLayoutMod
 
         public override CElement CreateSettingsView()
         {
-            return DefDatabase<LayoutDef>.GetNamed("RWLayout_ModSettings").Instantiate(new Dictionary<string, object> { { "mod", this }, { "settings", settings }, { "rwsettings", typeof(RWLayoutInfo) } });
+            return DefDatabase<LayoutDef>.GetNamed("RWLayout_ModSettings").Instantiate(new Dictionary<string, object> {
+                { "mod", this },
+                { "settings", settings },
+                { "rwsettings", typeof(RWLayoutInfo) }
+            });
         }
     }
-
-    public class TestElement : CElement
-    {
-        public override void DoContent()
-        {
-            base.DoContent();
-
-            GuiTools.PushTextAnchor(TextAnchor.LowerLeft);
-            Widgets.Label(Bounds, $"{RWLayoutInfo.PatchAllActiveAssemblies}");
-            GuiTools.PopTextAnchor();
-
-        }
-    }
-
 }
