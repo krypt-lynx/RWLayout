@@ -39,13 +39,11 @@ namespace RWLayout.alpha2
                 prefix: new HarmonyMethod(typeof(WindowStackAddPatches), nameof(WindowStackAddPatches.WindowStack_Add_prefix)));
 
             // GenTypes.AllActiveAssemblies returns duplicated entries. It makes game init Defs multiple times, causing errors in log
-            /*
             if (RWLayoutInfo.PatchAllActiveAssemblies)
             {
                 harmony.Patch(AccessTools.PropertyGetter(typeof(GenTypes), "AllActiveAssemblies"),
                     postfix: new HarmonyMethod(typeof(GetTypesAllActiveAssembliesFix), nameof(GetTypesAllActiveAssembliesFix.GenTypes_AllActiveAssemblies_postfix)));
             }
-            */
         }
     }
 

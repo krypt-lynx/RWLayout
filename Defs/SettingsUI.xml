@@ -45,8 +45,7 @@
 					<CCheckboxLabeled Id="aaass">
 						<properties>
 							<Title>Patch GenTypes.AllActiveAssemblies (requires restart)</Title>
-							<Tip>Temporary disabled. It was the reason of issues people had.</Tip>
-							<!-- <Tip>Excludes duplicated entities reported by this method. Without this fix log will contain red messages "already has short hash." about each RWLayout Def</Tip> -->
+							<Tip>Excludes duplicated entities reported by this method. Without this fix log will contain red messages "already has short hash." about each RWLayout Def</Tip>
 							<Checked bind="rwsettings.PatchAllActiveAssemblies" />
 						</properties>
 					</CCheckboxLabeled>
