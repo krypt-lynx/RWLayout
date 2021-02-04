@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 	<!-- prototype implementation is used! -->
+	<!-- I strongly disadvise of using this api yet! -->
 	<RWLayout.alpha2.LayoutDef>
 		<defName>RWLayout_ModSettings</defName>
 		<!-- todo: externalViews -->
