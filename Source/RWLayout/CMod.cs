@@ -112,7 +112,13 @@ namespace RWLayout.alpha2
             }
             else
             {
-                return string.Format($"Version: {0}".Translate(), version);
+                TaggedString VersionFormat;
+                if (!"RWLVersion".TryTranslate(out VersionFormat))
+                {
+                    VersionFormat = "Version: {0}";
+                }
+
+                return string.Format(VersionFormat, version);
             }
         }
 
