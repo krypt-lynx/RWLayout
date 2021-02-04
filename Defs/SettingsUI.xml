@@ -12,27 +12,40 @@
 			<binding object="sticky" target="root.StickyCheck"/>
 		</bindings> -->
 		<view>
-			<CElement Id="root">
+			<RWLayoutMod.TestElement Id="root">
 				<subviews>
-					<CCheckboxLabeled Id="debug">
+					<CCheckboxLabeled Id="dlayout">
 						<properties>
-							<Title translated="true">Layout debug</Title>
+							<Title>Layout debug</Title>
 							<Checked bind="settings.layoutDebug"/>
 							<Changed object="mod.DoLayoutDebugChanged" />
+						</properties>
+					</CCheckboxLabeled>
+					<CCheckboxLabeled Id="vlogging">
+						<properties>
+							<Title>Verbose logging</Title>
+							<Checked bind="rwsettings.VerboseLogging" />
 						</properties>
 					</CCheckboxLabeled>
 					<CCheckboxLabeled Id="lognull">
 						<properties>
 							<Title>Patch missing Log null check (requires restart)</Title>
 							<Tip>Fixes Log.Message, Log.Warning, and Log.Error breaking LogWindow if called with null argument</Tip>
-							<Checked object="settings.patchLog" />
+							<Checked bind="settings.patchLog" />
 						</properties>
 					</CCheckboxLabeled>
 					<CCheckboxLabeled Id="sticky">
 						<properties>
 							<Title>Patch sticky window resizing bug (requires restart)</Title>
 							<Tip>Fixes windows missing mouse up event during resizing if mouse was outside the window at the moment of event</Tip>
-							<Checked object="settings.patchWindowResize" />
+							<Checked bind="settings.patchWindowResize" />
+						</properties>
+					</CCheckboxLabeled>
+					<CCheckboxLabeled Id="aaass">
+						<properties>
+							<Title>Patch GenTypes.AllActiveAssemblies (requires restart)</Title>
+							<Tip>Excludes duplicated entities reported by this method. Without this fix log will contain red messages "already has short hash." about each RWLayout Def</Tip>
+							<Checked bind="rwsettings.PatchAllActiveAssemblies" />
 						</properties>
 					</CCheckboxLabeled>
 					<CLabel Id="noexamples">
@@ -42,27 +55,35 @@
 					</CLabel>
 				</subviews>
 				<constraints>
-					<constraint>debug.top == root.top</constraint>
-					<constraint>strong:lognull.top == debug.bottom+10</constraint>
+					<constraint>dlayout.top == root.top</constraint>
+					<constraint>vlogging.top == dlayout.bottom+2</constraint>
+					<constraint>strong:lognull.top == vlogging.bottom+10</constraint>
 					<constraint>sticky.top == lognull.bottom+2</constraint>
-					<constraint>noexamples.top == sticky.bottom+10</constraint>
+					<constraint>aaass.top == sticky.bottom+2</constraint>
+					<constraint>noexamples.top == aaass.bottom+20</constraint>
 					
-					<constraint>debug.height == debug.intrinsicHeight</constraint>
+					<constraint>dlayout.height == dlayout.intrinsicHeight</constraint>
+					<constraint>vlogging.height == vlogging.intrinsicHeight</constraint>
 					<constraint>lognull.height == lognull.intrinsicHeight</constraint>
 					<constraint>sticky.height == sticky.intrinsicHeight</constraint>
+					<constraint>aaass.height == aaass.intrinsicHeight</constraint>
 					<constraint>noexamples.height == noexamples.intrinsicHeight</constraint>
 
-					<constraint>debug.left == root.left</constraint>
+					<constraint>dlayout.left == root.left</constraint>
+					<constraint>vlogging.left == root.left</constraint>
 					<constraint>lognull.left == root.left</constraint>
 					<constraint>sticky.left == root.left</constraint>
+					<constraint>aaass.left == root.left</constraint>
 					<constraint>noexamples.left == root.left</constraint>
 
-					<constraint>debug.right == root.right</constraint>
+					<constraint>dlayout.right == root.right</constraint>
+					<constraint>vlogging.right == root.right</constraint>
 					<constraint>lognull.right == root.right</constraint>
 					<constraint>sticky.right == root.right</constraint>
+					<constraint>aaass.right == root.right</constraint>
 					<constraint>noexamples.right == root.right</constraint>
 				</constraints>
-			</CElement>
+			</RWLayoutMod.TestElement>
 		</view>
 	</RWLayout.alpha2.LayoutDef>
 </Defs>

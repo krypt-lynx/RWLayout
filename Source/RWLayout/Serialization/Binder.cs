@@ -17,6 +17,7 @@ namespace RWLayout.alpha2
             var dstProp = dstObj.GetType().GetMemberHandler(binding.Target.Member, BindingFlags.Public | BindingFlags.Instance);
             if (dstProp != null)
             {
+                $"Assigning {dstObj} to {srcObj}".Log();
                 // todo: T? to T assignment
                 dstProp.SetValue(dstObj, srcObj);
             }

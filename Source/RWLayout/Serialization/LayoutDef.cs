@@ -33,7 +33,7 @@ namespace RWLayout.alpha2
                     Prototype = new ElementPrototype(prototypeNode);
                 }
                 var bindingNodes = node.SelectNodes("bindings/binding");
-                Assignments = bindingNodes?.AsEnumerable<XmlElement>()
+                Assignments = bindingNodes?.Cast<XmlElement>()
                     .Select(x => new BindingPrototype(x))
                     .ToList();
             }
@@ -157,6 +157,10 @@ namespace RWLayout.alpha2
             }
         }
 
+        public override string ToString()
+        {
+            return Member == null ? Object : $"{Object}.{Member}";
+        }
     }
 
     public struct BindingPrototype
@@ -196,7 +200,7 @@ namespace RWLayout.alpha2
 
             this.node = node;
 
-            var viewNodes = node.SelectNodes("subviews/*").AsEnumerable<XmlNode>().Where(x => x.NodeType == XmlNodeType.Element).Cast<XmlElement>();
+            var viewNodes = node.SelectNodes("subviews/*").WhereTypeIs<XmlElement>();
 
             Subviews = viewNodes.Select(x => new ElementPrototype(x)).ToList();
 

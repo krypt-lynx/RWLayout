@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -37,6 +38,20 @@ namespace RWLayout.alpha2
             harmony.Patch(AccessTools.Method(typeof(WindowStack), nameof(WindowStack.Add)),
                 prefix: new HarmonyMethod(typeof(WindowStackAddPatches), nameof(WindowStackAddPatches.WindowStack_Add_prefix)));
 
+            // GenTypes.AllActiveAssemblies returns duplicated entries. It makes game init Defs multiple times, causing errors in log
+            if (RWLayoutInfo.PatchAllActiveAssemblies)
+            {
+                harmony.Patch(AccessTools.PropertyGetter(typeof(GenTypes), "AllActiveAssemblies"),
+                    postfix: new HarmonyMethod(typeof(GetTypesAllActiveAssembliesFix), nameof(GetTypesAllActiveAssembliesFix.GenTypes_AllActiveAssemblies_postfix)));
+            }
+        }
+    }
+
+    static class GetTypesAllActiveAssembliesFix
+    {
+        internal static IEnumerable<int> GenTypes_AllActiveAssemblies_postfix(IEnumerable<int> values)
+        {
+            return values.Distinct();
         }
     }
 

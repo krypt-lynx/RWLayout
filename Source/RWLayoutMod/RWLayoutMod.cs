@@ -83,6 +83,13 @@ namespace RWLayoutMod
             // ShowMismatchMessage();
         }
 
+        public override void WriteSettings()
+        {
+            base.WriteSettings();
+            RWLayoutInfo.WriteSettings();
+
+        }
+
         static bool showMismatchMessageOnce = true;
         private static void ShowMismatchMessage()
         {
@@ -145,7 +152,7 @@ namespace RWLayoutMod
             try
             {
                 using (Stream stream = Assembly.GetExecutingAssembly()
-                        .GetManifestResourceStream(name + ".git.txt"))
+                          .GetManifestResourceStream(name + ".git.txt"))
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     commitInfo = reader.ReadToEnd()?.TrimEndNewlines();
@@ -169,7 +176,20 @@ namespace RWLayoutMod
 
         public override CElement CreateSettingsView()
         {
-            return DefDatabase<LayoutDef>.GetNamed("RWLayout_ModSettings").Instantiate(new Dictionary<string, object> { { "mod", this }, { "settings", settings } });
+            return DefDatabase<LayoutDef>.GetNamed("RWLayout_ModSettings").Instantiate(new Dictionary<string, object> { { "mod", this }, { "settings", settings }, { "rwsettings", typeof(RWLayoutInfo) } });
+        }
+    }
+
+    public class TestElement : CElement
+    {
+        public override void DoContent()
+        {
+            base.DoContent();
+
+            GuiTools.PushTextAnchor(TextAnchor.LowerLeft);
+            Widgets.Label(Bounds, $"{RWLayoutInfo.PatchAllActiveAssemblies}");
+            GuiTools.PopTextAnchor();
+
         }
     }
 

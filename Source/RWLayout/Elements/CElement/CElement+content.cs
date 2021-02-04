@@ -28,7 +28,7 @@ namespace RWLayout.alpha2
         public virtual Vector2 tryFit(Vector2 size) { return Vector2.zero; }
 
         /// <summary>
-        /// Renders the view and its children
+        /// Renders the view and its children. If you want to have a custom render you need to override this method
         /// </summary>
         public virtual void DoElementContent()
         {

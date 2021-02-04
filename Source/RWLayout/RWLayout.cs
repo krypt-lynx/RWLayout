@@ -12,16 +12,38 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
+    internal class RWSettings : ModSettings
+    {
+        public bool patchAllActiveAssemblies = true;
+        public bool verboseLogging = true;
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+
+            Scribe_Values.Look(ref patchAllActiveAssemblies, nameof(patchAllActiveAssemblies), true);
+            Scribe_Values.Look(ref verboseLogging, nameof(verboseLogging), true);
+        }
+    }
+
+
     sealed public class RWLayoutModInternal : Mod    {
+        
         const string rwLayoutHarmonyId = "rwlayout.alpha2.internal";
 
         public RWLayoutModInternal(ModContentPack content) : base(content)
         {
+            RWLayoutInfo.modInstance = this;
+            RWLayoutInfo.settings = GetSettings<RWSettings>();
+
             Harmony harmony = new Harmony(rwLayoutHarmonyId);
             RWLayoutHarmonyPatches.Patch(harmony);
+
             CModHelper.Patch(harmony);
+
             ParseHelper.Parsers<EdgeInsets>.Register(ParseEdgeInsets);
         }
+
 
         static EdgeInsets ParseEdgeInsets(string value)
         {
@@ -59,7 +81,27 @@ namespace RWLayout.alpha2
             ReadVersionInfo();
         }
 
+        internal static RWSettings settings = null;
+        internal static RWLayoutModInternal modInstance;
+
+        public static void WriteSettings()
+        {
+            modInstance.WriteSettings();
+        }
+
+        public static bool PatchAllActiveAssemblies
+        {
+            get => settings.patchAllActiveAssemblies;
+            set => settings.patchAllActiveAssemblies = value;
+        }
+        public static bool VerboseLogging
+        {
+            get => settings.verboseLogging;
+            set => settings.verboseLogging = value;
+        }
+
         private static string versionInfo = null;
+
         public static string VersionInfo => versionInfo;
 
         private static void ReadVersionInfo()

@@ -13,7 +13,7 @@ namespace RWLayout.alpha2
     {
         static public void ApplyProperty(CElement view, XmlElement node, Dictionary<string, object> objectsMap)
         {
-            var propNodes = node.SelectSingleNode("properties")?.ChildNodes.AsEnumerable<XmlNode>().Where(x => x.NodeType == XmlNodeType.Element).Cast<XmlElement>() ?? Enumerable.Empty<XmlElement>();
+            var propNodes = node.SelectSingleNode("properties")?.ChildNodes.WhereTypeIs<XmlElement>() ?? Enumerable.Empty<XmlElement>();
             foreach (var subnode in propNodes)
             {
                 try
@@ -29,7 +29,7 @@ namespace RWLayout.alpha2
                 }
                 catch (Exception e)
                 {
-                    LogHelper.LogException("Exception thrown during field assignment", e);
+                    LogHelper.LogException($"Exception thrown during field assignment; target object: \"{view}\"; node: \"{subnode.OuterXml}\"; exception", e);
                 }
             }
         }
@@ -52,7 +52,22 @@ namespace RWLayout.alpha2
             var srcPath = new BindingPath(node.GetAttribute("bind"));
 
             object srcObj = objectsMap[srcPath.Object];
-            var srcProp = srcObj.GetType().GetMemberHandler(srcPath.Member, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+            Type srcType = null;
+            if (srcObj is Type)
+            {
+                srcType = (Type)srcObj;
+            } else
+            {
+                srcType = srcObj.GetType();
+            }
+
+            var srcProp = srcType.GetMemberHandler(srcPath.Member, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+
+            if (srcProp == null)
+            {
+                Log.Error($"Unable to assign property \"{propName}\" of object \"{view}\": source object \"{srcPath}\" does not exists");
+                return;
+            }
 
             var dstProp = view.GetType().GetMemberHandler(propName, BindingFlags.Public | BindingFlags.Instance);
 
@@ -66,7 +81,19 @@ namespace RWLayout.alpha2
                 var dstObj = dstProp.GetValue(view);
                 dstProp.MemberType.GetMethod(nameof(Bindable<object>.Bind), BindingFlags.Instance | BindingFlags.NonPublic)
                     .Invoke(dstObj, new object[] { srcObj, srcProp });
-            }  
+                $"Binded {srcProp} of {srcObj} to {dstProp}".Log();
+            }
+            else
+            {
+                if (dstProp == null)
+                {
+                    Log.Error($"Unable to assign property \"{propName}\" of object \"{view}\": property \"{propName}\" does not exists");
+                }
+                else
+                {
+                    Log.Error($"Unable to assign property \"{propName}\" of object \"{view}\": \"{srcObj}\" is not of compatible type");
+                }
+            }
         }
 
         private static void AssignProperty(CElement view, Dictionary<string, object> objectsMap, XmlElement node)
@@ -89,7 +116,7 @@ namespace RWLayout.alpha2
 
             var valueType = propInfo.MemberType;
             var value = TryResolve(node, valueType, objectsMap);
-
+            $"Assigned {value} to {propName}".Log();
             propInfo.SetValue(view, value);
         }
 

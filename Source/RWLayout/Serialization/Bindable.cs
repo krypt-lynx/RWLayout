@@ -84,7 +84,6 @@ namespace RWLayout.alpha2
 
         internal void Bind(object obj, MemberHandler prop)
         {
-            Log.Message("Bindable Bind called");
             this.binded = new WeakReference(obj);
             bindedMember = prop;
             SynchronizeFrom();

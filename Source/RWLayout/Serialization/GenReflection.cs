@@ -108,6 +108,11 @@ namespace RWLayout.alpha2
                     break;
             }
         }
+
+        public override string ToString()
+        {
+            return $"{base.ToString()}:{{{member}}}";
+        }
     }
 
     static class GenReflection

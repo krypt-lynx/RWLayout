@@ -108,7 +108,7 @@
     <Compile Include="Elements\GuiHosts\CListingRow.cs" />
     <Compile Include="Elements\CListingStandart.cs" />
     <Compile Include="Internal\Extensions.cs" />
-    <Compile Include="LogHelper.cs" />
+    <Compile Include="Internal\LogHelper.cs" />
     <Compile Include="RWLayout.cs" />
     <Compile Include="RWLayoutHarmonyPatches.cs" />
     <Compile Include="MiscTools\ConstraintTools.cs" />
