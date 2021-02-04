@@ -65,7 +65,7 @@ namespace RWLayout.alpha2
         }
 
         /// <summary>
-        /// Checks if used variables belong to current view tree</remarks>
+        /// Checks if used variables belong to current view tree
         /// </summary>
         private void ValidateVariables(ClConstraint constraint)
         {

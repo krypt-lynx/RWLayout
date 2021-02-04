@@ -44,7 +44,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// Create resource wrapper with resource
         /// </summary>
-        /// <param name="itemPath">the resource</param>
+        /// <param name="value">the resource</param>
         public Resource(T value)
         {
             this.itemPath = value.ToString();

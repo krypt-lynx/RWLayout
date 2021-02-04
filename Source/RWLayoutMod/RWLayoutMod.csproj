@@ -49,7 +49,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>  
+  </PropertyGroup>
   <Import Condition=" '$(Configuration)' == '1.1' " Project="..\dependences-1.1.csproj" />
   <Import Condition=" '$(Configuration)' == '1.2' " Project="..\dependences-1.2.csproj" />
   <Import Condition=" '$(Configuration)' == 'Debug' " Project="..\dependences-1.2.csproj" />
@@ -106,7 +106,6 @@
       <Name>Cassowary</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="prebuild.ps1" />
   </ItemGroup>

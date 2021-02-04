@@ -193,7 +193,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// Removes the row at index from CListView
         /// </summary>
-        /// <param name="row">index of row to remove</param>
+        /// <param name="index">index of row to remove</param>
         /// <returns>the removed row</returns>
         public CListingRow RemoveRowAt(int index)
         {

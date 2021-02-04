@@ -4,22 +4,21 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{859869AF-24C5-4ABA-A111-F95A794ED7A3}</ProjectGuid>
+    <ProjectGuid>{2CD25228-E1AA-4BE0-B9CB-C40911581246}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RWLayout.alpha2</RootNamespace>
-    <AssemblyName>0RWLayout</AssemblyName>
+    <RootNamespace>RWLayoutVersionTester</RootNamespace>
+    <AssemblyName>RWLayoutVersionTester</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <LangVersion>8.0</LangVersion>
-    <DocumentationFile>bin\Debug\0RWLayout.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\1.2\Assemblies\</OutputPath>
     <DefineConstants>TRACE;DEBUG;rw_1_2</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -27,7 +26,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\1.2\Assemblies\</OutputPath>
     <DefineConstants>TRACE;rw_1_2</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -36,7 +35,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.1|AnyCPU' ">
     <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\1.1\Assemblies\</OutputPath>
     <DefineConstants>TRACE;rw_1_1</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -45,7 +44,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.2|AnyCPU' ">
     <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\1.2\Assemblies\</OutputPath>
     <DefineConstants>TRACE;rw_1_2</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -56,10 +55,10 @@
   <Import Condition=" '$(Configuration)' == 'Debug' " Project="..\dependences-1.2.csproj" />
   <Import Condition=" '$(Configuration)' == 'Release' " Project="..\dependences-1.2.csproj" />
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
+    <Reference Include="0Harmony">
       <Private>False</Private>
     </Reference>
-    <Reference Include="0Harmony">
+    <Reference Include="Assembly-CSharp">
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -71,6 +70,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
+      <EmbedInteropTypes>False</EmbedInteropTypes>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
@@ -87,73 +87,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Resource.cs" />
-    <Compile Include="CMod.cs" />
-    <Compile Include="Elements\Controls\CButtonImage.cs" />
-    <Compile Include="Elements\Controls\CButtonText.cs" />
-    <Compile Include="Elements\Controls\CCheckbox.cs" />
-    <Compile Include="Elements\Controls\CCheckboxLabeled.cs" />
-    <Compile Include="Elements\Controls\CFrame.cs" />
-    <Compile Include="Elements\Controls\CListView_vNext.cs" />
-    <Compile Include="Elements\Controls\CScrollView.cs" />
-    <Compile Include="Elements\Controls\CImage.cs" />
-    <Compile Include="CWindow\CWindow.cs" />
-    <Compile Include="CWindow\CWindowResizer.cs" />
-    <Compile Include="Elements\CElement\CElement+anchors.cs" />
-    <Compile Include="Elements\CElement\CElement+constraints.cs" />
-    <Compile Include="Elements\CElement\CElement+content.cs" />
-    <Compile Include="Elements\CElement\CElement+debug.cs" />
-    <Compile Include="Elements\CElement\CElement+events.cs" />
-    <Compile Include="Elements\CElement\CElement+hierarchy.cs" />
-    <Compile Include="Elements\CElement\CElement.cs" />
-    <Compile Include="Elements\Controls\Obsolete\CButton.cs" />
-    <Compile Include="Elements\CTextuteElement.cs" />
-    <Compile Include="Elements\CTintedElement.cs" />
-    <Compile Include="Elements\GuiHosts\CElementHost.cs" />
-    <Compile Include="Elements\GuiHosts\CGuiRoot.cs" />
-    <Compile Include="Elements\Controls\Obsolete\CCheckBox.cs" />
-    <Compile Include="Elements\Controls\CLabel.cs" />
-    <Compile Include="Elements\Controls\CListView.cs" />
-    <Compile Include="Elements\CTitledElement.cs" />
-    <Compile Include="Elements\Controls\CWidget.cs" />
-    <Compile Include="CWindow\CWindowRoot.cs" />
-    <Compile Include="Elements\GuiHosts\CListingRow.cs" />
-    <Compile Include="Elements\CListingStandart.cs" />
-    <Compile Include="Internal\Extensions.cs" />
-    <Compile Include="Internal\LogHelper.cs" />
-    <Compile Include="RWLayout.cs" />
-    <Compile Include="RWLayoutHarmonyPatches.cs" />
-    <Compile Include="MiscTools\ConstraintTools.cs" />
-    <Compile Include="Classes\EdgeInsets.cs" />
-    <Compile Include="MiscTools\GUIStyleExtension.cs" />
-    <Compile Include="MiscTools\GuiTools+Drawing.cs" />
-    <Compile Include="MiscTools\GuiTools+Text.cs" />
-    <Compile Include="MiscTools\GuiTools+Geometry.cs" />
+    <Compile Include="RWLayoutVersionTester.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serialization\Bindable.cs" />
-    <Compile Include="Serialization\Binder.cs" />
-    <Compile Include="Serialization\ConstraintParser.cs" />
-    <Compile Include="Serialization\GenReflection.cs" />
-    <Compile Include="Serialization\PropertyWriter.cs" />
-    <Compile Include="Serialization\LayoutDef.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="D:\Repo\Cassowary.net\Cassowary\Cassowary.csproj">
-      <Project>{f01578a3-ba19-47e6-b333-40e41158658b}</Project>
-      <Name>Cassowary</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="git.txt">
-      <LogicalName>git.txt</LogicalName>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="prebuild.ps1" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="git.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>set ProjectDir=$(ProjectDir)
+    <PreBuildEvent>
+	  set ProjectDir=$(ProjectDir)
 	  set TargetDir=$(TargetDir)
 	  PowerShell -NoProfile -ExecutionPolicy Bypass -Command "&amp; ""$(ProjectDir)prebuild.ps1\"" "</PreBuildEvent>
   </PropertyGroup>
