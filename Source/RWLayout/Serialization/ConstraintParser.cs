@@ -66,7 +66,7 @@ namespace RWLayout.alpha2
             var view = objects[viewId];
 
             var prop = view.GetType().GetMemberHandler(anchorName, BindingFlags.Public | BindingFlags.Instance  );
-            if (prop == null || !typeof(ClAbstractVariable).IsAssignableFrom(prop.MemberType))
+            if (prop == null || !typeof(ClAbstractVariable).IsAssignableFrom(prop.TargetType))
             {
                 throw new Exception($"{anchorName} is not an anchor in object {view}");
             }
