@@ -14,6 +14,10 @@ namespace RWLayout.alpha2
     public enum BindingMode
     {
         /// <summary>
+        /// Do not copy value
+        /// </summary>
+        None,
+        /// <summary>
         /// Copy value on command
         /// </summary>
         Manual,
@@ -30,8 +34,11 @@ namespace RWLayout.alpha2
     public class Bindable<TProperty>
     {
         WeakReference binded;
-        MemberHandler bindedMember;
+        //MemberHandler bindedMember;
 
+        bool bindedToStatic = false;
+        Action<object, TProperty> write;
+        Func<object, TProperty> read;
         /// <summary>
         /// Read mode
         /// </summary>
@@ -84,8 +91,32 @@ namespace RWLayout.alpha2
 
         internal void Bind(object obj, MemberHandler prop)
         {
-            this.binded = new WeakReference(obj);
-            bindedMember = prop;
+            this.binded = obj != null ? new WeakReference(obj) : null;
+            bindedToStatic = prop.IsStatic;
+
+            if (ReadMode != BindingMode.None)
+            {
+                if (prop.CanRead)
+                {
+                    read = prop.CreateGetValueDelegate<TProperty>();
+                }
+                else
+                {
+                    $"Member {prop} is binded to read, but it cannot be readen".Log(MessageType.Error);
+                }
+            }
+            if (ReadMode != BindingMode.None)
+            {
+                if (prop.CanWrite)
+                {
+                    write = prop.CreateSetValueDelegate<TProperty>();
+                }
+                else
+                {
+                    $"Member {prop} is binded to write, but it cannot be written".Log(MessageType.Error);
+                }
+            }
+
             SynchronizeFrom();
         }
 
@@ -94,9 +125,16 @@ namespace RWLayout.alpha2
         /// </summary>
         public void SynchronizeFrom()
         {
-            if (binded?.Target != null)
+            if (read != null)
             {
-                value = (TProperty)bindedMember.GetValue(binded.Target);
+                if (bindedToStatic)
+                {
+                    value = read(null);
+                }
+                else if (binded?.Target != null)
+                {
+                    value = read(binded.Target);
+                }
             }
         }
 
@@ -105,9 +143,16 @@ namespace RWLayout.alpha2
         /// </summary>
         public void SynchronizeTo()
         {
-            if (binded?.Target != null)
+            if (write != null)
             {
-                bindedMember.SetValue(binded.Target, value);
+                if (bindedToStatic)
+                {
+                    write(null, value);
+                }
+                else if (binded?.Target != null)
+                {
+                    write(binded.Target, value);
+                }
             }
         }
     }

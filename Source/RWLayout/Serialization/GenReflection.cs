@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,7 +36,26 @@ namespace RWLayout.alpha2
             }
         }
 
-        public Type MemberType
+        public bool CanRead
+        {
+            get
+            {
+                switch (member.MemberType)
+                {
+                    case MemberTypes.Field:
+                        return true;
+                    case MemberTypes.Property:
+                        return ((PropertyInfo)member).CanRead;
+                    case MemberTypes.Method:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        }
+
+
+        public Type TargetType
         {
             get
             {
@@ -51,6 +72,8 @@ namespace RWLayout.alpha2
                 }
             }
         }
+
+        public MemberInfo Member => member;
 
         internal object GetValue(object obj)
         {
@@ -78,7 +101,7 @@ namespace RWLayout.alpha2
                     foreach (var param in ((MethodInfo)member).GetParameters())
                         tArgs.Add(param.ParameterType);
                     tArgs.Add(((MethodInfo)member).ReturnType);
-                    delegateType = System.Linq.Expressions.Expression.GetDelegateType(tArgs.ToArray());
+                    delegateType = Expression.GetDelegateType(tArgs.ToArray());
                 }
                 return delegateType;
             }
@@ -96,7 +119,29 @@ namespace RWLayout.alpha2
             }
         }
 
-        internal void SetValue(object obj, object value)
+        public bool IsStatic
+        {
+            get
+            {
+                switch (member.MemberType)
+                {
+                    case MemberTypes.Field:
+                        return ((FieldInfo)member).IsStatic;
+                    case MemberTypes.Property:
+                        return ((PropertyInfo)member).GetAccessors().FirstOrDefault()?.IsStatic ?? false;
+                    case MemberTypes.Event: // whatever, just making it to semiwork for unsupported cases
+                        return ((EventInfo)member).GetAddMethod()?.IsStatic ?? false;
+                    case MemberTypes.Method:
+                    case MemberTypes.Constructor:
+                        return ((MethodBase)member).IsStatic;
+
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        public void SetValue(object obj, object value)
         {
             switch (member.MemberType)
             {
@@ -134,6 +179,126 @@ namespace RWLayout.alpha2
                 default:
                     return null;
             }
+        }
+
+        static int test
+        {
+            get => 0;
+        }
+
+        public static Func<object ,T> CreateGetValueDelegate<T>(this MemberHandler member)
+        {
+            switch (member.Member.MemberType)
+            {
+                case MemberTypes.Property:
+                    return CreateGetPropertyValueDelegate<T>((PropertyInfo)member.Member);
+                case MemberTypes.Field:
+                    return CreateGetFieldValueDelegate<T>((FieldInfo)member.Member);
+                default:
+                    return null;
+            }
+        }
+
+        private static Func<object, T> CreateGetPropertyValueDelegate<T>(PropertyInfo prop)
+        {
+            DynamicMethod getter = new DynamicMethod($"get_{prop.DeclaringType.Name}_{prop.Name}", typeof(T), new Type[] { typeof(object) }, true);
+            MethodInfo method = prop.GetGetMethod(true);
+            ILGenerator gen = getter.GetILGenerator();
+
+            if (method.IsStatic)
+            {
+                gen.Emit(OpCodes.Call, method);
+                gen.Emit(OpCodes.Ret);
+            }
+            else
+            {
+                gen.Emit(OpCodes.Ldarg_0);
+                gen.Emit(OpCodes.Castclass, prop.DeclaringType);
+                gen.Emit(OpCodes.Callvirt, method);
+                gen.Emit(OpCodes.Ret);
+            }
+
+            return (Func<object, T>)getter.CreateDelegate(typeof(Func<object, T>));
+        }
+
+        private static Func<object, T> CreateGetFieldValueDelegate<T>(FieldInfo field)
+        {
+            DynamicMethod getter = new DynamicMethod($"get_{field.DeclaringType.Name}_{field.Name}", typeof(T), new Type[] { typeof(object) }, true);
+            ILGenerator gen = getter.GetILGenerator();
+
+            gen.Emit(OpCodes.Ldarg_0);
+            gen.Emit(OpCodes.Castclass, field.DeclaringType);
+            if (field.IsStatic)
+            {
+                gen.Emit(OpCodes.Ldsfld, field);
+            }
+            else
+            {
+                gen.Emit(OpCodes.Ldfld, field);
+            }
+            gen.Emit(OpCodes.Ret);
+
+            return (Func<object, T>)getter.CreateDelegate(typeof(Func<object, T>));
+        }
+
+        public static Action<object, T> CreateSetValueDelegate<T>(this MemberHandler member)
+        {
+            switch (member.Member.MemberType)
+            {
+                case MemberTypes.Property:
+                    return CreateSetPropertyValueDelegate<T>((PropertyInfo)member.Member);
+                case MemberTypes.Field:
+                    return CreateSetFieldValueDelegate<T>((FieldInfo)member.Member);
+                default:
+                    return null;
+            }
+        }
+
+        private static Action<object, T> CreateSetPropertyValueDelegate<T>(PropertyInfo prop)
+        {
+            DynamicMethod getter = new DynamicMethod($"set_{prop.DeclaringType.Name}_{prop.Name}", null, new Type[] { typeof(object), typeof(T) }, true);
+            MethodInfo method = prop.GetSetMethod(true);
+            ILGenerator gen = getter.GetILGenerator();
+
+            if (method.IsStatic)
+            {
+                gen.Emit(OpCodes.Ldarg_1);
+                gen.Emit(OpCodes.Call, method);
+                gen.Emit(OpCodes.Ret);
+            }
+            else
+            {
+                gen.Emit(OpCodes.Ldarg_0);
+                gen.Emit(OpCodes.Castclass, prop.DeclaringType);
+                gen.Emit(OpCodes.Ldarg_1);
+                gen.Emit(OpCodes.Callvirt, method);
+                gen.Emit(OpCodes.Ret);
+            }
+
+            return (Action<object, T>)getter.CreateDelegate(typeof(Action<object, T>));
+        }
+
+        private static Action<object, T> CreateSetFieldValueDelegate<T>(FieldInfo field)
+        {
+            DynamicMethod getter = new DynamicMethod($"set_{field.DeclaringType.Name}_{field.Name}", null, new Type[] { typeof(object), typeof(T) }, true);
+            ILGenerator gen = getter.GetILGenerator();
+
+            if (field.IsStatic)
+            {
+                gen.Emit(OpCodes.Ldarg_1);
+                gen.Emit(OpCodes.Stsfld, field);
+                gen.Emit(OpCodes.Ret);
+            }
+            else
+            {
+                gen.Emit(OpCodes.Ldarg_0);
+                gen.Emit(OpCodes.Castclass, field.DeclaringType);
+                gen.Emit(OpCodes.Ldarg_1);
+                gen.Emit(OpCodes.Stfld, field);
+                gen.Emit(OpCodes.Ret);
+            }
+
+            return (Action<object, T>)getter.CreateDelegate(typeof(Action<object, T>));
         }
     }
 }

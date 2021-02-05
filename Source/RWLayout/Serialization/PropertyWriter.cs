@@ -51,14 +51,17 @@ namespace RWLayout.alpha2
             var propName = node.Name;
             var srcPath = new BindingPath(node.GetAttribute("bind"));
 
-            object srcObj = objectsMap[srcPath.Object];
+            object srcValue = objectsMap[srcPath.Object];
+            object srcObject = null;
             Type srcType = null;
-            if (srcObj is Type)
+            if (srcValue is Type)
             {
-                srcType = (Type)srcObj;
+                srcType = (Type)srcValue;
+                srcObject = null;
             } else
             {
-                srcType = srcObj.GetType();
+                srcType = srcValue.GetType();
+                srcObject = srcValue;
             }
 
             var srcProp = srcType.GetMemberHandler(srcPath.Member, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
@@ -71,17 +74,17 @@ namespace RWLayout.alpha2
 
             var dstProp = view.GetType().GetMemberHandler(propName, BindingFlags.Public | BindingFlags.Instance);
 
-            if (dstProp != null && !IsCompatibleBindable(dstProp.MemberType, srcProp.MemberType))
+            if (dstProp != null && !IsCompatibleBindable(dstProp.TargetType, srcProp.TargetType))
             {
                 dstProp = view.GetType().GetMemberHandler(propName + "Prop", BindingFlags.Public | BindingFlags.Instance);
             }
 
-            if (dstProp != null && IsCompatibleBindable(dstProp.MemberType, srcProp.MemberType))
+            if (dstProp != null && IsCompatibleBindable(dstProp.TargetType, srcProp.TargetType))
             {
                 var dstObj = dstProp.GetValue(view);
-                dstProp.MemberType.GetMethod(nameof(Bindable<object>.Bind), BindingFlags.Instance | BindingFlags.NonPublic)
-                    .Invoke(dstObj, new object[] { srcObj, srcProp });
-                $"Binded {srcProp} of {srcObj} to {dstProp}".Log();
+                dstProp.TargetType.GetMethod(nameof(Bindable<object>.Bind), BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(dstObj, new object[] { srcObject, srcProp });
+                $"Binded {srcProp} of {srcValue} to {dstProp}".Log();
             }
             else
             {
@@ -91,7 +94,7 @@ namespace RWLayout.alpha2
                 }
                 else
                 {
-                    Log.Error($"Unable to assign property \"{propName}\" of object \"{view}\": \"{srcObj}\" is not of compatible type");
+                    Log.Error($"Unable to assign property \"{propName}\" of object \"{view}\": \"{srcValue}\" is not of compatible type");
                 }
             }
         }
@@ -114,7 +117,7 @@ namespace RWLayout.alpha2
                 return;
             }
 
-            var valueType = propInfo.MemberType;
+            var valueType = propInfo.TargetType;
             var value = TryResolve(node, valueType, objectsMap);
             $"Assigned {value} to {propName}".Log();
             propInfo.SetValue(view, value);
