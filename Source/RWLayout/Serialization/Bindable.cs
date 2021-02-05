@@ -98,7 +98,7 @@ namespace RWLayout.alpha2
             {
                 if (prop.CanRead)
                 {
-                    read = prop.CreateGetValueDelegate<TProperty>();
+                    read = prop.GetGetValueDelegate<TProperty>();
                 }
                 else
                 {
@@ -109,7 +109,7 @@ namespace RWLayout.alpha2
             {
                 if (prop.CanWrite)
                 {
-                    write = prop.CreateSetValueDelegate<TProperty>();
+                    write = prop.GetSetValueDelegate<TProperty>();
                 }
                 else
                 {

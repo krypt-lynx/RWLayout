@@ -181,21 +181,28 @@ namespace RWLayout.alpha2
             }
         }
 
-        static int test
-        {
-            get => 0;
-        }
+        static Dictionary<MemberInfo, Delegate> SettersCache = new Dictionary<MemberInfo, Delegate>();
+        static Dictionary<MemberInfo, Delegate> GettersCache = new Dictionary<MemberInfo, Delegate>();
 
-        public static Func<object ,T> CreateGetValueDelegate<T>(this MemberHandler member)
+        public static Func<object, T> GetGetValueDelegate<T>(this MemberHandler member)
         {
-            switch (member.Member.MemberType)
+            lock (GettersCache)
             {
-                case MemberTypes.Property:
-                    return CreateGetPropertyValueDelegate<T>((PropertyInfo)member.Member);
-                case MemberTypes.Field:
-                    return CreateGetFieldValueDelegate<T>((FieldInfo)member.Member);
-                default:
-                    return null;
+                Delegate getter;
+                if (!GettersCache.TryGetValue(member.Member, out getter))
+                {
+                    switch (member.Member.MemberType)
+                    {
+                        case MemberTypes.Property:
+                            getter = CreateGetPropertyValueDelegate<T>((PropertyInfo)member.Member);
+                            break;
+                        case MemberTypes.Field:
+                            getter = CreateGetFieldValueDelegate<T>((FieldInfo)member.Member);
+                            break;
+                    }
+                    GettersCache[member.Member] = getter;
+                }
+                return (Func<object, T>)getter;
             }
         }
 
@@ -241,16 +248,25 @@ namespace RWLayout.alpha2
             return (Func<object, T>)getter.CreateDelegate(typeof(Func<object, T>));
         }
 
-        public static Action<object, T> CreateSetValueDelegate<T>(this MemberHandler member)
+        public static Action<object, T> GetSetValueDelegate<T>(this MemberHandler member)
         {
-            switch (member.Member.MemberType)
+            lock (SettersCache)
             {
-                case MemberTypes.Property:
-                    return CreateSetPropertyValueDelegate<T>((PropertyInfo)member.Member);
-                case MemberTypes.Field:
-                    return CreateSetFieldValueDelegate<T>((FieldInfo)member.Member);
-                default:
-                    return null;
+                Delegate setter;
+                if (!SettersCache.TryGetValue(member.Member, out setter))
+                {
+                    switch (member.Member.MemberType)
+                    {
+                        case MemberTypes.Property:
+                            setter = CreateSetPropertyValueDelegate<T>((PropertyInfo)member.Member);
+                            break;
+                        case MemberTypes.Field:
+                            setter = CreateSetFieldValueDelegate<T>((FieldInfo)member.Member);
+                            break;
+                    }
+                    SettersCache[member.Member] = setter;
+                }
+                return (Action<object, T>)setter;
             }
         }
 
