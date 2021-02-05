@@ -184,8 +184,8 @@ namespace RWLayout.alpha2
                 catch (Exception e)
                 {
                     // InErrorState = true;
-                    Log.Error($"{e.GetType().Name} was thrown during constraint {pair.cn} adding: {e.Message}");
-                    Log.Message($"solver's constraints:\n{string.Join("\n", Solver.AllConstraints().Select(x => x.ToString()))}");
+                    $"{e.GetType().Name} was thrown during constraint {pair.cn} adding: {e.Message}".Log(MessageType.Error);
+                    $"solver's constraints:\n{string.Join("\n", Solver.AllConstraints().Select(x => x.ToString()))}".Log(MessageType.Message);
                 }
             }
         }

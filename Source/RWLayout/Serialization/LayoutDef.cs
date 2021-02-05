@@ -1,6 +1,7 @@
 ﻿using Cassowary;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -41,15 +42,20 @@ namespace RWLayout.alpha2
 
         public CElement Instantiate(Dictionary<string, object> externalObjects = null)
         {
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
             Dictionary<string, object> objectsMap = new Dictionary<string, object>(externalObjects);
             Dictionary<CElement, ElementPrototype> viewPrototypes = new Dictionary<CElement, ElementPrototype>();
 
             CElement root = InstantiateViewsTree(Prototype, objectsMap, viewPrototypes);
 
-
             ApplyConstraints(objectsMap, viewPrototypes);
             ApplyProperties(objectsMap, viewPrototypes);
             ApplyAssignments(objectsMap, Assignments);
+
+            timer.Stop();
+            $"LayoutDef{{{this.defName}}}: objects constructed in: {((decimal)timer.Elapsed.Ticks) / 10000000:0.0000000}".Log(MessageType.Message);
+
             return root;
         }
 

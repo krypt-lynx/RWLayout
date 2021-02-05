@@ -151,7 +151,7 @@ namespace RWLayout.alpha2
             };
 
             timer.Stop();
-            Log.Message($"{this.GetType().Name}: gui constructed in: {((decimal)timer.Elapsed.Ticks) / 10000000:0.0000000}");
+            $"{this.GetType().Name}: gui constructed in: {((decimal)timer.Elapsed.Ticks) / 10000000:0.0000000}".Log();
 
             base.PreOpen();
         }

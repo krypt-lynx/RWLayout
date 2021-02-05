@@ -134,7 +134,7 @@ namespace RWLayout.alpha2
 
             if (layoutUpdateDebugCounter == 60)
             {
-                Log.Warning($"{NamePrefix()} layout being updated every frame for 60 frames. Probably something is going wrong.");
+                $"{NamePrefix()} layout being updated every frame for 60 frames. Probably something is going wrong.".Log(MessageType.Message);
             }
 
             UpdateWindowGuide(inRect.size);

@@ -57,9 +57,9 @@ namespace RWLayout.alpha2
                 var method = typeof(GenTypes).GetProperty("AllActiveAssemblies", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
                 var test = ((IEnumerable<Assembly>)method.GetValue(null)).Count() > 0;
 
-                // We still alive? Reenabling it back
                 if (test)
                 {
+                    // We still alive? Reenabling it back
                     $"GenTypes.AllActiveAssemblies appears to be ok".Log();
 
                     RWLayoutInfo.PatchAllActiveAssemblies = true;
@@ -67,6 +67,7 @@ namespace RWLayout.alpha2
                 }
                 else
                 {
+                    // We are zombie
                     $"GenTypes.AllActiveAssemblies returned no assemblies".Log(MessageType.Error);
                 }
             }
