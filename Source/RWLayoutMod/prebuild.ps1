@@ -11,7 +11,7 @@ if (($ProjectDir -eq $null) -or
 	exit
 }
 
-# if (Test-Path $TargetDir) { Remove-Item -Recurse -Force "$TargetDir*" }
+if (Test-Path $TargetDir) { Remove-Item -Recurse -Force "$TargetDir*" }
 
 $version = git describe --tag  --dirty --always 
 $version | Out-File -NoNewline "$ProjectDir\git.txt"
