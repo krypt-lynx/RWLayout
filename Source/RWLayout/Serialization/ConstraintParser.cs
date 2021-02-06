@@ -74,6 +74,12 @@ namespace RWLayout.alpha2
             return prop.GetValue(view) as ClVariable;
         }
 
+        /// <summary>
+        /// Creates constraint from string representation
+        /// </summary>
+        /// <param name="constraint">string representation of constraint</param>
+        /// <param name="objects">id to object map</param>
+        /// <returns></returns>
         static public ClConstraint CreateConstraint(string constraint, Dictionary<string, object> objects)
         {
             ClLinearExpression expression = new ClLinearExpression();

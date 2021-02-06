@@ -9,6 +9,11 @@ namespace RWLayout.alpha2
 {
     static class Binder
     {
+        /// <summary>
+        /// Assigns valus from source to destination
+        /// </summary>
+        /// <param name="binding">binding information</param>
+        /// <param name="objects">id to object map</param>
         internal static void Assign(BindingPrototype binding, Dictionary<string, object> objects)
         {
             object srcObj = ReadObject(binding.Source, objects);
@@ -27,6 +32,12 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Reads the value at provided path
+        /// </summary>
+        /// <param name="path">path</param>
+        /// <param name="objects">id to object map</param>
+        /// <returns>value read</returns>
         internal static object ReadObject(BindingPath path, Dictionary<string, object> objects)
         {
             object obj = objects[path.Object];
