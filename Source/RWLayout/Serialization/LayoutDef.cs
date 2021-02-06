@@ -15,10 +15,9 @@ namespace RWLayout.alpha2
     public class LayoutDef : Def
     {
         [Unsaved(false)]
-        public ElementPrototype Prototype;
+        public ElementPrototype[] Views;
         [Unsaved(false)]
-        public List<BindingPrototype> Assignments;
-        public List<BindingPrototype> Bindings;
+        public BindingPrototype[] Assignments;
 
 
         public void LoadDataFromXmlCustom(XmlNode xmlRoot)
@@ -28,26 +27,25 @@ namespace RWLayout.alpha2
             if (node != null)
             {
                 defName = node.SelectSingleNode("defName/text()")?.Value;
-                var prototypeNode = node.SelectSingleNode("view/*") as XmlElement;
-                if (prototypeNode != null)
-                {
-                    Prototype = new ElementPrototype(prototypeNode);
-                }
+                var nodes = node.SelectNodes("views/*").WhereTypeIs<XmlElement>();
+
+                Views = nodes.Select(n => new ElementPrototype(n)).ToArray();
+
                 var bindingNodes = node.SelectNodes("bindings/binding");
                 Assignments = bindingNodes?.Cast<XmlElement>()
                     .Select(x => new BindingPrototype(x))
-                    .ToList();
+                    .ToArray();
             }
         }
 
-        public CElement Instantiate(Dictionary<string, object> externalObjects = null)
+        public CElement[] Instantiate(Dictionary<string, object> externalObjects = null)
         {
             Stopwatch timer = new Stopwatch();
             timer.Start();
             Dictionary<string, object> objectsMap = new Dictionary<string, object>(externalObjects);
             Dictionary<CElement, ElementPrototype> viewPrototypes = new Dictionary<CElement, ElementPrototype>();
 
-            CElement root = InstantiateViewsTree(Prototype, objectsMap, viewPrototypes);
+            var views = Views.Select(x => InstantiateViewsTree(x, objectsMap, viewPrototypes)).ToArray();
 
             ApplyConstraints(objectsMap, viewPrototypes);
             ApplyProperties(objectsMap, viewPrototypes);
@@ -56,11 +54,11 @@ namespace RWLayout.alpha2
             timer.Stop();
             $"LayoutDef{{{this.defName}}}: objects constructed in: {((decimal)timer.Elapsed.Ticks) / 10000000:0.0000000}".Log(MessageType.Message);
 
-            return root;
+            return views;
         }
 
 
-        private void ApplyAssignments(Dictionary<string, object> objectsMap, List<BindingPrototype> assignments)
+        private void ApplyAssignments(Dictionary<string, object> objectsMap, BindingPrototype[] assignments)
         {
             foreach (var assignment in assignments)
             {
@@ -179,7 +177,7 @@ namespace RWLayout.alpha2
             var src = x.GetAttribute("object");
             Source = new BindingPath(src);
 
-            var dst = x.GetAttribute("target");
+            var dst = x.GetAttribute("to");
             Target = new BindingPath(dst);
 
             if (Target.Member == null)

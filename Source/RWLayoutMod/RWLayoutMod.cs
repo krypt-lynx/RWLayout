@@ -147,7 +147,7 @@ namespace RWLayoutMod
                 { "mod", this },
                 { "settings", settings },
                 { "rwsettings", typeof(RWLayoutInfo) }
-            });
+            }).FirstOrDefault();
         }
     }
 }
