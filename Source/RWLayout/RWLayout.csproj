@@ -131,10 +131,10 @@
     <Compile Include="MiscTools\GuiTools+Geometry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\Bindable.cs" />
-    <Compile Include="Serialization\Binder.cs" />
+    <Compile Include="Serialization\PropertyWriter.cs" />
     <Compile Include="Serialization\ConstraintParser.cs" />
     <Compile Include="Serialization\GenReflection.cs" />
-    <Compile Include="Serialization\PropertyWriter.cs" />
+    <Compile Include="Serialization\Binder.cs" />
     <Compile Include="Serialization\LayoutDef.cs" />
   </ItemGroup>
   <ItemGroup>

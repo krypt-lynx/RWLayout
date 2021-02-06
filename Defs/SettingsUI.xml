@@ -12,6 +12,7 @@
 			<assign object="lognull" to="root.NullCheck"/>
 			<assign object="sticky" to="root.StickyCheck"/>
 		</assignments> -->
+		<!-- the same rules as in properties node of view -->
 		<objects/>
 		<views>
 			<CElement Id="root">

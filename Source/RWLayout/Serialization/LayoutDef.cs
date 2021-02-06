@@ -64,7 +64,7 @@ namespace RWLayout.alpha2
             {
                 try
                 {
-                    Binder.Assign(assignment, objectsMap);
+                    PropertyWriter.Assign(assignment, objectsMap);
                 }
                 catch (Exception e)
                 {
@@ -79,7 +79,7 @@ namespace RWLayout.alpha2
             {
                 try
                 {
-                    PropertyWriter.ApplyProperty(kvp.Key, kvp.Value.node, objectsMap);
+                    Binder.ApplyProperties(kvp.Key, kvp.Value.Properties, objectsMap);
                 }
                 catch (Exception e)
                 {
@@ -95,14 +95,14 @@ namespace RWLayout.alpha2
             {
                 if (kvp.Value.Constraints != null)
                 {
-                    foreach (var constraintData in kvp.Value.Constraints)
+                    foreach (var proptotype in kvp.Value.Constraints)
                     {
                         try
                         {
-                            var constraint = ConstraintParser.CreateConstraint(constraintData.Item2, objectsMap);
-                            if (constraintData.Item1 != null)
+                            var constraint = ConstraintParser.CreateConstraint(proptotype.Constraint, objectsMap);
+                            if (proptotype.Id != null)
                             {
-                                objectsMap[constraintData.Item1] = constraint;
+                                objectsMap[proptotype.Id] = constraint;
                             }
                             kvp.Key.AddConstraints(constraint);
                         } 
@@ -187,50 +187,93 @@ namespace RWLayout.alpha2
         }
     }
 
-    public class ElementPrototype
+
+    public class Prototype
+    {
+        public string Id;
+
+        public Prototype(XmlElement node)
+        {            
+            Id = node.HasAttribute("Id") ? node.GetAttribute("Id") : null;
+        }
+    }
+
+    public class PropertyPrototype : Prototype
+    {
+        public enum PropertyPrototypeKind
+        {
+            TextRepresentation,
+            AssignFrom,
+            BindValue,
+        }
+
+        public string Name;
+        public PropertyPrototypeKind Kind;
+        public string Value;
+        public bool Translate;
+        public BindingPath Path;
+        public Type TypeHint;
+
+        public PropertyPrototype(XmlElement node) : base(node)
+        {
+            Name = node.Name;
+            if (node.HasAttribute("bind"))
+            {
+                Kind = PropertyPrototypeKind.BindValue;
+                Path = new BindingPath(node.GetAttribute("bind"));
+            } 
+            else if (node.HasAttribute("object"))
+            {
+                Kind = PropertyPrototypeKind.AssignFrom;
+                Path = new BindingPath(node.GetAttribute("object"));
+            }
+            else
+            {
+                Kind = PropertyPrototypeKind.TextRepresentation;
+                var typeHintValue =
+                    node.GetAttributeNode("type")?.Value ??
+                    node.GetAttributeNode("class")?.Value;
+                TypeHint = typeHintValue != null ? GenReflection.GetRWType(typeHintValue) : null;
+                Value = node.InnerText;
+                Translate = node.GetAttribute("translate").ToLowerInvariant() == "true";
+            }
+        }
+
+        public override string ToString()
+        {
+            return $"{base.ToString()} {{Name: {Name}; Kind: {Kind};}}";
+        }
+    }
+
+    public class ConstraintPrototype : Prototype
+    {
+        public string Constraint;
+
+        public ConstraintPrototype(XmlElement node) : base(node) {
+            Constraint = node.InnerText.Trim(" \n\r\t".ToCharArray());
+        }
+    }
+
+    public class ElementPrototype : Prototype
     {
 
-        public List<ElementPrototype> Subviews;
-        public List<(string, string)> Constraints;
-        public string Id;
+        public ElementPrototype[] Subviews;
+        public ConstraintPrototype[] Constraints;
+        public PropertyPrototype[] Properties;
+
         public string Class;
 
-        public XmlElement node;
 
-        public ElementPrototype(XmlElement node)
+        public ElementPrototype(XmlElement node) : base(node)
         {
             Class = node.Name;
-            Id = node.GetAttribute("Id");
-
-            this.node = node;
-
-            var viewNodes = node.SelectNodes("subviews/*").WhereTypeIs<XmlElement>();
-
-            Subviews = viewNodes.Select(x => new ElementPrototype(x)).ToList();
-
-            var constraintNodes = node.SelectNodes("constraints/constraint").Cast<XmlElement>();
-            Constraints = constraintNodes.Select(x => (x.HasAttribute("Id") ? x.GetAttribute("Id") : null, x.InnerText.Trim(" \n\r\t".ToCharArray()))).ToList();
-            /*
-            var constraintNodes = node.SelectNodes("constraints/constraint/text()");
-            Constraints = constraintNodes?.AsEnumerable<XmlNode>()
-                .Select(x => x?.Value)
-                .Select(x => x?.Trim(" \n\r\t".ToCharArray()))
-                .Where(x => x?.Length > 0)
-                .Where(x => x != null)
-                .ToList();*/
+            
+            Subviews = node.SelectNodes("subviews/*").WhereTypeIs<XmlElement>()
+                .Select(x => new ElementPrototype(x)).ToArray();
+            Constraints = node.SelectNodes("constraints/constraint").WhereTypeIs<XmlElement>()
+                .Select(x => new ConstraintPrototype(x)).ToArray();
+            Properties = node.SelectNodes("properties/*").WhereTypeIs<XmlElement>()
+                .Select(x => new PropertyPrototype(x)).ToArray();
         }
-
-
-
-        internal void ParseConstraints(XmlElement prototypeNode)
-        {
-            throw new NotImplementedException();
-        }
-
-        /*
-        private void ParseConstraints(string constraintsStr)
-        {
-            throw new NotImplementedException();
-        }*/
     }
 }

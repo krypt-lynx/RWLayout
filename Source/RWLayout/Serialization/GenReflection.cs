@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using Verse;
 
 namespace RWLayout.alpha2
 {
@@ -53,7 +54,6 @@ namespace RWLayout.alpha2
                 }
             }
         }
-
 
         public Type TargetType
         {
@@ -206,6 +206,13 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Constructs propperty getter wrapper method for provided property info
+        /// </summary>
+        /// <typeparam name="T">Type of the property, should match prop.PropertyType</typeparam>
+        /// <param name="prop">The property getter wrapper is constructed for</param>
+        /// <returns>The getter wrapper method</returns>
+        /// <remarks>Created getter wrapper is bound to type of object owning the prorerty. Func object argument must be of this type or of one of its subclasses</remarks>
         private static Func<object, T> CreateGetPropertyValueDelegate<T>(PropertyInfo prop)
         {
             DynamicMethod getter = new DynamicMethod($"get_{prop.DeclaringType.Name}_{prop.Name}", typeof(T), new Type[] { typeof(object) }, true);
@@ -228,6 +235,13 @@ namespace RWLayout.alpha2
             return (Func<object, T>)getter.CreateDelegate(typeof(Func<object, T>));
         }
 
+        /// <summary>
+        /// Constructs field getter method for provided field info
+        /// </summary>
+        /// <typeparam name="T">Type of the field, should match field.FieldType</typeparam>
+        /// <param name="field">The field getter is constructed for</param>
+        /// <returns>The getter method</returns>
+        /// <remarks>Created getter is bound to type of object owning the field. Func object argument must be of this type or of one of its subclasses</remarks>
         private static Func<object, T> CreateGetFieldValueDelegate<T>(FieldInfo field)
         {
             DynamicMethod getter = new DynamicMethod($"get_{field.DeclaringType.Name}_{field.Name}", typeof(T), new Type[] { typeof(object) }, true);
@@ -270,6 +284,13 @@ namespace RWLayout.alpha2
             }
         }
 
+        /// <summary>
+        /// Constructs propperty setter wrapper method for provided property info
+        /// </summary>
+        /// <typeparam name="T">Type of the property, should match prop.PropertyType</typeparam>
+        /// <param name="prop">The property setter wrapper is constructed for</param>
+        /// <returns>The setter wrapper method</returns>
+        /// <remarks>Created setter wrapper is bound to type of object owning the prorerty. Action object argument must be of this type or of one of its subclasses</remarks>
         private static Action<object, T> CreateSetPropertyValueDelegate<T>(PropertyInfo prop)
         {
             DynamicMethod getter = new DynamicMethod($"set_{prop.DeclaringType.Name}_{prop.Name}", null, new Type[] { typeof(object), typeof(T) }, true);
@@ -294,6 +315,13 @@ namespace RWLayout.alpha2
             return (Action<object, T>)getter.CreateDelegate(typeof(Action<object, T>));
         }
 
+        /// <summary>
+        /// Constructs field setter method for provided field info
+        /// </summary>
+        /// <typeparam name="T">type of the field, should match field.FieldType</typeparam>
+        /// <param name="field">the field getter is constructed for</param>
+        /// <returns>the setter method</returns>
+        /// <remarks>Created setter is bound to type of object owning the field. Action object argument must be of this type or of one of its subclasses</remarks>
         private static Action<object, T> CreateSetFieldValueDelegate<T>(FieldInfo field)
         {
             DynamicMethod getter = new DynamicMethod($"set_{field.DeclaringType.Name}_{field.Name}", null, new Type[] { typeof(object), typeof(T) }, true);
@@ -315,6 +343,14 @@ namespace RWLayout.alpha2
             }
 
             return (Action<object, T>)getter.CreateDelegate(typeof(Action<object, T>));
+        }
+
+        public static Type GetRWType(string typeName)
+        {
+            const string ns = "RWLayout.alpha2";
+            Type valueType = GenTypes.GetTypeInAnyAssembly(typeName, ns);
+            valueType ??= GenTypes.GetTypeInAnyAssembly($"{ns}.{typeName}", ns);
+            return valueType;
         }
     }
 }
