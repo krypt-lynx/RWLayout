@@ -210,6 +210,7 @@ namespace RWLayout.alpha2
                     }
                     break;
                 case ParseState.equality:
+                    throw new FormatException($"unexpected end of expression: {constraint}");
                 case ParseState.syntaxError:
                     throw new FormatException($"syntax error: {constraint}");
                 default:
@@ -223,16 +224,20 @@ namespace RWLayout.alpha2
         {
             switch (strengthName.ToLowerInvariant())
             {
+                case "r":
                 case "required":
                     return ClStrength.Required;
+                case "s":
                 case "strong":
                     return ClStrength.Strong;
+                case "m":
                 case "medium":
                     return ClStrength.Medium;
+                case "w":
                 case "weak":
                     return ClStrength.Weak;
                 default:
-                    throw new ArgumentException($"{strengthName} is not a valid strengthName", nameof(strengthName));
+                    throw new ArgumentException($"{strengthName} is not a valid constraint strength mame", nameof(strengthName));
             }
         }
     }
