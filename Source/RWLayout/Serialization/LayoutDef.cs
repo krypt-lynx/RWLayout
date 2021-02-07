@@ -95,14 +95,14 @@ namespace RWLayout.alpha2
             {
                 if (kvp.Value.Constraints != null)
                 {
-                    foreach (var proptotype in kvp.Value.Constraints)
+                    foreach (var prototype in kvp.Value.Constraints)
                     {
                         try
                         {
-                            var constraint = ConstraintParser.CreateConstraint(proptotype.Constraint, objectsMap);
-                            if (proptotype.Id != null)
+                            var constraint = prototype.Materialize(objectsMap);
+                            if (prototype.Id != null)
                             {
-                                objectsMap[proptotype.Id] = constraint;
+                                objectsMap[prototype.Id] = constraint;
                             }
                             kvp.Key.AddConstraints(constraint);
                         } 
@@ -247,11 +247,50 @@ namespace RWLayout.alpha2
 
     public class ConstraintPrototype : Prototype
     {
-        public string Constraint;
+        public ConstraintDescription Constraint;
 
         public ConstraintPrototype(XmlElement node) : base(node) {
-            Constraint = node.InnerText.Trim(" \n\r\t".ToCharArray());
+            Constraint = new ConstraintParser().Parse(node.InnerText.Trim(" \n\r\t".ToCharArray()));
         }
+
+        internal ClLinearConstraint Materialize(Dictionary<string, object> objectsMap)
+        {
+            ClLinearExpression expression = new ClLinearExpression();
+            foreach (var term in Constraint.Terms)
+            {
+                if (term.OwnerId != null)
+                {
+                    var anchor = GetAnchor(term.OwnerId, term.AnchorName, objectsMap);
+                    expression.AddVariable(anchor, term.Multiplier);
+                }
+                else
+                {
+                    expression.Constant += term.Multiplier;
+                }
+
+            }
+
+            return new ClLinearConstraint(expression, Constraint.Operator, Constraint.Strength);
+        }
+
+        static private ClVariable GetAnchor(string viewId, string anchorName, Dictionary<string, object> objects)
+        {
+            if (!objects.ContainsKey(viewId))
+            {
+                throw new ArgumentOutOfRangeException($"{viewId} is not a known view Id", nameof(viewId));
+            }
+
+            var view = objects[viewId];
+
+            var prop = view.GetType().GetMemberHandler(anchorName, BindingFlags.Public | BindingFlags.Instance);
+            if (prop == null || !typeof(ClAbstractVariable).IsAssignableFrom(prop.TargetType))
+            {
+                throw new Exception($"{anchorName} is not an anchor in object {view}");
+            }
+
+            return prop.GetValue(view) as ClVariable;
+        }
+
     }
 
     public class ElementPrototype : Prototype
