@@ -107,6 +107,7 @@
     <Compile Include="Elements\CElement\CElement+hierarchy.cs" />
     <Compile Include="Elements\CElement\CElement.cs" />
     <Compile Include="Elements\Controls\Obsolete\CButton.cs" />
+    <Compile Include="Elements\CTabsView.cs" />
     <Compile Include="Elements\CTextuteElement.cs" />
     <Compile Include="Elements\CTintedElement.cs" />
     <Compile Include="Elements\GuiHosts\CElementHost.cs" />
