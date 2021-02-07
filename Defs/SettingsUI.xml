@@ -58,9 +58,9 @@
 					</CLabel>
 				</subviews>
 				<constraints>
-					<constraint>dlayout.top == root.top</constraint>
+					<constraint strength="strong">dlayout.top == root.top</constraint>
 					<constraint>vlogging.top == dlayout.bottom+2</constraint>
-					<constraint>strong:lognull.top == vlogging.bottom+10</constraint>
+					<constraint>lognull.top == vlogging.bottom+10</constraint>
 					<constraint>sticky.top == lognull.bottom+2</constraint>
 					<constraint>aaass.top == sticky.bottom+2</constraint>
 					<constraint>noexamples.top == aaass.bottom+20</constraint>

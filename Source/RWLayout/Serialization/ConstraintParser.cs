@@ -25,14 +25,10 @@ namespace RWLayout.alpha2
     {
         public List<ConstraintSegment> Terms;
         public Cl.Operator Operator;
-        public ClStrength Strength;
 
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append(Strength.Name);
-            sb.Append(":");
-
             bool isFirst = true;
 
             foreach (var term in Terms)
@@ -158,9 +154,6 @@ namespace RWLayout.alpha2
         /// </summary>
         StringBuilder word = new StringBuilder();
 
-
-        bool willAcceptStrength = true;
-
         bool eqRelationDefined = false;
 
         bool hasLeadNumber = false; // lead: +c*x -c*x  post: +x*c +x/c -x*c -x/c
@@ -176,7 +169,6 @@ namespace RWLayout.alpha2
             {
                 if (eqRelationDefined)
                 {
-                    willAcceptStrength = false;
                     AppendCurrentTerm();
                     return ConstraintParserState.done;
                 }
@@ -188,7 +180,6 @@ namespace RWLayout.alpha2
             }
             else if (char.IsDigit(ch))
             {
-                willAcceptStrength = false;
                 word.Append(ch);
                 return ConstraintParserState.leadNumber;
             }
@@ -199,7 +190,6 @@ namespace RWLayout.alpha2
             }
             else if (IsMultiplicationOperator(ch))
             {
-                willAcceptStrength = false;
                 SetMultipler();
                 segmentOp = ch;
                 hasLeadNumber = true;
@@ -207,7 +197,6 @@ namespace RWLayout.alpha2
             }
             else if (IsAditionOperator(ch))
             {
-                willAcceptStrength = false;
                 AppendCurrentTerm();
                 segmentSign = ch;
                 return ConstraintParserState.firstChar;
@@ -216,7 +205,6 @@ namespace RWLayout.alpha2
             {
                 if (!eqRelationDefined)
                 {
-                    willAcceptStrength = false;
                     AppendCurrentTerm();
                     SetEquationSign(ch);
                     return ConstraintParserState.equality;
@@ -272,7 +260,6 @@ namespace RWLayout.alpha2
             {
                 if (!eqRelationDefined)
                 {
-                    willAcceptStrength = false;
                     SetMultipler();
                     AppendCurrentTerm();
                     SetEquationSign(ch);
@@ -302,20 +289,6 @@ namespace RWLayout.alpha2
             {
                 word.Append(ch);
                 return ConstraintParserState.word;
-            }
-            else if (ch == ':')
-            {
-                if (willAcceptStrength)
-                {
-                    SetStrength();
-                    willAcceptStrength = false;
-                    return ConstraintParserState.firstChar;
-                }
-                else
-                {
-                    errorMessage = "Unexpected symbol";
-                    return ConstraintParserState.syntaxError;
-                }
             }
             else if (ch == '.')
             {
@@ -375,7 +348,6 @@ namespace RWLayout.alpha2
             {
                 if (!eqRelationDefined)
                 {
-                    willAcceptStrength = false;
                     SetAnchor();
                     AppendCurrentTerm();
                     SetEquationSign(ch);
@@ -426,7 +398,6 @@ namespace RWLayout.alpha2
             {
                 if (!eqRelationDefined)
                 {
-                    willAcceptStrength = false;
                     SetMultipler();
                     AppendCurrentTerm();
                     SetEquationSign(ch);
@@ -479,15 +450,6 @@ namespace RWLayout.alpha2
         private void SetTarget()
         {
             segmentTarget = word.ToString();
-            word.Clear();
-        }
-
-        /// <summary>
-        /// sets strength and resets the word
-        /// </summary>
-        private void SetStrength()
-        {
-            prototype.Strength = GetStrength(word.ToString());
             word.Clear();
         }
 
@@ -585,35 +547,12 @@ namespace RWLayout.alpha2
             return equalityCharSet.Contains(ch);
         }
 
-        static ClStrength GetStrength(string strengthName)
-        {
-            switch (strengthName.ToLowerInvariant())
-            {
-                case "r":
-                case "required":
-                    return ClStrength.Required;
-                case "s":
-                case "strong":
-                    return ClStrength.Strong;
-                case "m":
-                case "medium":
-                    return ClStrength.Medium;
-                case "w":
-                case "weak":
-                    return ClStrength.Weak;
-                default:
-                    throw new ArgumentException($"{strengthName} is not a valid constraint strength mame", nameof(strengthName));
-            }
-        }
-
         public ConstraintDescription Parse(string constraint)
         {
             state = ConstraintParserState.firstChar;
             word.Clear();
-            willAcceptStrength = true;
             prototype = new ConstraintDescription();
             prototype.Terms = new List<ConstraintSegment>();
-            prototype.Strength = ClStrength.Default;
             errorMessage = null;
 
             int charNumber = 0;

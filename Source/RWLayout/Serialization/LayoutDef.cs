@@ -247,10 +247,33 @@ namespace RWLayout.alpha2
 
     public class ConstraintPrototype : Prototype
     {
+        public ClStrength Strength;
         public ConstraintDescription Constraint;
 
-        public ConstraintPrototype(XmlElement node) : base(node) {
+        public ConstraintPrototype(XmlElement node) : base(node) 
+        {
+            Strength = node.HasAttribute("strength") ? GetStrength(node.GetAttribute("strength")) : ClStrength.Default;
             Constraint = new ConstraintParser().Parse(node.InnerText.Trim(" \n\r\t".ToCharArray()));
+        }
+
+        static ClStrength GetStrength(string strengthName)
+        {
+            switch (strengthName.ToLowerInvariant())
+            {
+                case "default":
+                    return ClStrength.Default;
+                case "required":
+                    return ClStrength.Required;
+                case "strong":
+                    return ClStrength.Strong;
+                case "medium":
+                    return ClStrength.Medium;
+                case "weak":
+                    return ClStrength.Weak;
+                default:
+                    $"{strengthName} is not a valid constraint strength mame".Log(MessageType.Error);
+                    return ClStrength.Default;
+            }
         }
 
         internal ClLinearConstraint Materialize(Dictionary<string, object> objectsMap)
@@ -267,10 +290,9 @@ namespace RWLayout.alpha2
                 {
                     expression.Constant += term.Multiplier;
                 }
-
             }
 
-            return new ClLinearConstraint(expression, Constraint.Operator, Constraint.Strength);
+            return new ClLinearConstraint(expression, Constraint.Operator, Strength);
         }
 
         static private ClVariable GetAnchor(string viewId, string anchorName, Dictionary<string, object> objects)
