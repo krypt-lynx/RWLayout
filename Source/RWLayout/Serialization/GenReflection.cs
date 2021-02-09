@@ -247,17 +247,19 @@ namespace RWLayout.alpha2
             DynamicMethod getter = new DynamicMethod($"get_{field.DeclaringType.Name}_{field.Name}", typeof(T), new Type[] { typeof(object) }, true);
             ILGenerator gen = getter.GetILGenerator();
 
-            gen.Emit(OpCodes.Ldarg_0);
-            gen.Emit(OpCodes.Castclass, field.DeclaringType);
+
             if (field.IsStatic)
             {
                 gen.Emit(OpCodes.Ldsfld, field);
+                gen.Emit(OpCodes.Ret);
             }
             else
             {
+                gen.Emit(OpCodes.Ldarg_0);
+                gen.Emit(OpCodes.Castclass, field.DeclaringType);
                 gen.Emit(OpCodes.Ldfld, field);
+                gen.Emit(OpCodes.Ret);
             }
-            gen.Emit(OpCodes.Ret);
 
             return (Func<object, T>)getter.CreateDelegate(typeof(Func<object, T>));
         }
