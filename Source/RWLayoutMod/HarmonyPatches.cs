@@ -25,15 +25,16 @@ namespace RWLayoutMod
             return true;
         }
 
-        static FieldInfo WindowResizer_isResizing = typeof(WindowResizer).GetField("isResizing", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+        static Func<WindowResizer, bool> get_WindowResizer_isResizing = RWLayout.alpha2.FastAccess.Dynamic.InstanceGetField<WindowResizer, bool>("isResizing");
+        static Action<WindowResizer, bool> set_WindowResizer_isResizing = RWLayout.alpha2.FastAccess.Dynamic.InstanceSetField<WindowResizer, bool>("isResizing");
         internal static void DoResizeControl_postfix(WindowResizer __instance)
         {
-            bool isResizing = (bool)WindowResizer_isResizing.GetValue(__instance);
+            bool isResizing = get_WindowResizer_isResizing(__instance);
             if (isResizing)
             {
                 if (!Input.GetMouseButton(0))
                 {
-                    WindowResizer_isResizing.SetValue(__instance, false);
+                    set_WindowResizer_isResizing(__instance, false);
                 }
             }
         }
