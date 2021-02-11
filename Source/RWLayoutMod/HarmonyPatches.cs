@@ -25,8 +25,8 @@ namespace RWLayoutMod
             return true;
         }
 
-        static Func<WindowResizer, bool> get_WindowResizer_isResizing = RWLayout.alpha2.FastAccess.Dynamic.InstanceGetField<WindowResizer, bool>("isResizing");
-        static Action<WindowResizer, bool> set_WindowResizer_isResizing = RWLayout.alpha2.FastAccess.Dynamic.InstanceSetField<WindowResizer, bool>("isResizing");
+        static Func<WindowResizer, bool> get_WindowResizer_isResizing = RWLayout.alpha2.FastAccess.Dynamic.ObjectGetField<WindowResizer, bool>("isResizing");
+        static Action<WindowResizer, bool> set_WindowResizer_isResizing = RWLayout.alpha2.FastAccess.Dynamic.ObjectSetField<WindowResizer, bool>("isResizing");
         internal static void DoResizeControl_postfix(WindowResizer __instance)
         {
             bool isResizing = get_WindowResizer_isResizing(__instance);

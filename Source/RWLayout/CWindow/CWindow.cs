@@ -24,7 +24,7 @@ namespace RWLayout.alpha2
     {
         CWindowResizer resizer;
 
-        static Action<Window, WindowResizer> set_Window_resizer = Dynamic.InstanceSetField<Window, WindowResizer>("resizer");
+        static Action<Window, WindowResizer> set_Window_resizer = Dynamic.ObjectSetField<Window, WindowResizer>("resizer");
         public override void WindowOnGUI()
         {
             if (resizer == null)

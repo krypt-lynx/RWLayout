@@ -123,6 +123,7 @@
     <Compile Include="FastAccess\Dynamic+Field.cs" />
     <Compile Include="FastAccess\Dynamic+InstanceRetMethod.cs" />
     <Compile Include="FastAccess\Dynamic+InstanceVoidMethod.cs" />
+    <Compile Include="FastAccess\Dynamic+Property.cs" />
     <Compile Include="FastAccess\Dynamic+StaticRetMethod.cs" />
     <Compile Include="FastAccess\Dynamic+StaticVoidMethod.cs" />
     <Compile Include="FastAccess\Dynamic.cs" />
