@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RWLayout.alpha2.FastAccess;
 
-namespace RWLayoutTests
+namespace RWLayoutTests.FastAccess
 {
     [TestClass]
     public class FastAccess_ClassInstance

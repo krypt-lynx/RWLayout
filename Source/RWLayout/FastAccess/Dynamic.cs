@@ -38,6 +38,10 @@ namespace RWLayout.alpha2.FastAccess
         }
     }
 
+    public delegate TValue ByRefGetter<TInstance, out TValue>(ref TInstance instance);
+    public delegate void ByRefSetter<TInstance, in TValue>(ref TInstance instance, TValue value);
+
+
     public partial class Dynamic
     {
         public static Delegate CreateMethodCaller(Type delegateType, MethodInfo method, Type return_, Type this_, params Type[] args)
@@ -57,10 +61,12 @@ namespace RWLayout.alpha2.FastAccess
             {
                 if (this_.IsValueType)
                 {
+                    // Struct;
                     gen.EmitLdarga((byte)argIndex++);
                 }
                 else 
                 {
+                    // Class; ref Struct;
                     gen.EmitLdarg((byte)argIndex++);
                 }
             }

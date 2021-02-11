@@ -48,7 +48,8 @@ namespace RWLayout.alpha2
 
         public static string BuildExceptionMessage(string message, Exception e)
         {
-            var result = $"{message}: {e.GetType().Name}: {e.Message}\n";
+            var result = $"{message}: {e.GetType().Name}: {e.Message}\n{e.StackTrace}\n";
+
             if (e.InnerException != null)
             {
                 result += BuildExceptionMessage("Inner Exception", e.InnerException);

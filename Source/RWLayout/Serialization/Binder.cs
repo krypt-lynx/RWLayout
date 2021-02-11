@@ -85,7 +85,7 @@ namespace RWLayout.alpha2
             if (dstProp != null && IsCompatibleBindable(dstProp.MemberType(), srcProp.MemberType()))
             {
                 var dstObj = dstProp.GetValue(view);
-                dstProp.MemberType().GetMethod(nameof(Bindable<object>.Bind), BindingFlags.Instance | BindingFlags.NonPublic)
+                dstProp.MemberType().GetMethod(nameof(Bindable<object>.Bind), BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new Type[] { typeof(object), typeof(MemberInfo) }, null)
                     .Invoke(dstObj, new object[] { srcObject, srcProp });
                 $"Binded {srcProp} of {srcValue} to {dstProp}".Log();
             }

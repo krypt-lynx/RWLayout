@@ -101,6 +101,11 @@ namespace RWLayout.alpha2
                 throw new Exception($"type {obj.GetType()} of binded object {obj} does not match type {typeof(T)} of the property");
             }
 
+            if (!prop.IsStatic() && prop.DeclaringType.IsValueType)
+            {
+                throw new Exception($"trying to bind an object {obj} of unsupported type {obj.GetType()}: cannot build instances of value types");
+            }
+
             this.binded = obj != null ? new WeakReference(obj) : null;
             bindedToStatic = prop.IsStatic();
 
@@ -115,7 +120,7 @@ namespace RWLayout.alpha2
                     $"Member {prop} is binded to read, but it cannot be readen".Log(MessageType.Error);
                 }
             }
-            if (ReadMode != BindingMode.None)
+            if (WriteMode != BindingMode.None)
             {
                 if (MemberHandler.CanWrite(prop))
                 {

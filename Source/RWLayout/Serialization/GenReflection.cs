@@ -198,10 +198,22 @@ namespace RWLayout.alpha2
             }
             else
             {
-                gen.Emit(OpCodes.Ldarg_0);
-                gen.Emit(OpCodes.Castclass, prop.DeclaringType);
-                gen.Emit(OpCodes.Callvirt, method);
-                gen.Emit(OpCodes.Ret);
+                if (prop.DeclaringType.IsValueType)
+                {
+                    gen.Emit(OpCodes.Ldarg_0);
+                    gen.Emit(OpCodes.Unbox_Any, prop.DeclaringType);
+                    gen.Emit(OpCodes.Stloc_0);
+                    gen.Emit(OpCodes.Ldloca_S, (byte)0);
+                    gen.Emit(OpCodes.Call, method);
+                    gen.Emit(OpCodes.Ret);
+                }
+                else
+                {
+                    gen.Emit(OpCodes.Ldarg_0);
+                    gen.Emit(OpCodes.Castclass, prop.DeclaringType);
+                    gen.Emit(OpCodes.Callvirt, method);
+                    gen.Emit(OpCodes.Ret);
+                }
             }
 
             return (Func<object, T>)getter.CreateDelegate(typeof(Func<object, T>));
@@ -227,10 +239,20 @@ namespace RWLayout.alpha2
             }
             else
             {
-                gen.Emit(OpCodes.Ldarg_0);
-                gen.Emit(OpCodes.Castclass, field.DeclaringType);
-                gen.Emit(OpCodes.Ldfld, field);
-                gen.Emit(OpCodes.Ret);
+                if (field.DeclaringType.IsValueType)
+                {
+                    gen.Emit(OpCodes.Ldarg_0);
+                    gen.Emit(OpCodes.Unbox, field.DeclaringType);
+                    gen.Emit(OpCodes.Ldfld, field);
+                    gen.Emit(OpCodes.Ret);
+                }
+                else
+                {
+                    gen.Emit(OpCodes.Ldarg_0);
+                    gen.Emit(OpCodes.Castclass, field.DeclaringType);
+                    gen.Emit(OpCodes.Ldfld, field);
+                    gen.Emit(OpCodes.Ret);
+                }
             }
 
             return (Func<object, T>)getter.CreateDelegate(typeof(Func<object, T>));
@@ -279,11 +301,18 @@ namespace RWLayout.alpha2
             }
             else
             {
-                gen.Emit(OpCodes.Ldarg_0);
-                gen.Emit(OpCodes.Castclass, prop.DeclaringType);
-                gen.Emit(OpCodes.Ldarg_1);
-                gen.Emit(OpCodes.Callvirt, method);
-                gen.Emit(OpCodes.Ret);
+                if (prop.DeclaringType.IsValueType)
+                {
+                    throw new Exception($"Unsupported type {prop.DeclaringType} cannot write instance propeties of value types");
+                }   
+                else
+                { 
+                    gen.Emit(OpCodes.Ldarg_0);
+                    gen.Emit(OpCodes.Castclass, prop.DeclaringType);
+                    gen.Emit(OpCodes.Ldarg_1);
+                    gen.Emit(OpCodes.Callvirt, method);
+                    gen.Emit(OpCodes.Ret);
+                }
             }
 
             return (Action<object, T>)getter.CreateDelegate(typeof(Action<object, T>));
@@ -309,11 +338,18 @@ namespace RWLayout.alpha2
             }
             else
             {
-                gen.Emit(OpCodes.Ldarg_0);
-                gen.Emit(OpCodes.Castclass, field.DeclaringType);
-                gen.Emit(OpCodes.Ldarg_1);
-                gen.Emit(OpCodes.Stfld, field);
-                gen.Emit(OpCodes.Ret);
+                if (field.DeclaringType.IsValueType)
+                {
+                    throw new Exception($"Unsupported type {field.DeclaringType} cannot write instance fields of value types");
+                }
+                else
+                {
+                    gen.Emit(OpCodes.Ldarg_0);
+                    gen.Emit(OpCodes.Castclass, field.DeclaringType);
+                    gen.Emit(OpCodes.Ldarg_1);
+                    gen.Emit(OpCodes.Stfld, field);
+                    gen.Emit(OpCodes.Ret);
+                }
             }
 
             return (Action<object, T>)getter.CreateDelegate(typeof(Action<object, T>));

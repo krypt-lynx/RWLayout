@@ -120,6 +120,7 @@
     <Compile Include="CWindow\CWindowRoot.cs" />
     <Compile Include="Elements\GuiHosts\CListingRow.cs" />
     <Compile Include="Elements\CListingStandart.cs" />
+    <Compile Include="FastAccess\Dynamic+StructMethod.cs" />
     <Compile Include="FastAccess\Dynamic+Field.cs" />
     <Compile Include="FastAccess\Dynamic+InstanceRetMethod.cs" />
     <Compile Include="FastAccess\Dynamic+InstanceVoidMethod.cs" />

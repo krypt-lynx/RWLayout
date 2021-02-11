@@ -49,10 +49,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Binding.cs" />
     <Compile Include="FastAccess_StructInstance.cs" />
     <Compile Include="FastAccess_StructStatic.cs" />
     <Compile Include="FastAccess_ClassStatic.cs" />
     <Compile Include="FastAccess_ClassInstance.cs" />
+    <Compile Include="PerfTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
