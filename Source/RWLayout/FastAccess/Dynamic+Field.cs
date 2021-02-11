@@ -10,23 +10,23 @@ namespace RWLayout.alpha2.FastAccess
 {
     public partial class Dynamic
     {
-        public static Func<TInstance, TField> InstanceGetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+        public static Getter<TInstance, TField> InstanceGetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : class
         {
             return InstanceGetField<TInstance, TField>(typeof(TInstance).GetField(fieldName, bindingAttr));
         }
 
-        public static Action<TInstance, TField> InstanceSetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+        public static Setter<TInstance, TField> InstanceSetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : class
         {
             return InstanceSetField<TInstance, TField>(typeof(TInstance).GetField(fieldName, bindingAttr));
         }
 
 
-        public static ByRefGetter<TInstance, TField> StructGetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+        public static ByRefGetter<TInstance, TField> StructGetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : struct
         {
             return StructGetField<TInstance, TField>(typeof(TInstance).GetField(fieldName, bindingAttr));
         }
 
-        public static ByRefSetter<TInstance, TField> StructSetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+        public static ByRefSetter<TInstance, TField> StructSetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : struct
         {
             return StructSetField<TInstance, TField>(typeof(TInstance).GetField(fieldName, bindingAttr));
         }
@@ -45,7 +45,7 @@ namespace RWLayout.alpha2.FastAccess
 
 
 
-        public static Func<TInstance, TField> InstanceGetField<TInstance, TField>(FieldInfo field)
+        public static Getter<TInstance, TField> InstanceGetField<TInstance, TField>(FieldInfo field) where TInstance : class
         {
             DynamicMethod getter = new DynamicMethod($"get_{field.DeclaringType.Name}_{field.Name}", typeof(TField), new Type[] { typeof(TInstance) }, true);
             ILGenerator gen = getter.GetILGenerator();
@@ -54,10 +54,10 @@ namespace RWLayout.alpha2.FastAccess
             gen.Emit(OpCodes.Ldfld, field);
             gen.Emit(OpCodes.Ret);
 
-            return (Func<TInstance, TField>)getter.CreateDelegate(typeof(Func<TInstance, TField>));
+            return (Getter<TInstance, TField>)getter.CreateDelegate(typeof(Getter<TInstance, TField>));
         }
 
-        public static Action<TInstance, TField> InstanceSetField<TInstance, TField>(FieldInfo field)
+        public static Setter<TInstance, TField> InstanceSetField<TInstance, TField>(FieldInfo field) where TInstance : class
         {
             DynamicMethod getter = new DynamicMethod($"set_{field.DeclaringType.Name}_{field.Name}", null, new Type[] { typeof(TInstance), typeof(TField) }, true);
             ILGenerator gen = getter.GetILGenerator();
@@ -67,11 +67,11 @@ namespace RWLayout.alpha2.FastAccess
             gen.Emit(OpCodes.Stfld, field);
             gen.Emit(OpCodes.Ret);
 
-            return (Action<TInstance, TField>)getter.CreateDelegate(typeof(Action<TInstance, TField>));
+            return (Setter<TInstance, TField>)getter.CreateDelegate(typeof(Setter<TInstance, TField>));
         }
 
 
-        public static ByRefGetter<TInstance, TField> StructGetField<TInstance, TField>(FieldInfo field)
+        public static ByRefGetter<TInstance, TField> StructGetField<TInstance, TField>(FieldInfo field) where TInstance : struct
         {
             DynamicMethod getter = new DynamicMethod($"get_{field.DeclaringType.Name}_{field.Name}", typeof(TField), new Type[] { typeof(TInstance).MakeByRefType() }, true);
             ILGenerator gen = getter.GetILGenerator();
@@ -83,7 +83,7 @@ namespace RWLayout.alpha2.FastAccess
             return (ByRefGetter<TInstance, TField>)getter.CreateDelegate(typeof(ByRefGetter<TInstance, TField>));
         }
 
-        public static ByRefSetter<TInstance, TField> StructSetField<TInstance, TField>(FieldInfo field)
+        public static ByRefSetter<TInstance, TField> StructSetField<TInstance, TField>(FieldInfo field) where TInstance : struct
         {
             DynamicMethod getter = new DynamicMethod($"set_{field.DeclaringType.Name}_{field.Name}", null, new Type[] { typeof(TInstance).MakeByRefType(), typeof(TField) }, true);
             ILGenerator gen = getter.GetILGenerator();

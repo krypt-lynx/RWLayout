@@ -38,8 +38,11 @@ namespace RWLayout.alpha2.FastAccess
         }
     }
 
-    public delegate TValue ByRefGetter<TInstance, out TValue>(ref TInstance instance);
-    public delegate void ByRefSetter<TInstance, in TValue>(ref TInstance instance, TValue value);
+    public delegate TValue Getter<in TInstance, out TValue>(TInstance instance) where TInstance : class;
+    public delegate void Setter<in TInstance, in TValue>(TInstance instance, TValue value) where TInstance : class;
+
+    public delegate TValue ByRefGetter<TInstance, out TValue>(ref TInstance instance) where TInstance : struct;
+    public delegate void ByRefSetter<TInstance, in TValue>(ref TInstance instance, TValue value) where TInstance : struct;
 
 
     public partial class Dynamic

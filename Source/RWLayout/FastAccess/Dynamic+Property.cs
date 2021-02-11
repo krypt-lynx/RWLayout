@@ -14,12 +14,12 @@ namespace RWLayout.alpha2.FastAccess
 
     public partial class Dynamic
     {
-        public static Func<TInstance, TProperty> InstanceGetProperty<TInstance, TProperty>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+        public static Getter<TInstance, TProperty> InstanceGetProperty<TInstance, TProperty>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : class
         {
             return InstanceGetProperty<TInstance, TProperty>(typeof(TInstance).GetProperty(fieldName, bindingAttr));
         }
 
-        public static Action<TInstance, TProperty> InstanceSetProperty<TInstance, TProperty>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+        public static Setter<TInstance, TProperty> InstanceSetProperty<TInstance, TProperty>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : class
         {
             return InstanceSetProperty<TInstance, TProperty>(typeof(TInstance).GetProperty(fieldName, bindingAttr));
         }
@@ -34,19 +34,19 @@ namespace RWLayout.alpha2.FastAccess
             return StaticSetProperty<TProperty>(typeof(TInstance).GetProperty(fieldName, bindingAttr));
         }
 
-        public static ByRefGetter<TInstance, TProperty> StructGetProperty<TInstance, TProperty>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+        public static ByRefGetter<TInstance, TProperty> StructGetProperty<TInstance, TProperty>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : struct
         {
             return StructGetProperty<TInstance, TProperty>(typeof(TInstance).GetProperty(fieldName, bindingAttr));
         }
 
-        public static ByRefSetter<TInstance, TProperty> StructSetProperty<TInstance, TProperty>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+        public static ByRefSetter<TInstance, TProperty> StructSetProperty<TInstance, TProperty>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : struct
         {
             return StructSetProperty<TInstance, TProperty>(typeof(TInstance).GetProperty(fieldName, bindingAttr));
         }
 
 
 
-        public static Func<TInstance, TProperty> InstanceGetProperty<TInstance, TProperty>(PropertyInfo property)
+        public static Getter<TInstance, TProperty> InstanceGetProperty<TInstance, TProperty>(PropertyInfo property) where TInstance : class
         {
             DynamicMethod getter = new DynamicMethod($"get_{property.DeclaringType.Name}_{property.Name}", typeof(TProperty), new Type[] { typeof(TInstance) }, true);
             var method = property.GetGetMethod(true);
@@ -56,10 +56,10 @@ namespace RWLayout.alpha2.FastAccess
             gen.Emit(OpCodes.Callvirt, method);
             gen.Emit(OpCodes.Ret);
 
-            return (Func<TInstance, TProperty>)getter.CreateDelegate(typeof(Func<TInstance, TProperty>));
+            return (Getter<TInstance, TProperty>)getter.CreateDelegate(typeof(Getter<TInstance, TProperty>));
         }
 
-        public static Action<TInstance, TProperty> InstanceSetProperty<TInstance, TProperty>(PropertyInfo property)
+        public static Setter<TInstance, TProperty> InstanceSetProperty<TInstance, TProperty>(PropertyInfo property) where TInstance : class
         {
             DynamicMethod getter = new DynamicMethod($"set_{property.DeclaringType.Name}_{property.Name}", null, new Type[] { typeof(TInstance), typeof(TProperty) }, true);
             var method = property.GetSetMethod(true);
@@ -70,10 +70,10 @@ namespace RWLayout.alpha2.FastAccess
             gen.Emit(OpCodes.Callvirt, method);
             gen.Emit(OpCodes.Ret);
 
-            return (Action<TInstance, TProperty>)getter.CreateDelegate(typeof(Action<TInstance, TProperty>));
+            return (Setter<TInstance, TProperty>)getter.CreateDelegate(typeof(Setter<TInstance, TProperty>));
         }
 
-        public static ByRefGetter<TInstance, TProperty> StructGetProperty<TInstance, TProperty>(PropertyInfo property)
+        public static ByRefGetter<TInstance, TProperty> StructGetProperty<TInstance, TProperty>(PropertyInfo property) where TInstance : struct
         {
             DynamicMethod getter = new DynamicMethod($"get_{property.DeclaringType.Name}_{property.Name}", typeof(TProperty), new Type[] { typeof(TInstance).MakeByRefType() }, true);
             var method = property.GetGetMethod(true);
@@ -86,7 +86,7 @@ namespace RWLayout.alpha2.FastAccess
             return (ByRefGetter<TInstance, TProperty>)getter.CreateDelegate(typeof(ByRefGetter<TInstance, TProperty>));
         }
 
-        public static ByRefSetter<TInstance, TProperty> StructSetProperty<TInstance, TProperty>(PropertyInfo property)
+        public static ByRefSetter<TInstance, TProperty> StructSetProperty<TInstance, TProperty>(PropertyInfo property) where TInstance : struct
         {
             DynamicMethod getter = new DynamicMethod($"set_{property.DeclaringType.Name}_{property.Name}", null, new Type[] { typeof(TInstance).MakeByRefType(), typeof(TProperty) }, true);
             var method = property.GetSetMethod(true);

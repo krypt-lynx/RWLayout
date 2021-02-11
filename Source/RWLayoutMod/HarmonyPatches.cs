@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using RWLayout.alpha2;
+using RWLayout.alpha2.FastAccess;
 using UnityEngine;
 using Verse;
 
@@ -25,8 +26,8 @@ namespace RWLayoutMod
             return true;
         }
 
-        static Func<WindowResizer, bool> get_WindowResizer_isResizing = RWLayout.alpha2.FastAccess.Dynamic.InstanceGetField<WindowResizer, bool>("isResizing");
-        static Action<WindowResizer, bool> set_WindowResizer_isResizing = RWLayout.alpha2.FastAccess.Dynamic.InstanceSetField<WindowResizer, bool>("isResizing");
+        static Getter<WindowResizer, bool> get_WindowResizer_isResizing = Dynamic.InstanceGetField<WindowResizer, bool>("isResizing");
+        static Setter<WindowResizer, bool> set_WindowResizer_isResizing = Dynamic.InstanceSetField<WindowResizer, bool>("isResizing");
         internal static void DoResizeControl_postfix(WindowResizer __instance)
         {
             bool isResizing = get_WindowResizer_isResizing(__instance);
