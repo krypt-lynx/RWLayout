@@ -10,12 +10,12 @@ namespace RWLayout.alpha2.FastAccess
 {
     public partial class Dynamic
     {
-        public static Func<TInstance, TField> ObjectGetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+        public static Func<TInstance, TField> InstanceGetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
         {
             return InstanceGetField<TInstance, TField>(typeof(TInstance).GetField(fieldName, bindingAttr));
         }
 
-        public static Action<TInstance, TField> ObjectSetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+        public static Action<TInstance, TField> InstanceSetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
         {
             return InstanceSetField<TInstance, TField>(typeof(TInstance).GetField(fieldName, bindingAttr));
         }

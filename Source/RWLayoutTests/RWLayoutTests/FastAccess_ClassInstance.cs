@@ -77,7 +77,7 @@ namespace RWLayoutTests
         public void GetField()
         {
             var test = new TestClass();
-            var get = Dynamic.ObjectGetField<TestClass, string>("field");
+            var get = Dynamic.InstanceGetField<TestClass, string>("field");
 
             Assert.AreEqual("field", get(test));
             test.SetTestField("new");
@@ -88,7 +88,7 @@ namespace RWLayoutTests
         public void SetField()
         {
             var test = new TestClass();
-            var set = Dynamic.ObjectSetField<TestClass, string>("field");
+            var set = Dynamic.InstanceSetField<TestClass, string>("field");
 
             set(test, "new");
             Assert.AreEqual("new", test.GetTestField());
@@ -98,7 +98,7 @@ namespace RWLayoutTests
         public void GetProperty()
         {
             var test = new TestClass();
-            var get = Dynamic.ObjectGetProperty<TestClass, string>("property");
+            var get = Dynamic.InstanceGetProperty<TestClass, string>("property");
 
             Assert.AreEqual("property", get(test));
             test.testProperty = "new";
@@ -109,7 +109,7 @@ namespace RWLayoutTests
         public void SetProperty()
         {
             var test = new TestClass();
-            var set = Dynamic.ObjectSetProperty<TestClass, string>("property");
+            var set = Dynamic.InstanceSetProperty<TestClass, string>("property");
 
             set(test, "new");
             Assert.AreEqual("new", test.testProperty);
