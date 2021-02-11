@@ -10,72 +10,56 @@ using Verse;
 
 namespace RWLayout.alpha2
 {
-    class MemberHandler
+    static class MemberHandler
     {
-        private MemberInfo member = null;
-
-        public MemberHandler(MemberInfo member)
+        public static bool CanWrite(this MemberInfo member)
         {
-            this.member = member;
-        }
-
-        public bool CanWrite
-        {
-            get
+            switch (member.MemberType)
             {
-                switch (member.MemberType)
-                {
-                    case MemberTypes.Field:
-                        return true;
-                    case MemberTypes.Property:
-                        return ((PropertyInfo)member).CanWrite;
-                    case MemberTypes.Method:
-                        return false;
-                    default:
-                        return false;
-                }
+                case MemberTypes.Field:
+                    return true;
+                case MemberTypes.Property:
+                    return ((PropertyInfo)member).CanWrite;
+                case MemberTypes.Method:
+                    return false;
+                default:
+                    return false;
             }
         }
 
-        public bool CanRead
+        public static bool CanRead(this MemberInfo member)
         {
-            get
+            switch (member.MemberType)
             {
-                switch (member.MemberType)
-                {
-                    case MemberTypes.Field:
-                        return true;
-                    case MemberTypes.Property:
-                        return ((PropertyInfo)member).CanRead;
-                    case MemberTypes.Method:
-                        return true;
-                    default:
-                        return false;
-                }
+                case MemberTypes.Field:
+                    return true;
+                case MemberTypes.Property:
+                    return ((PropertyInfo)member).CanRead;
+                case MemberTypes.Method:
+                    return true;
+                default:
+                    return false;
             }
+
         }
 
-        public Type TargetType
+        public static Type MemberType(this MemberInfo member)
         {
-            get
+            switch (member.MemberType)
             {
-                switch (member.MemberType)
-                {
-                    case MemberTypes.Field:
-                        return ((FieldInfo)member).FieldType;
-                    case MemberTypes.Property:
-                        return ((PropertyInfo)member).PropertyType;
-                    case MemberTypes.Method:
-                        return DelegateType;
-                    default:
-                        return null;
-                }
+                case MemberTypes.Field:
+                    return ((FieldInfo)member).FieldType;
+                case MemberTypes.Property:
+                    return ((PropertyInfo)member).PropertyType;
+                case MemberTypes.Method:
+                    return DelegateType((MethodInfo)member);
+                default:
+                    return null;
             }
+
         }
 
-        public MemberInfo Member => member;
-
-        internal object GetValue(object obj)
+        public static object GetValue(this MemberInfo member, object obj)
         {
             switch (member.MemberType)
             {
@@ -84,64 +68,53 @@ namespace RWLayout.alpha2
                 case MemberTypes.Property:
                     return ((PropertyInfo)member).GetValue(obj);
                 case MemberTypes.Method:
-                    return CreateDelegate(obj);
+                    return CreateDelegate((MethodInfo)member, obj);
                 default:
                     return null;
             }
         }
 
-        Type delegateType = null;
-        private Type DelegateType
+        private static Type DelegateType(MethodInfo member)
         {
-            get
-            {
-                if (delegateType == null)
-                {
-                    var tArgs = new List<Type>();
-                    foreach (var param in ((MethodInfo)member).GetParameters())
-                        tArgs.Add(param.ParameterType);
-                    tArgs.Add(((MethodInfo)member).ReturnType);
-                    delegateType = Expression.GetDelegateType(tArgs.ToArray());
-                }
-                return delegateType;
-            }
+            var tArgs = new List<Type>();
+            foreach (var param in member.GetParameters())
+                tArgs.Add(param.ParameterType);
+            tArgs.Add(member.ReturnType);
+            return Expression.GetDelegateType(tArgs.ToArray());
         }
 
-        private object CreateDelegate(object obj)
+        private static object CreateDelegate(MethodInfo member, object obj)
         {
-            var delDecltype = DelegateType;
-            if (((MethodInfo)member).IsStatic) {
-                return Delegate.CreateDelegate(delDecltype, ((MethodInfo)member));
+            if (((MethodInfo)member).IsStatic)
+            {
+                return Delegate.CreateDelegate(DelegateType(member),member);
             }
             else
             {
-                return Delegate.CreateDelegate(delDecltype, obj, ((MethodInfo)member));
+                return Delegate.CreateDelegate(DelegateType(member), obj, member);
             }
         }
 
-        public bool IsStatic
+        static public bool IsStatic(this MemberInfo member)
         {
-            get
+            switch (member.MemberType)
             {
-                switch (member.MemberType)
-                {
-                    case MemberTypes.Field:
-                        return ((FieldInfo)member).IsStatic;
-                    case MemberTypes.Property:
-                        return ((PropertyInfo)member).GetAccessors().FirstOrDefault()?.IsStatic ?? false;
-                    case MemberTypes.Event: // whatever, just making it to semiwork for unsupported cases
-                        return ((EventInfo)member).GetAddMethod()?.IsStatic ?? false;
-                    case MemberTypes.Method:
-                    case MemberTypes.Constructor:
-                        return ((MethodBase)member).IsStatic;
+                case MemberTypes.Field:
+                    return ((FieldInfo)member).IsStatic;
+                case MemberTypes.Property:
+                    return ((PropertyInfo)member).GetAccessors().FirstOrDefault()?.IsStatic ?? false;
+                case MemberTypes.Event: // whatever, just making it to semiwork for unsupported cases
+                    return ((EventInfo)member).GetAddMethod()?.IsStatic ?? false;
+                case MemberTypes.Method:
+                case MemberTypes.Constructor:
+                    return ((MethodBase)member).IsStatic;
 
-                    default:
-                        return false;
-                }
+                default:
+                    return false;
             }
         }
 
-        public void SetValue(object obj, object value)
+        static public void SetValue(this MemberInfo member, object obj, object value)
         {
             switch (member.MemberType)
             {
@@ -154,14 +127,13 @@ namespace RWLayout.alpha2
             }
         }
 
-        public override string ToString()
-        {
-            return $"{base.ToString()}:{{{member}}}";
-        }
+
     }
+
 
     static class GenReflection
     {
+        /*
         public static MemberHandler GetMemberHandler(this Type type, string name, BindingFlags bindingAttr)
         {
             var member = type.GetMember(name, bindingAttr)?.FirstOrDefault();
@@ -179,28 +151,28 @@ namespace RWLayout.alpha2
                 default:
                     return null;
             }
-        }
+        }*/
 
         static Dictionary<MemberInfo, Delegate> SettersCache = new Dictionary<MemberInfo, Delegate>();
         static Dictionary<MemberInfo, Delegate> GettersCache = new Dictionary<MemberInfo, Delegate>();
 
-        public static Func<object, T> GetGetValueDelegate<T>(this MemberHandler member)
+        public static Func<object, T> GetGetValueDelegate<T>(this MemberInfo member)
         {
             lock (GettersCache)
             {
                 Delegate getter;
-                if (!GettersCache.TryGetValue(member.Member, out getter))
+                if (!GettersCache.TryGetValue(member, out getter))
                 {
-                    switch (member.Member.MemberType)
+                    switch (member.MemberType)
                     {
                         case MemberTypes.Property:
-                            getter = CreateGetPropertyValueDelegate<T>((PropertyInfo)member.Member);
+                            getter = CreateGetPropertyValueDelegate<T>((PropertyInfo)member);
                             break;
                         case MemberTypes.Field:
-                            getter = CreateGetFieldValueDelegate<T>((FieldInfo)member.Member);
+                            getter = CreateGetFieldValueDelegate<T>((FieldInfo)member);
                             break;
                     }
-                    GettersCache[member.Member] = getter;
+                    GettersCache[member] = getter;
                 }
                 return (Func<object, T>)getter;
             }
@@ -264,23 +236,23 @@ namespace RWLayout.alpha2
             return (Func<object, T>)getter.CreateDelegate(typeof(Func<object, T>));
         }
 
-        public static Action<object, T> GetSetValueDelegate<T>(this MemberHandler member)
+        public static Action<object, T> GetSetValueDelegate<T>(this MemberInfo member)
         {
             lock (SettersCache)
             {
                 Delegate setter;
-                if (!SettersCache.TryGetValue(member.Member, out setter))
+                if (!SettersCache.TryGetValue(member, out setter))
                 {
-                    switch (member.Member.MemberType)
+                    switch (member.MemberType)
                     {
                         case MemberTypes.Property:
-                            setter = CreateSetPropertyValueDelegate<T>((PropertyInfo)member.Member);
+                            setter = CreateSetPropertyValueDelegate<T>((PropertyInfo)member);
                             break;
                         case MemberTypes.Field:
-                            setter = CreateSetFieldValueDelegate<T>((FieldInfo)member.Member);
+                            setter = CreateSetFieldValueDelegate<T>((FieldInfo)member);
                             break;
                     }
-                    SettersCache[member.Member] = setter;
+                    SettersCache[member] = setter;
                 }
                 return (Action<object, T>)setter;
             }

@@ -30,15 +30,15 @@ namespace RWLayout.alpha2
     /// <summary>
     /// Class binding values in runtime
     /// </summary>
-    /// <typeparam name="TProperty"></typeparam>
-    public class Bindable<TProperty>
+    /// <typeparam name="T"></typeparam>
+    public class Bindable<T>
     {
         WeakReference binded;
         //MemberHandler bindedMember;
 
         bool bindedToStatic = false;
-        Action<object, TProperty> write;
-        Func<object, TProperty> read;
+        Action<object, T> write;
+        Func<object, T> read;
         /// <summary>
         /// Read mode
         /// </summary>
@@ -49,12 +49,12 @@ namespace RWLayout.alpha2
         /// </summary>
         public BindingMode WriteMode = BindingMode.Auto;
 
-        private TProperty value;
+        private T value;
 
         /// <summary>
         /// This is the Value <i>property</i>. The write into it syncronized with binded property
         /// </summary>
-        public TProperty Value {
+        public T Value {
             get
             {
                 if (ReadMode == BindingMode.Auto)
@@ -89,16 +89,26 @@ namespace RWLayout.alpha2
             WriteMode = writeMode;
         }
 
-        internal void Bind(object obj, MemberHandler prop)
+        public void Bind(object obj, string memberName, BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)
         {
+            Bind(obj, obj.GetType().GetMember(memberName, flags).FirstOrDefault()); // todo: proper member search
+        }
+
+        public void Bind(object obj, MemberInfo prop)
+        {
+            if (prop.MemberType() != typeof(T))
+            {
+                throw new Exception($"type {obj.GetType()} of binded object {obj} does not match type {typeof(T)} of the property");
+            }
+
             this.binded = obj != null ? new WeakReference(obj) : null;
-            bindedToStatic = prop.IsStatic;
+            bindedToStatic = prop.IsStatic();
 
             if (ReadMode != BindingMode.None)
             {
-                if (prop.CanRead)
+                if (MemberHandler.CanRead(prop))
                 {
-                    read = prop.GetGetValueDelegate<TProperty>();
+                    read = prop.GetGetValueDelegate<T>();
                 }
                 else
                 {
@@ -107,9 +117,9 @@ namespace RWLayout.alpha2
             }
             if (ReadMode != BindingMode.None)
             {
-                if (prop.CanWrite)
+                if (MemberHandler.CanWrite(prop))
                 {
-                    write = prop.GetSetValueDelegate<TProperty>();
+                    write = prop.GetSetValueDelegate<T>();
                 }
                 else
                 {

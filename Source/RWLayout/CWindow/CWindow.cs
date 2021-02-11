@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Cassowary;
 using UnityEngine;
 using Verse;
+using RWLayout.alpha2.FastAccess;
 
 namespace RWLayout.alpha2
 {
@@ -23,12 +24,13 @@ namespace RWLayout.alpha2
     {
         CWindowResizer resizer;
 
+        static Action<Window, WindowResizer> set_Window_resizer = Dynamic.InstanceSetField<Window, WindowResizer>("resizer");
         public override void WindowOnGUI()
         {
             if (resizer == null)
             {
                 resizer = new CWindowResizer();
-                typeof(Window).GetField("resizer", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, resizer);
+                set_Window_resizer(this, resizer);
                 resizer.minWindowSize = MarginsSize();
                 resizer.UpdateSize = (ref Vector2 winSize) =>
                 { 

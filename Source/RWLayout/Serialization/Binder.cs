@@ -67,7 +67,7 @@ namespace RWLayout.alpha2
                 srcObject = srcValue;
             }
 
-            var srcProp = srcType.GetMemberHandler(srcPath.Member, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+            var srcProp = srcType.GetMember(srcPath.Member, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static).FirstOrDefault(); // todo: propper overload resolving
 
             if (srcProp == null)
             {
@@ -75,17 +75,17 @@ namespace RWLayout.alpha2
                 return;
             }
 
-            var dstProp = view.GetType().GetMemberHandler(propName, BindingFlags.Public | BindingFlags.Instance);
+            var dstProp = view.GetType().GetMember(propName, BindingFlags.Public | BindingFlags.Instance).FirstOrDefault(); // todo: propper overload resolving
 
-            if (dstProp != null && !IsCompatibleBindable(dstProp.TargetType, srcProp.TargetType))
+            if (dstProp != null && !IsCompatibleBindable(dstProp.MemberType(), srcProp.MemberType()))
             {
-                dstProp = view.GetType().GetMemberHandler(propName + "Prop", BindingFlags.Public | BindingFlags.Instance);
+                dstProp = view.GetType().GetMember(propName + "Prop", BindingFlags.Public | BindingFlags.Instance).FirstOrDefault(); // todo: propper overload resolving
             }
 
-            if (dstProp != null && IsCompatibleBindable(dstProp.TargetType, srcProp.TargetType))
+            if (dstProp != null && IsCompatibleBindable(dstProp.MemberType(), srcProp.MemberType()))
             {
                 var dstObj = dstProp.GetValue(view);
-                dstProp.TargetType.GetMethod(nameof(Bindable<object>.Bind), BindingFlags.Instance | BindingFlags.NonPublic)
+                dstProp.MemberType().GetMethod(nameof(Bindable<object>.Bind), BindingFlags.Instance | BindingFlags.NonPublic)
                     .Invoke(dstObj, new object[] { srcObject, srcProp });
                 $"Binded {srcProp} of {srcValue} to {dstProp}".Log();
             }
@@ -105,7 +105,7 @@ namespace RWLayout.alpha2
         private static void AssignPropertyFrom(CElement view, Dictionary<string, object> objectsMap, PropertyPrototype property)
         {
             var propName = property.Name;
-            var propInfo = view.GetType().GetMemberHandler(propName, BindingFlags.Public | BindingFlags.Instance);
+            var propInfo = view.GetType().GetMember(propName, BindingFlags.Public | BindingFlags.Instance).FirstOrDefault();
 
             if (propInfo == null)
             {
@@ -113,13 +113,13 @@ namespace RWLayout.alpha2
                 return;
             }
 
-            if (!propInfo.CanWrite)
+            if (!propInfo.CanWrite())
             {
                 Log.Error($"Unable to assign property {propName} of object {view}");
                 return;
             }
 
-            var valueType = property.TypeHint ?? propInfo.TargetType;
+            var valueType = property.TypeHint ?? propInfo.MemberType();
             valueType = Nullable.GetUnderlyingType(valueType) ?? valueType;                       
 
             var value = PropertyWriter.ReadObject(property.Path, objectsMap);
@@ -132,7 +132,7 @@ namespace RWLayout.alpha2
         private static void AssignPropertyText(CElement view, Dictionary<string, object> objectsMap, PropertyPrototype property)
         {
             var propName = property.Name;
-            var propInfo = view.GetType().GetMemberHandler(propName, BindingFlags.Public | BindingFlags.Instance);
+            var propInfo = view.GetType().GetMember(propName, BindingFlags.Public | BindingFlags.Instance).FirstOrDefault(); // todo:
 
             if (propInfo == null)
             {
@@ -140,13 +140,13 @@ namespace RWLayout.alpha2
                 return;
             }
 
-            if (!propInfo.CanWrite)
+            if (!propInfo.CanWrite())
             {
                 Log.Error($"Unable to assign property {propName} of object {view}");
                 return;
             }
 
-            var valueType = property.TypeHint ?? propInfo.TargetType;
+            var valueType = property.TypeHint ?? propInfo.MemberType();
             valueType = Nullable.GetUnderlyingType(valueType) ?? valueType;
 
             var value = ParseFromText(property.Value, property.Translate, valueType);

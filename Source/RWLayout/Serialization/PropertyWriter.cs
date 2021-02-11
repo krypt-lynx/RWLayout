@@ -19,7 +19,7 @@ namespace RWLayout.alpha2
             object srcObj = ReadObject(binding.Source, objects);
 
             object dstObj = objects[binding.Target.Object];
-            var dstProp = dstObj.GetType().GetMemberHandler(binding.Target.Member, BindingFlags.Public | BindingFlags.Instance);
+            var dstProp = dstObj.GetType().GetMember(binding.Target.Member, BindingFlags.Public | BindingFlags.Instance).FirstOrDefault();
             if (dstProp != null)
             {
                 $"Assigning {dstObj} to {srcObj}".Log();
@@ -43,7 +43,7 @@ namespace RWLayout.alpha2
             object obj = objects[path.Object];
             if (path.Member != null)
             {
-                var srcProp = obj.GetType().GetMemberHandler(path.Member, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+                var srcProp = obj.GetType().GetMember(path.Member, BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static).FirstOrDefault();
                 if (srcProp != null)
                 {
                     obj = srcProp.GetValue(obj);

@@ -304,8 +304,8 @@ namespace RWLayout.alpha2
 
             var view = objects[viewId];
 
-            var prop = view.GetType().GetMemberHandler(anchorName, BindingFlags.Public | BindingFlags.Instance);
-            if (prop == null || !typeof(ClAbstractVariable).IsAssignableFrom(prop.TargetType))
+            var prop = view.GetType().GetMember(anchorName, BindingFlags.Public | BindingFlags.Instance).FirstOrDefault();
+            if (prop == null || !typeof(ClAbstractVariable).IsAssignableFrom(prop.MemberType()))
             {
                 throw new Exception($"{anchorName} is not an anchor in object {view}");
             }
