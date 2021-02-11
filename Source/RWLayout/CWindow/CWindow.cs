@@ -248,5 +248,17 @@ namespace RWLayout.alpha2
 
             base.Notify_ResolutionChanged();
         }
+
+        public Vector2 TranslateToScreenCoordiates(Vector2 vector)
+        {
+            var margins = MarginInsets();
+            return new Vector2(windowRect.xMin + margins.Left + vector.x, windowRect.yMin + margins.Top + vector.y);
+        }
+
+        public Rect TranslateToScreenCoordiates(Rect rect)
+        {
+            var margins = MarginInsets();
+            return new Rect(windowRect.xMin + margins.Left + rect.x, windowRect.yMin + margins.Top + rect.y, rect.width, rect.height);
+        }
     }
 }

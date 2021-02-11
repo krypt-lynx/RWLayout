@@ -62,6 +62,9 @@ namespace RWLayout.alpha2
             }
         }
 
+        public bool Groupping { get; set; } = false;
+        public bool Clipping { get; set; } = false;
+
         Vector2? intrinsicSize = null;
 
         /// <summary>
@@ -69,7 +72,29 @@ namespace RWLayout.alpha2
         /// </summary>
         public virtual void PostLayoutUpdate()
         {
-            Bounds = Rect.MinMaxRect((float)left.Value, (float)top.Value, (float)right.Value, (float)bottom.Value);
+            var parent = Parent;
+            if (parent != null)
+            {
+                globalOffset = Parent.GlobalOffset + Parent.LocalOffset;
+            }
+            else
+            {
+                globalOffset = Vector2.zero;
+            }
+
+            if (Groupping || Clipping)
+            {
+                clipRect = Rect.MinMaxRect((float)left.Value + globalOffset.x, (float)top.Value + globalOffset.y, (float)right.Value + globalOffset.x, (float)bottom.Value + globalOffset.y);
+                localOffset = new Vector2(-(float)left.Value - globalOffset.x, -(float)top.Value - globalOffset.y);
+            }
+            else
+            {
+                localOffset = Vector2.zero;
+
+            }
+
+            Bounds = Rect.MinMaxRect((float)left.Value + globalOffset.x + localOffset.x, (float)top.Value + globalOffset.y + localOffset.x, (float)right.Value + globalOffset.x + localOffset.x, (float)bottom.Value + globalOffset.y + localOffset.x);
+
             BoundsRounded = Bounds.GUIRounded();
 
             foreach (var element in Elements)

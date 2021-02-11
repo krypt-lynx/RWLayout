@@ -20,6 +20,26 @@ namespace RWLayout.alpha2
         public Rect BoundsRounded { get; protected set; }
         protected Vector2 drawingOffset; // TODO: implement
 
+        protected Vector2 localOffset = Vector2.zero;
+
+        /// <summary>
+        /// Offset of coordinates in relation to parent view
+        /// </summary>
+        public Vector2 LocalOffset { get => localOffset; }
+
+        protected Vector2 globalOffset = Vector2.zero;
+
+        /// <summary>
+        /// Offset of parent coordinaties in relation to global origin
+        /// </summary>
+        /// <remarks>
+        /// Full offset is LocalOffset + GlobalOffset
+        /// </remarks>
+        public Vector2 GlobalOffset { get => globalOffset; }
+
+        protected Rect clipRect;
+
+
         /// <summary>
         /// expected to return best fitting size in given place
         /// </summary>
@@ -36,9 +56,29 @@ namespace RWLayout.alpha2
             {
                 DoContent();
 
+                var clipping = Clipping;
+                var groupping = Groupping && !clipping;
+                if (clipping)
+                {
+                    GUI.BeginClip(clipRect);
+                }
+                if (groupping)
+                {
+                    GUI.BeginGroup(clipRect);
+                }
+
                 foreach (var element in Elements)
                 {
                     element.DoElementContent();
+                }
+
+                if(groupping)
+                {
+                    GUI.EndGroup();
+                }
+                if (clipping)
+                {
+                    GUI.EndClip();
                 }
             }
         }
