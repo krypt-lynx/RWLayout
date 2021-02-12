@@ -26,6 +26,49 @@ namespace RWLayoutTests.ConstraintParser
             public Cl.Operator Operator;
         }
 
+        //[TestMethod]
+        public void PerfTest()
+        {
+            var tests = new string[] {
+                    "dlayout.top == root.top",
+                    "vlogging.top == dlayout.bottom+2",
+                    "lognull.top == vlogging.bottom+10",
+                    "sticky.top == lognull.bottom+2",
+                    "aaass.top == sticky.bottom+2",
+                    "noexamples.top == aaass.bottom+20",
+
+                    "dlayout.height == dlayout.intrinsicHeight",
+                    "vlogging.height == vlogging.intrinsicHeight",
+                    "lognull.height == lognull.intrinsicHeight",
+                    "sticky.height == sticky.intrinsicHeight",
+                    "aaass.height == aaass.intrinsicHeight",
+                    "noexamples.height == noexamples.intrinsicHeight",
+
+                    "dlayout.left == root.left",
+                    "vlogging.left == root.left",
+                    "lognull.left == root.left",
+                    "sticky.left == root.left",
+                    "aaass.left == root.left",
+                    "noexamples.left == root.left",
+
+                    "dlayout.right == root.right",
+                    "vlogging.right == root.right",
+                    "lognull.right == root.right",
+                    "sticky.right == root.right",
+                    "aaass.right == root.right",
+                    "noexamples.right == root.right",
+            };
+
+            var parser = new RWLayout.alpha2.ConstraintParser();
+            for (int i = 0; i < 100000; i++)
+            {
+                foreach (var test in tests)
+                {
+                    var result = parser.Parse(test);
+                }
+            }
+        }
+
         [TestMethod]
         public void ParseSuccess()
         {
