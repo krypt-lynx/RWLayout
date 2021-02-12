@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
+[assembly: InternalsVisibleTo("RWLayoutTests")]
 namespace RWLayout.alpha2
 {
     public class ConstraintSegment
@@ -17,7 +19,7 @@ namespace RWLayout.alpha2
 
         public override string ToString()
         {
-            return OwnerId != null ? $"{Multiplier}×{OwnerId}.{AnchorName}" : $"{Multiplier}";
+            return OwnerId != null ? $"{Multiplier.ToString(CultureInfo.InvariantCulture)}×{OwnerId}.{AnchorName}" : $"{Multiplier}";
         }
     }
 
@@ -90,6 +92,7 @@ namespace RWLayout.alpha2
         done,
         syntaxError,
     }
+
 
     class SemanticErrorException : Exception
     {
@@ -169,7 +172,7 @@ namespace RWLayout.alpha2
             {
                 if (eqRelationDefined)
                 {
-                    AppendCurrentTerm();
+                    AppendTerm();
                     return ConstraintParserState.done;
                 }
                 else
@@ -190,14 +193,13 @@ namespace RWLayout.alpha2
             }
             else if (IsMultiplicationOperator(ch))
             {
-                SetMultipler();
+                SetMultipler(true);
                 segmentOp = ch;
-                hasLeadNumber = true;
                 return ConstraintParserState.word;
             }
             else if (IsAditionOperator(ch))
             {
-                AppendCurrentTerm();
+                AppendTerm();
                 segmentSign = ch;
                 return ConstraintParserState.firstChar;
             }
@@ -205,7 +207,7 @@ namespace RWLayout.alpha2
             {
                 if (!eqRelationDefined)
                 {
-                    AppendCurrentTerm();
+                    AppendTerm();
                     SetEquationSign(ch);
                     return ConstraintParserState.equality;
                 }
@@ -228,8 +230,8 @@ namespace RWLayout.alpha2
             {
                 if (eqRelationDefined)
                 {
-                    SetMultipler();
-                    AppendCurrentTerm();
+                    SetMultipler(true);
+                    AppendTerm();
                     return ConstraintParserState.done;
                 }
                 else
@@ -245,14 +247,14 @@ namespace RWLayout.alpha2
             }
             else if (IsMultiplicationOperator(ch))
             {
-                SetMultipler();
+                SetMultipler(true);
                 segmentOp = ch;
                 return ConstraintParserState.word;
             }
             else if (IsAditionOperator(ch))
             {
-                SetMultipler();
-                AppendCurrentTerm();
+                SetMultipler(true);
+                AppendTerm();
                 segmentSign = ch;
                 return ConstraintParserState.firstChar;
             }
@@ -260,8 +262,8 @@ namespace RWLayout.alpha2
             {
                 if (!eqRelationDefined)
                 {
-                    SetMultipler();
-                    AppendCurrentTerm();
+                    SetMultipler(true);
+                    AppendTerm();
                     SetEquationSign(ch);
                     return ConstraintParserState.equality;
                 }
@@ -309,7 +311,7 @@ namespace RWLayout.alpha2
                 if (eqRelationDefined)
                 {
                     SetAnchor();
-                    AppendCurrentTerm();
+                    AppendTerm();
                     return ConstraintParserState.done;
                 }
                 else
@@ -340,7 +342,7 @@ namespace RWLayout.alpha2
             else if (IsAditionOperator(ch))
             {
                 SetAnchor();
-                AppendCurrentTerm();
+                AppendTerm();
                 segmentSign = ch;
                 return ConstraintParserState.firstChar;
             }
@@ -349,7 +351,7 @@ namespace RWLayout.alpha2
                 if (!eqRelationDefined)
                 {
                     SetAnchor();
-                    AppendCurrentTerm();
+                    AppendTerm();
                     SetEquationSign(ch);
                     return ConstraintParserState.equality;
                 }
@@ -372,8 +374,8 @@ namespace RWLayout.alpha2
             {
                 if (eqRelationDefined)
                 {
-                    SetMultipler();
-                    AppendCurrentTerm();
+                    SetMultipler(false);
+                    AppendTerm();
                     return ConstraintParserState.done;
                 }
                 else
@@ -389,8 +391,8 @@ namespace RWLayout.alpha2
             }
             else if (IsAditionOperator(ch))
             {
-                SetMultipler();
-                AppendCurrentTerm();
+                SetMultipler(false);
+                AppendTerm();
                 segmentSign = ch;
                 return ConstraintParserState.firstChar;
             }
@@ -398,8 +400,8 @@ namespace RWLayout.alpha2
             {
                 if (!eqRelationDefined)
                 {
-                    SetMultipler();
-                    AppendCurrentTerm();
+                    SetMultipler(false);
+                    AppendTerm();
                     SetEquationSign(ch);
                     return ConstraintParserState.equality;
                 }
@@ -424,7 +426,7 @@ namespace RWLayout.alpha2
             }
             else
             {
-                errorMessage = "Unexpected symbol";
+                errorMessage = "Symbol '=' expected";
                 return ConstraintParserState.syntaxError;
             }
         }
@@ -456,8 +458,9 @@ namespace RWLayout.alpha2
         /// <summary>
         /// sets term multipler
         /// </summary>
-        private void SetMultipler()
+        private void SetMultipler(bool isLeading)
         {
+            hasLeadNumber = hasLeadNumber || isLeading;
             segmentMultipler = word.ToString();
             word.Clear();
         }
@@ -465,45 +468,62 @@ namespace RWLayout.alpha2
         /// <summary>
         /// creates term, adds it to expression, and resets variables (but not word)
         /// </summary>
-        private void AppendCurrentTerm()
+        private void AppendTerm()
         {
             if (hasLeadNumber && segmentOp == '/')
             {
                 throw new SemanticErrorException("division by variable is not allowed");
             }
-            var Multiplier = segmentMultipler != null ? Convert.ToDouble(segmentMultipler, CultureInfo.InvariantCulture) : 1;
-            if (segmentOp == '/')
+
+            try
             {
+                if (segmentMultipler == null && segmentTarget == null)
+                {
+                    return;
+                }
+
+                var Multiplier = segmentMultipler != null ? Convert.ToDouble(segmentMultipler, CultureInfo.InvariantCulture) : 1;
+
+                if (segmentOp == '/')
+                {
+                    if (Multiplier == 0)
+                    {
+                        throw new SemanticErrorException("Division by zero");
+                    }
+                    Multiplier = 1 / Multiplier;
+                }
+
                 if (Multiplier == 0)
                 {
-                    throw new SemanticErrorException("division by zero");
+                    return;
                 }
-                Multiplier = 1 / Multiplier;
+
+                if (segmentSign == '-')
+                {
+                    Multiplier = -Multiplier;
+                }
+
+                if (eqRelationDefined)
+                {
+                    Multiplier = -Multiplier;
+                }
+
+                prototype.Terms.Add(new ConstraintSegment
+                {
+                    Multiplier = Multiplier,
+                    OwnerId = segmentTarget,
+                    AnchorName = segmentAnchor,
+                });
             }
-
-            if (segmentSign == '-')
+            finally
             {
-                Multiplier = -Multiplier;
+                hasLeadNumber = false;
+                segmentAnchor = null;
+                segmentTarget = null;
+                segmentMultipler = null;
+                segmentSign = '*';
+                segmentOp = '+';
             }
-
-            if (eqRelationDefined)
-            {
-                Multiplier = -Multiplier;
-            }
-
-            prototype.Terms.Add(new ConstraintSegment
-            {
-                Multiplier = Multiplier,
-                OwnerId = segmentTarget,
-                AnchorName = segmentAnchor,
-            });
-
-            hasLeadNumber = false;
-            segmentAnchor = null;
-            segmentTarget = null;
-            segmentMultipler = null;
-            segmentSign = '*';
-            segmentOp = '+';
         }
 
         /// <summary>
@@ -554,6 +574,8 @@ namespace RWLayout.alpha2
             prototype = new ConstraintDescription();
             prototype.Terms = new List<ConstraintSegment>();
             errorMessage = null;
+            hasLeadNumber = false;
+            eqRelationDefined = false;
 
             int charNumber = 0;
             foreach (var ch in constraint.Append('\0'))
@@ -572,10 +594,16 @@ namespace RWLayout.alpha2
                 charNumber++;
             }
 
+            if (!prototype.Terms.Any(x => x.OwnerId != null))
+            {
+                throw new SemanticErrorException($"parsed expression does not contains anchors");
+            }
+            
             if (state != ConstraintParserState.done)
             {
-                throw new InternalErrorException($"parser enden work in invalid state: {state}");
+                throw new InternalErrorException($"parser ended work in invalid state: {state}");
             }
+
 
             return prototype;
         }

@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binding.cs" />
+    <Compile Include="ConstraintParser.cs" />
     <Compile Include="FastAccess_StructInstance.cs" />
     <Compile Include="FastAccess_StructStatic.cs" />
     <Compile Include="FastAccess_ClassStatic.cs" />
