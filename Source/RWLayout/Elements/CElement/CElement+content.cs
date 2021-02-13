@@ -11,9 +11,23 @@ namespace RWLayout.alpha2
     public partial class CElement
     {
         /// <summary>
+        /// Frame of the view
+        /// </summary>
+        /// <remarks>
+        /// Defines location of element in parent element.
+        /// Use this property for operating with element's childrens
+        /// </remarks>
+        public Rect Frame { get; protected set; }
+
+        /// <summary>
         /// Bounds of the view
         /// </summary>
+        /// <remarks>
+        /// The rect of the element in its coorditanes system (with respect to Grouping/Clipping)
+        /// Use this property to draw element content
+        /// </remarks>
         public Rect Bounds { get; protected set; }
+
         /// <summary>
         /// Rounded to whole numbers bounds of the view
         /// </summary>
@@ -37,8 +51,6 @@ namespace RWLayout.alpha2
         /// </remarks>
         public Vector2 GlobalOffset { get => globalOffset; }
 
-        protected Rect clipRect;
-
 
         /// <summary>
         /// expected to return best fitting size in given place
@@ -54,18 +66,19 @@ namespace RWLayout.alpha2
         {
             if (!Hidden)
             {
-                DoContent();
 
                 var clipping = Clipping;
                 var groupping = Groupping && !clipping;
                 if (clipping)
                 {
-                    GUI.BeginClip(clipRect);
+                    GUI.BeginClip(Frame);
                 }
                 if (groupping)
                 {
-                    GUI.BeginGroup(clipRect);
+                    GUI.BeginGroup(Frame);
                 }
+
+                DoContent();
 
                 foreach (var element in Elements)
                 {
@@ -113,7 +126,9 @@ namespace RWLayout.alpha2
             if (DebugDraw)
             {
                 GuiTools.UsingColor(new Color(1, 0, 0, 0.2f), () => GuiTools.Box(Bounds, new EdgeInsets(1)));                
-                TooltipHandler.TipRegion(Bounds, $"{NamePrefix()}:\n{{x:{Bounds.x} y:{Bounds.y} w:{Bounds.width} h:{Bounds.height}}}");
+                TooltipHandler.TipRegion(Bounds, $"{NamePrefix()}:\n" +
+                    $"Frame: {{x:{Frame.x} y:{Frame.y} w:{Frame.width} h:{Frame.height}}}\n" +
+                    $"Bounds: {{x:{Bounds.x} y:{Bounds.y} w:{Bounds.width} h:{Bounds.height}}}");
             }
 
             if (Tip != null)

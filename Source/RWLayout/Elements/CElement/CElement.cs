@@ -84,18 +84,15 @@ namespace RWLayout.alpha2
 
             if (Groupping || Clipping)
             {
-                clipRect = Rect.MinMaxRect((float)left.Value + globalOffset.x, (float)top.Value + globalOffset.y, (float)right.Value + globalOffset.x, (float)bottom.Value + globalOffset.y);
                 localOffset = new Vector2(-(float)left.Value - globalOffset.x, -(float)top.Value - globalOffset.y);
             }
             else
             {
                 localOffset = Vector2.zero;
-
             }
 
-            Bounds = Rect.MinMaxRect((float)left.Value + globalOffset.x + localOffset.x, (float)top.Value + globalOffset.y + localOffset.x, (float)right.Value + globalOffset.x + localOffset.x, (float)bottom.Value + globalOffset.y + localOffset.x);
+            RecacheMetrics();
 
-            BoundsRounded = Bounds.GUIRounded();
 
             foreach (var element in Elements)
             {
@@ -103,12 +100,29 @@ namespace RWLayout.alpha2
             }
 
             var newIntrinsicSize = this.tryFit(Bounds.size);
-         
+
             if (intrinsicSize.HasValue && newIntrinsicSize != intrinsicSize.Value)
             {
                 //Log.Message($"{NamePrefix()}: intrinsicSize: {intrinsicSize}; newIntrinsicSize: {newIntrinsicSize}");
                 SetNeedsUpdateLayout();
             }
+        }
+
+        protected void RecacheMetrics()
+        {
+            Frame = Rect.MinMaxRect(
+                (float)left.Value + globalOffset.x,
+                (float)top.Value + globalOffset.y,
+                (float)right.Value + globalOffset.x,
+                (float)bottom.Value + globalOffset.y);
+
+            Bounds = Rect.MinMaxRect(
+                (float)left.Value + globalOffset.x + localOffset.x,
+                (float)top.Value + globalOffset.y + localOffset.y,
+                (float)right.Value + globalOffset.x + localOffset.x,
+                (float)bottom.Value + globalOffset.y + localOffset.y);
+
+            BoundsRounded = Bounds.GUIRounded();
         }
 
         /// <summary>
