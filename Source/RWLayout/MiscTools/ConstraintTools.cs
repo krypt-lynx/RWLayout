@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,6 +36,7 @@ namespace RWLayout.alpha2
         public Func<CElement, ClVariable> SideB;
         public Func<CElement, ClVariable> Size;
         public Func<CElement, ClVariable> IntrinsicSize;
+        public Func<CElement, ClVariable> Center;
         public double multipler;
 
         public Func<EdgeInsets, double> LeadingInset;
@@ -50,10 +52,10 @@ namespace RWLayout.alpha2
         public bool ConstrainEnd;
         public ClStrength Strength;
         public EdgeInsets Insets;
+        public double Spacing;
+
+
         public bool IntrinsicIfNotSet;
-        /// <summary>
-        /// is not implemented
-        /// </summary>
         public bool AlignToCenter; // todo: implement
 
         public static StackOptions Default = new StackOptions
@@ -76,7 +78,20 @@ namespace RWLayout.alpha2
             EdgeInsets? insets,
             bool intrinsicIfNotSet)
         {
-            return Create(constrainStart, constrainSides, constrainEnd, strength, insets, intrinsicIfNotSet, false);
+            return Create(constrainStart, constrainSides, constrainEnd, strength, insets, intrinsicIfNotSet, false, 0);
+        }
+
+        [Obsolete("This method is present for binary compatibility only")]
+        public static StackOptions Create(
+            bool constrainStart,
+            bool constrainSides,
+            bool constrainEnd,
+            ClStrength strength,
+            EdgeInsets? insets,
+            bool intrinsicIfNotSet,
+            bool alignToCenter)
+        {
+            return Create(constrainStart, constrainSides, constrainEnd, strength, insets, intrinsicIfNotSet, alignToCenter, 0);
         }
 
         public static StackOptions Create(
@@ -86,16 +101,18 @@ namespace RWLayout.alpha2
             ClStrength strength = null,
             EdgeInsets? insets = null,
             bool intrinsicIfNotSet = false,
-            bool alignToCenter = false)
+            bool alignToCenter = false,
+            double spacing = 0)
         {
             var options = new StackOptions();
             options.ConstrainStart = constrainStart;
             options.ConstrainSides = constrainSides;
             options.ConstrainEnd = constrainEnd;
             options.Strength = strength ?? ClStrength.Default;
-            options.Insets = insets.HasValue ? insets.Value : EdgeInsets.Zero; 
+            options.Insets = insets.HasValue ? insets.Value : EdgeInsets.Zero;
             options.IntrinsicIfNotSet = intrinsicIfNotSet;
             options.AlignToCenter = alignToCenter;
+            options.Spacing = spacing;
 
             return options;
         }
@@ -112,6 +129,7 @@ namespace RWLayout.alpha2
             SideB = x => x.bottom,
             Size = x => x.width,
             IntrinsicSize = x => x.intrinsicWidth,
+            Center = x => x.centerY,
             multipler = 1,
             LeadingInset = x => x.Left,
             TrailingInset = x => x.Right,
@@ -127,13 +145,14 @@ namespace RWLayout.alpha2
             SideB = x => x.top,
             Size = x => x.width,
             IntrinsicSize = x => x.intrinsicWidth,
+            Center = x => x.centerY,
             multipler = -1,
             LeadingInset = x => x.Right,
             TrailingInset = x => x.Left,
             SideAInset = x => x.Bottom,
             SideBInset = x => x.Top,
         };
-        private static AnchorMapper toBotton = new AnchorMapper
+        private static AnchorMapper toBottom = new AnchorMapper
         {
             debug = "toBottom",
             Leading = x => x.top,
@@ -141,6 +160,7 @@ namespace RWLayout.alpha2
             SideA = x => x.left,
             SideB = x => x.right,
             Size = x => x.height,
+            Center = x => x.centerX,
             IntrinsicSize = x => x.intrinsicHeight,
             multipler = 1,
             LeadingInset = x => x.Top,
@@ -157,6 +177,7 @@ namespace RWLayout.alpha2
             SideB = x => x.left,
             Size = x => x.height,
             IntrinsicSize = x => x.intrinsicHeight,
+            Center = x => x.centerX,
             multipler = -1,
             LeadingInset = x => x.Bottom,
             TrailingInset = x => x.Top,
@@ -263,51 +284,95 @@ namespace RWLayout.alpha2
             element.AddConstraint(new ClLinearConstraint(element.height, toLinearExpression(height), strength));
         }
 
+
         public static void StackLeft(this CElement parent, StackOptions options, params object[] items)
         {
-            Stack(parent, toRight, options, items);
+            StackLeft(parent, options, (IEnumerable)items);
         }
 
         public static void StackTop(this CElement parent, StackOptions options, params object[] items)
         {
-            Stack(parent, toBotton, options, items);
+            StackTop(parent, options, (IEnumerable)items);
         }
 
         public static void StackRight(this CElement parent, StackOptions options, params object[] items)
         {
-            Stack(parent, toLeft, options, items);
+            StackRight(parent, options, (IEnumerable)items);
         }
 
         public static void StackBottom(this CElement parent, StackOptions options, params object[] items)
+        {
+            StackBottom(parent, options, (IEnumerable)items);
+        }
+
+
+        public static void StackLeft(this CElement parent, StackOptions options, IEnumerable items)
+        {
+            Stack(parent, toRight, options, items);
+        }
+
+        public static void StackTop(this CElement parent, StackOptions options, IEnumerable items)
+        {
+            Stack(parent, toBottom, options, items);
+        }
+
+        public static void StackRight(this CElement parent, StackOptions options, IEnumerable items)
+        {
+            Stack(parent, toLeft, options, items);
+        }
+
+        public static void StackBottom(this CElement parent, StackOptions options, IEnumerable items)
         {
             Stack(parent, toTop, options, items);
         }
 
 
-        public static void StackLeft(this CElement parent, params object[] items)
+        public static void StackLeft(this CElement parent, IEnumerable items)
         {
             Stack(parent, toRight, StackOptions.Default, items);
         }
 
-        public static void StackTop(this CElement parent, params object[] items)
+        public static void StackTop(this CElement parent, IEnumerable items)
         {
-            Stack(parent, toBotton, StackOptions.Default, items);
+            Stack(parent, toBottom, StackOptions.Default, items);
         }
 
-        public static void StackRight(this CElement parent, params object[] items)
+        public static void StackRight(this CElement parent, IEnumerable items)
         {
             Stack(parent, toLeft, StackOptions.Default, items);
         }
 
-        public static void StackBottom(this CElement parent, params object[] items)
+        public static void StackBottom(this CElement parent, IEnumerable items)
         {
             Stack(parent, toTop, StackOptions.Default, items);
         }
 
 
-        private static void Stack(CElement parent, AnchorMapper mapper, StackOptions options, IEnumerable<object> items)
+        public static void StackLeft(this CElement parent, params object[] items)
+        {
+            StackLeft(parent, (IEnumerable)items);
+        }
+
+        public static void StackTop(this CElement parent, params object[] items)
+        {
+            StackTop(parent, (IEnumerable)items);
+        }
+
+        public static void StackRight(this CElement parent, params object[] items)
+        {
+            StackRight(parent, (IEnumerable)items);
+        }
+
+        public static void StackBottom(this CElement parent, params object[] items)
+        {
+            StackBottom(parent, (IEnumerable)items);
+        }
+
+
+        private static void Stack(CElement parent, AnchorMapper mapper, StackOptions options, IEnumerable items)
         {
             ClLinearExpression trailing = mapper.Leading(parent) + mapper.LeadingInset(options.Insets) * mapper.multipler;
+            bool isFirst = true;
             foreach (var item in items)
             {
                 CElement element = null;
@@ -334,6 +399,10 @@ namespace RWLayout.alpha2
                 if (element != null)
                 {
                     var child = element;
+                    if (!isFirst)
+                    {
+                        trailing = trailing + options.Spacing;
+                    }
                     parent.AddConstraint(new ClLinearConstraint(trailing, new ClLinearExpression(mapper.Leading(child)), options.Strength));
                     trailing = new ClLinearExpression(mapper.Trailing(child));
 
@@ -352,6 +421,13 @@ namespace RWLayout.alpha2
                             mapper.SideB(child) ^ mapper.SideB(parent) - mapper.SideBInset(options.Insets) * mapper.multipler
                         );
                     }
+                    if (options.AlignToCenter)
+                    {
+                        parent.AddConstraints(options.Strength,
+                            mapper.Center(child) ^ mapper.Center(parent)
+                            );
+                    }
+                    isFirst = false;
                 }
                 else 
                 {
