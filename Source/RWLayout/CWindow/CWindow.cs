@@ -73,7 +73,7 @@ namespace RWLayout.alpha2
         /// <returns></returns>
         public Vector2 MarginsSize()
         {            
-            return new Vector2(Margin * 2, Margin * 2 + (optionalTitle == null ? 0 : Margin + 25f)) + GuiScaleFix();
+            return MarginInsets().Size;
         }
 
         public EdgeInsets MarginInsets()
