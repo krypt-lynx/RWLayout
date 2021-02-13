@@ -110,7 +110,6 @@ namespace RWLayoutTests.FastAccess
         [TestMethod]
         public void CallRetMethod()
         {
-            var test = new TestStruct();
             var call0 = Dynamic.StaticRetMethod<TestStruct, string>("RetMethod0");
             var call1 = Dynamic.StaticRetMethod<TestStruct, int, string>("RetMethod1");
             var call2 = Dynamic.StaticRetMethod<TestStruct, int, int, string>("RetMethod2");
