@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RWLayoutTests
 {
-    // [TestClass]
+    //[TestClass]
     public class PerfTest
     {
         class TargetClass
