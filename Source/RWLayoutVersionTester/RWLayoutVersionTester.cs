@@ -76,7 +76,7 @@ namespace RWLayoutVersionTester
                         text:
                         $"RWLayout service mod version does not match lib version.\n" +
                         $"\n" +
-                        $"It can be caused by wrong mod order and mod embedding a version of the lib. Ensure RWLayout it placed right after core mods\n" +
+                        $"It can be caused by wrong mod order and mod embedding a version of the lib. Ensure RWLayout is placed right after core mods\n" +
                         $"\n" +
                         $"Mod version:\t{modVer}\n" +
                         $"Lib version:\t{libVer}",
