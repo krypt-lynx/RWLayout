@@ -31,11 +31,6 @@ namespace RWLayout.alpha2.FastAccess
                     break;
             }
         }
-
-        public static void EmitLdarga(this ILGenerator gen, byte argIndex)
-        {
-            gen.Emit(OpCodes.Ldarga_S, argIndex);
-        }
     }
 
     public delegate TValue Getter<in TInstance, out TValue>(TInstance instance) where TInstance : class;
@@ -47,6 +42,21 @@ namespace RWLayout.alpha2.FastAccess
 
     public partial class Dynamic
     {
+        public static TDelegate CreateMethodCaller<TDelegate>(MethodInfo method) where TDelegate : Delegate
+        {
+            return (TDelegate)CreateMethodCaller(typeof(TDelegate), method);
+        }
+
+        public static Delegate CreateMethodCaller(Type delegateType, MethodInfo method)
+        {
+            return CreateMethodCaller(
+                delegateType,
+                method,
+                method.ReturnType != typeof(void) ? method.ReturnType : null,
+                method.IsStatic ? null : (method.DeclaringType.IsValueType ? method.DeclaringType.MakeByRefType() : method.DeclaringType),
+                method.GetParameters().Select(x => x.ParameterType).ToArray());
+        }
+
         public static Delegate CreateMethodCaller(Type delegateType, MethodInfo method, Type return_, Type this_, params Type[] args)
         {
             var arguments = Enumerable.Empty<Type>();
@@ -56,7 +66,7 @@ namespace RWLayout.alpha2.FastAccess
             }
             arguments = arguments.Concat(args);
 
-            DynamicMethod wrapper = new DynamicMethod($"method_{method.DeclaringType.Name}_{method.Name}", return_, arguments.ToArray(), true);
+            DynamicMethod wrapper = new DynamicMethod($"method_{method.DeclaringType.Name}_{method.Name}", return_, arguments.ToArray(), typeof(Dynamic), true);
             ILGenerator gen = wrapper.GetILGenerator();
 
             int argIndex = 0;
@@ -65,7 +75,7 @@ namespace RWLayout.alpha2.FastAccess
                 if (this_.IsValueType)
                 {
                     // Struct;
-                    gen.EmitLdarga((byte)argIndex++);
+                    gen.Emit(OpCodes.Ldarga_S, (byte)argIndex++);
                 }
                 else 
                 {
