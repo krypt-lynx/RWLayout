@@ -90,6 +90,7 @@
     <Compile Include="Classes\Resource.cs" />
     <Compile Include="CMod.cs" />
     <Compile Include="Elements\Controls\CButtonImage.cs" />
+    <Compile Include="Elements\Controls\CButtonInvisible.cs" />
     <Compile Include="Elements\Controls\CButtonText.cs" />
     <Compile Include="Elements\Controls\CCheckbox.cs" />
     <Compile Include="Elements\Controls\CCheckboxLabeled.cs" />
