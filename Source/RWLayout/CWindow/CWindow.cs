@@ -94,7 +94,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// Inner size of the window (window size - margins)
         /// </summary>
-        public Vector2 InnerSize
+        public virtual Vector2 InnerSize
         {
             get
             {
