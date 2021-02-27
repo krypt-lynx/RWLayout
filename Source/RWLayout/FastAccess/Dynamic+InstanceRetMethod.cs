@@ -50,44 +50,32 @@ namespace RWLayout.alpha2.FastAccess
 
         public static Func<TInstance, TResult> InstanceRetMethod<TInstance, TResult>(MethodInfo method) where TInstance : class
         {
-            return (Func<TInstance, TResult>)CreateMethodCaller(typeof(Func<TInstance, TResult>), 
-                method, method.ReturnType, method.DeclaringType);
+            return CreateMethodCaller<Func<TInstance, TResult>>(method);
         }
 
         public static Func<TInstance, TArg0, TResult> InstanceRetMethod<TInstance, TArg0, TResult>(MethodInfo method) where TInstance : class
         {
-
-            return (Func<TInstance, TArg0, TResult>)CreateMethodCaller(typeof(Func<TInstance, TArg0, TResult>), 
-                method, method.ReturnType, method.DeclaringType,
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<Func<TInstance, TArg0, TResult>>(method);
         }
 
         public static Func<TInstance, TArg0, TArg1, TResult> InstanceRetMethod<TInstance, TArg0, TArg1, TResult>(MethodInfo method) where TInstance : class
         {
-            return (Func<TInstance, TArg0, TArg1, TResult>)CreateMethodCaller(typeof(Func<TInstance, TArg0, TArg1, TResult>), 
-                method, method.ReturnType, method.DeclaringType,
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<Func<TInstance, TArg0, TArg1, TResult>>(method);
         }
 
         public static Func<TInstance, TArg0, TArg1, TArg2, TResult> InstanceRetMethod<TInstance, TArg0, TArg1, TArg2, TResult>(MethodInfo method) where TInstance : class
         {
-            return (Func<TInstance, TArg0, TArg1, TArg2, TResult>)CreateMethodCaller(typeof(Func<TInstance, TArg0, TArg1, TArg2, TResult>),
-                method, method.ReturnType, method.DeclaringType,
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<Func<TInstance, TArg0, TArg1, TArg2, TResult>>(method);
         }
 
         public static Func<TInstance, TArg0, TArg1, TArg2, TArg3, TResult> InstanceRetMethod<TInstance, TArg0, TArg1, TArg2, TArg3, TResult>(MethodInfo method) where TInstance : class
         {
-            return (Func<TInstance, TArg0, TArg1, TArg2, TArg3, TResult>)CreateMethodCaller(typeof(Func<TInstance, TArg0, TArg1, TArg2, TArg3, TResult>),
-                method, method.ReturnType, method.DeclaringType,
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<Func<TInstance, TArg0, TArg1, TArg2, TArg3, TResult>>(method);
         }
 
         public static Func<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4, TResult> InstanceRetMethod<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4, TResult>(MethodInfo method) where TInstance : class
         {
-            return (Func<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4, TResult>)CreateMethodCaller(typeof(Func<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4, TResult>),
-                method, method.ReturnType, method.DeclaringType,
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<Func<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4, TResult>>(method);
         }
 
     }

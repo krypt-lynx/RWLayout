@@ -64,44 +64,32 @@ namespace RWLayout.alpha2.FastAccess
 
         public static ByRefFunc<TInstance, TResult> StructRetMethod<TInstance, TResult>(MethodInfo method) where TInstance : struct
         {
-            return (ByRefFunc<TInstance, TResult>)CreateMethodCaller(typeof(ByRefFunc<TInstance, TResult>),
-                method, method.ReturnType, method.DeclaringType.MakeByRefType());
+            return CreateMethodCaller<ByRefFunc<TInstance, TResult>>(method);
         }
 
         public static ByRefFunc<TInstance, TArg0, TResult> StructRetMethod<TInstance, TArg0, TResult>(MethodInfo method) where TInstance : struct
         {
-
-            return (ByRefFunc<TInstance, TArg0, TResult>)CreateMethodCaller(typeof(ByRefFunc<TInstance, TArg0, TResult>),
-                method, method.ReturnType, method.DeclaringType.MakeByRefType(),
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<ByRefFunc<TInstance, TArg0, TResult>>(method);
         }
 
         public static ByRefFunc<TInstance, TArg0, TArg1, TResult> StructRetMethod<TInstance, TArg0, TArg1, TResult>(MethodInfo method) where TInstance : struct
         {
-            return (ByRefFunc<TInstance, TArg0, TArg1, TResult>)CreateMethodCaller(typeof(ByRefFunc<TInstance, TArg0, TArg1, TResult>),
-                method, method.ReturnType, method.DeclaringType.MakeByRefType(),
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<ByRefFunc<TInstance, TArg0, TArg1, TResult>>(method);
         }
 
         public static ByRefFunc<TInstance, TArg0, TArg1, TArg2, TResult> StructRetMethod<TInstance, TArg0, TArg1, TArg2, TResult>(MethodInfo method) where TInstance : struct
         {
-            return (ByRefFunc<TInstance, TArg0, TArg1, TArg2, TResult>)CreateMethodCaller(typeof(ByRefFunc<TInstance, TArg0, TArg1, TArg2, TResult>),
-                method, method.ReturnType, method.DeclaringType.MakeByRefType(),
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<ByRefFunc<TInstance, TArg0, TArg1, TArg2, TResult>>(method);
         }
 
         public static ByRefFunc<TInstance, TArg0, TArg1, TArg2, TArg3, TResult> StructRetMethod<TInstance, TArg0, TArg1, TArg2, TArg3, TResult>(MethodInfo method) where TInstance : struct
         {
-            return (ByRefFunc<TInstance, TArg0, TArg1, TArg2, TArg3, TResult>)CreateMethodCaller(typeof(ByRefFunc<TInstance, TArg0, TArg1, TArg2, TArg3, TResult>),
-                method, method.ReturnType, method.DeclaringType.MakeByRefType(),
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<ByRefFunc<TInstance, TArg0, TArg1, TArg2, TArg3, TResult>>(method);
         }
 
         public static ByRefFunc<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4, TResult> StructRetMethod<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4, TResult>(MethodInfo method) where TInstance : struct
         {
-            return (ByRefFunc<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4, TResult>)CreateMethodCaller(typeof(ByRefFunc<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4, TResult>),
-                method, method.ReturnType, method.DeclaringType.MakeByRefType(),
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<ByRefFunc<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4, TResult>>(method);
         }
 
 
@@ -146,37 +134,32 @@ namespace RWLayout.alpha2.FastAccess
 
         public static ByRefAction<TInstance> StructVoidMethod<TInstance>(MethodInfo method) where TInstance : struct
         {
-            return (ByRefAction<TInstance>)CreateMethodCaller(typeof(ByRefAction<TInstance>), method, null, method.DeclaringType.MakeByRefType());
+            return CreateMethodCaller<ByRefAction<TInstance>>(method);
         }
 
         public static ByRefAction<TInstance, TArg0> StructVoidMethod<TInstance, TArg0>(MethodInfo method) where TInstance : struct
         {
-            return (ByRefAction<TInstance, TArg0>)CreateMethodCaller(typeof(ByRefAction<TInstance, TArg0>), method, null, method.DeclaringType.MakeByRefType(),
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<ByRefAction<TInstance, TArg0>>(method);
         }
 
         public static ByRefAction<TInstance, TArg0, TArg1> StructVoidMethod<TInstance, TArg0, TArg1>(MethodInfo method) where TInstance : struct
         {
-            return (ByRefAction<TInstance, TArg0, TArg1>)CreateMethodCaller(typeof(ByRefAction<TInstance, TArg0, TArg1>), method, null, method.DeclaringType.MakeByRefType(),
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<ByRefAction<TInstance, TArg0, TArg1>>(method);
         }
 
         public static ByRefAction<TInstance, TArg0, TArg1, TArg2> StructVoidMethod<TInstance, TArg0, TArg1, TArg2>(MethodInfo method) where TInstance : struct
         {
-            return (ByRefAction<TInstance, TArg0, TArg1, TArg2>)CreateMethodCaller(typeof(ByRefAction<TInstance, TArg0, TArg1, TArg2>), method, null, method.DeclaringType.MakeByRefType(),
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<ByRefAction<TInstance, TArg0, TArg1, TArg2>>(method);
         }
 
         public static ByRefAction<TInstance, TArg0, TArg1, TArg2, TArg3> StructVoidMethod<TInstance, TArg0, TArg1, TArg2, TArg3>(MethodInfo method) where TInstance : struct
         {
-            return (ByRefAction<TInstance, TArg0, TArg1, TArg2, TArg3>)CreateMethodCaller(typeof(ByRefAction<TInstance, TArg0, TArg1, TArg2, TArg3>), method, null, method.DeclaringType.MakeByRefType(),
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<ByRefAction<TInstance, TArg0, TArg1, TArg2, TArg3>>(method);
         }
 
         public static ByRefAction<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4> StructVoidMethod<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4>(MethodInfo method) where TInstance : struct
         {
-            return (ByRefAction<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4>)CreateMethodCaller(typeof(ByRefAction<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4>), method, null, method.DeclaringType.MakeByRefType(),
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<ByRefAction<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4>>(method);
         }
 
     }

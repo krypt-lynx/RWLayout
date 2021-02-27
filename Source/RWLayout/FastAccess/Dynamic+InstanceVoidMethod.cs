@@ -50,41 +50,32 @@ namespace RWLayout.alpha2.FastAccess
 
         public static Action<TInstance> InstanceVoidMethod<TInstance>(MethodInfo method) where TInstance : class
         {
-            return (Action<TInstance>)CreateMethodCaller(typeof(Action<TInstance>), method, null, method.DeclaringType);
+            return CreateMethodCaller<Action<TInstance>>(method);
         }
 
         public static Action<TInstance, TArg0> InstanceVoidMethod<TInstance, TArg0>(MethodInfo method) where TInstance : class
         {
-            return (Action<TInstance, TArg0>)CreateMethodCaller(typeof(Action<TInstance, TArg0>), method, null, method.DeclaringType, 
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
-
+            return CreateMethodCaller<Action<TInstance, TArg0>>(method);
         }
 
         public static Action<TInstance, TArg0, TArg1> InstanceVoidMethod<TInstance, TArg0, TArg1>(MethodInfo method) where TInstance : class
         {
-            return (Action<TInstance, TArg0, TArg1>)CreateMethodCaller(typeof(Action<TInstance, TArg0, TArg1>), method, null, method.DeclaringType,
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
-
+            return CreateMethodCaller<Action<TInstance, TArg0, TArg1>>(method);
         }
 
         public static Action<TInstance, TArg0, TArg1, TArg2> InstanceVoidMethod<TInstance, TArg0, TArg1, TArg2>(MethodInfo method) where TInstance : class
         {
-            return (Action<TInstance, TArg0, TArg1, TArg2>)CreateMethodCaller(typeof(Action<TInstance, TArg0, TArg1, TArg2>), method, null, method.DeclaringType,
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
-
+            return CreateMethodCaller<Action<TInstance, TArg0, TArg1, TArg2>>(method);
         }
 
         public static Action<TInstance, TArg0, TArg1, TArg2, TArg3> InstanceVoidMethod<TInstance, TArg0, TArg1, TArg2, TArg3>(MethodInfo method) where TInstance : class
         {
-            return (Action<TInstance, TArg0, TArg1, TArg2, TArg3>)CreateMethodCaller(typeof(Action<TInstance, TArg0, TArg1, TArg2, TArg3>), method, null, method.DeclaringType,
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
-
+            return CreateMethodCaller<Action<TInstance, TArg0, TArg1, TArg2, TArg3>>(method);
         }
 
         public static Action<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4> InstanceVoidMethod<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4>(MethodInfo method) where TInstance : class
         {
-            return (Action<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4>)CreateMethodCaller(typeof(Action<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4>), method, null, method.DeclaringType,
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
+            return CreateMethodCaller<Action<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4>>(method);
         }
 
     }

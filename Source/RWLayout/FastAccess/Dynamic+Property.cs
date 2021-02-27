@@ -48,7 +48,7 @@ namespace RWLayout.alpha2.FastAccess
 
         public static Getter<TInstance, TProperty> InstanceGetProperty<TInstance, TProperty>(PropertyInfo property) where TInstance : class
         {
-            DynamicMethod getter = new DynamicMethod($"get_{property.DeclaringType.Name}_{property.Name}", typeof(TProperty), new Type[] { typeof(TInstance) }, true);
+            DynamicMethod getter = new DynamicMethod($"get_{property.DeclaringType.Name}_{property.Name}", typeof(TProperty), new Type[] { typeof(TInstance) }, typeof(Dynamic), true);
             var method = property.GetGetMethod(true);
             ILGenerator gen = getter.GetILGenerator();
 
@@ -61,7 +61,7 @@ namespace RWLayout.alpha2.FastAccess
 
         public static Setter<TInstance, TProperty> InstanceSetProperty<TInstance, TProperty>(PropertyInfo property) where TInstance : class
         {
-            DynamicMethod getter = new DynamicMethod($"set_{property.DeclaringType.Name}_{property.Name}", null, new Type[] { typeof(TInstance), typeof(TProperty) }, true);
+            DynamicMethod getter = new DynamicMethod($"set_{property.DeclaringType.Name}_{property.Name}", null, new Type[] { typeof(TInstance), typeof(TProperty) }, typeof(Dynamic), true);
             var method = property.GetSetMethod(true);
             ILGenerator gen = getter.GetILGenerator();
 
@@ -75,7 +75,7 @@ namespace RWLayout.alpha2.FastAccess
 
         public static ByRefGetter<TInstance, TProperty> StructGetProperty<TInstance, TProperty>(PropertyInfo property) where TInstance : struct
         {
-            DynamicMethod getter = new DynamicMethod($"get_{property.DeclaringType.Name}_{property.Name}", typeof(TProperty), new Type[] { typeof(TInstance).MakeByRefType() }, true);
+            DynamicMethod getter = new DynamicMethod($"get_{property.DeclaringType.Name}_{property.Name}", typeof(TProperty), new Type[] { typeof(TInstance).MakeByRefType() }, typeof(Dynamic), true);
             var method = property.GetGetMethod(true);
             ILGenerator gen = getter.GetILGenerator();
 
@@ -88,7 +88,7 @@ namespace RWLayout.alpha2.FastAccess
 
         public static ByRefSetter<TInstance, TProperty> StructSetProperty<TInstance, TProperty>(PropertyInfo property) where TInstance : struct
         {
-            DynamicMethod getter = new DynamicMethod($"set_{property.DeclaringType.Name}_{property.Name}", null, new Type[] { typeof(TInstance).MakeByRefType(), typeof(TProperty) }, true);
+            DynamicMethod getter = new DynamicMethod($"set_{property.DeclaringType.Name}_{property.Name}", null, new Type[] { typeof(TInstance).MakeByRefType(), typeof(TProperty) }, typeof(Dynamic), true);
             var method = property.GetSetMethod(true);
             ILGenerator gen = getter.GetILGenerator();
 
@@ -104,7 +104,7 @@ namespace RWLayout.alpha2.FastAccess
 
         public static Func<TProperty> StaticGetProperty<TProperty>(PropertyInfo property)
         {
-            DynamicMethod getter = new DynamicMethod($"get_{property.DeclaringType.Name}_{property.Name}", typeof(TProperty), new Type[] { }, true);
+            DynamicMethod getter = new DynamicMethod($"get_{property.DeclaringType.Name}_{property.Name}", typeof(TProperty), new Type[] { }, typeof(Dynamic), true);
             var method = property.GetGetMethod(true);
             ILGenerator gen = getter.GetILGenerator();
 
@@ -116,7 +116,7 @@ namespace RWLayout.alpha2.FastAccess
 
         public static Action<TProperty> StaticSetProperty<TProperty>(PropertyInfo property)
         {
-            DynamicMethod getter = new DynamicMethod($"set_{property.DeclaringType.Name}_{property.Name}", null, new Type[] { typeof(TProperty) }, true);
+            DynamicMethod getter = new DynamicMethod($"set_{property.DeclaringType.Name}_{property.Name}", null, new Type[] { typeof(TProperty) }, typeof(Dynamic), true);
             var method = property.GetSetMethod(true);
             ILGenerator gen = getter.GetILGenerator();
 
