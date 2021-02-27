@@ -62,8 +62,10 @@ namespace RWLayout.alpha2
             }
         }
 
-        public bool Groupping { get; set; } = false;
         public bool Clipping { get; set; } = false;
+
+        [Obsolete("Use Clipping instead")]
+        public bool Groupping => Clipping;
 
         Vector2? intrinsicSize = null;
 
@@ -82,7 +84,7 @@ namespace RWLayout.alpha2
                 globalOffset = Vector2.zero;
             }
 
-            if (Groupping || Clipping)
+            if (Clipping)
             {
                 localOffset = new Vector2(-(float)left.Value - globalOffset.x, -(float)top.Value - globalOffset.y);
             }
