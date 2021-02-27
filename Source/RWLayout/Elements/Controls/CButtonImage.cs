@@ -9,7 +9,7 @@ using Verse;
 namespace RWLayout.alpha2
 {
     /// <summary>
-    /// Widgets.ButtonText wrapper
+    /// Widgets.ButtonImage wrapper
     /// </summary>
     public class CButtonImage : CElement
     {
