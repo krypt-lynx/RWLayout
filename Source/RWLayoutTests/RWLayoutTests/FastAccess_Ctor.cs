@@ -93,11 +93,11 @@ namespace RWLayoutTests.FastAccess
                 typeof(TestClassRefCtor).GetMethod("Invoke").GetParameters().Select(x => x.ParameterType).ToArray(), null);
 
 
-            var callRef_0 = (TestClassRefCtor_0)Dynamic.ConstructorCaller(typeof(TestClassRefCtor_0), constructor);
-            var callRef_1 = (TestClassRefCtor_1)Dynamic.ConstructorCaller(typeof(TestClassRefCtor_1), constructor);
-            var callRef_2 = (TestClassRefCtor_2)Dynamic.ConstructorCaller(typeof(TestClassRefCtor_2), constructor);
-            var callRef_3 = (TestClassRefCtor_3)Dynamic.ConstructorCaller(typeof(TestClassRefCtor_3), constructor);
-            var callRef_4 = (TestClassRefCtor_4)Dynamic.ConstructorCaller(typeof(TestClassRefCtor_4), constructor);
+            var callRef_0 = Dynamic.ConstructorCallerFromDelegate<TestClassRefCtor_0>(constructor);
+            var callRef_1 = Dynamic.ConstructorCallerFromDelegate<TestClassRefCtor_1>(constructor);
+            var callRef_2 = Dynamic.ConstructorCallerFromDelegate<TestClassRefCtor_2>(constructor);
+            var callRef_3 = Dynamic.ConstructorCallerFromDelegate<TestClassRefCtor_3>(constructor);
+            var callRef_4 = Dynamic.ConstructorCallerFromDelegate<TestClassRefCtor_4>(constructor);
 
             int c = 3;
             string d = "4"; 
@@ -122,25 +122,21 @@ namespace RWLayoutTests.FastAccess
 
 
             object ctest = c;
-            object dtest = c;
+            object dtest = d;
 
             c = 3;
             d = "4";
             ctest = c;
-            //dtest = d;
             testVar = callRef_2("1", 2, ref ctest, ref d);
             c = (int)ctest;
-            //d = (string)dtest;
             Assert.AreEqual(testVar.test, 10);
             Assert.AreEqual(3, c);
             Assert.AreEqual("-1", d);
 
             c = 3;
             d = "4";
-            //ctest = c;
             dtest = d;
             testVar = callRef_3("1", 2, ref c, ref dtest);
-            //c = (int)ctest;
             d = (string)dtest;
             Assert.AreEqual(testVar.test, 10);
             Assert.AreEqual(3, c);

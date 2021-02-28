@@ -174,6 +174,7 @@ namespace RWLayout.alpha2.FastAccess
             return (Func<TArg0, TArg1, TArg2, TArg3, TArg4, T>)ConstructorCaller(typeof(Func<TArg0, TArg1, TArg2, TArg3, TArg4, T>), constructor);
         }
 
+
         public static TDelegate ConstructorCallerFromDelegate<TDelegate>() where TDelegate : Delegate
         {
             var methodInfo = typeof(TDelegate).GetMethod("Invoke");
@@ -188,6 +189,11 @@ namespace RWLayout.alpha2.FastAccess
             return (TDelegate)ConstructorCaller(typeof(TDelegate), constructor);
         }
 
+        public static TDelegate ConstructorCallerFromDelegate<TDelegate>(ConstructorInfo constructor) where TDelegate : Delegate
+        {
+            return (TDelegate)ConstructorCaller(typeof(TDelegate), constructor);
+        }        
+        
         public static Delegate ConstructorCaller(Type delegateType, ConstructorInfo constructor)
         {
             return ConstructorCaller(delegateType, constructor, constructor.DeclaringType);
@@ -197,7 +203,6 @@ namespace RWLayout.alpha2.FastAccess
         {
             return ConstructorCaller(delegateType, null, valueType);
         }
-
    
         public static Delegate ConstructorCaller(Type delegateType, ConstructorInfo constructor, Type instanceType)
         {
@@ -245,7 +250,7 @@ namespace RWLayout.alpha2.FastAccess
 
                 for (int i = 0; i < ctorArgs.Length; i++)
                 {
-                    argBuilders.Add(ILMethodBuilder.GetArgBuilder(gen.Gen, delegateArgs[i], ctorArgs[i]));
+                    argBuilders.Add(ILMethodBuilder.GetArgBuilder(gen, delegateArgs[i], ctorArgs[i]));
                 }
 
                 for (int i = 0; i < ctorArgs.Length; i++)

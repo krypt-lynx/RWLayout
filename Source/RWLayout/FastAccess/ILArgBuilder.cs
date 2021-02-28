@@ -9,7 +9,7 @@ namespace RWLayout.alpha2.FastAccess
 {    
     class PassthroughILBuilder : ILArgBuilder
     {
-        public PassthroughILBuilder(ILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType) { }
+        public PassthroughILBuilder(TestILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType) { }
 
         public override void PassArg(byte argIndex)
         {
@@ -24,7 +24,7 @@ namespace RWLayout.alpha2.FastAccess
 
     class CastILBuilder : ILArgBuilder
     {
-        public CastILBuilder(ILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType) { }
+        public CastILBuilder(TestILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType) { }
 
         public override void PassArg(byte argIndex)
         {
@@ -44,7 +44,7 @@ namespace RWLayout.alpha2.FastAccess
 
     class UnboxILBuilder : ILArgBuilder
     {
-        public UnboxILBuilder(ILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType) { }
+        public UnboxILBuilder(TestILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType) { }
 
         public override void PassArg(byte argIndex)
         {
@@ -63,7 +63,7 @@ namespace RWLayout.alpha2.FastAccess
 
     class ByRefClassILBuilder : ILArgBuilder
     {
-        public ByRefClassILBuilder(ILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType)
+        public ByRefClassILBuilder(TestILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType)
         {
             elementType = methodArgType.GetElementType();
         }
@@ -104,7 +104,7 @@ namespace RWLayout.alpha2.FastAccess
 
     class ByRefValueTypeILBuilder : ILArgBuilder
     {
-        public ByRefValueTypeILBuilder(ILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType)
+        public ByRefValueTypeILBuilder(TestILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType)
         {
             elementType = methodArgType.GetElementType();
         }
@@ -146,11 +146,11 @@ namespace RWLayout.alpha2.FastAccess
     
     abstract class ILArgBuilder
     {
-        protected ILGenerator gen;
+        protected TestILGenerator gen;
         protected Type delegateArgType;
         protected Type methodArgType;
 
-        public ILArgBuilder(ILGenerator gen, Type delegateArgType, Type methodArgType)
+        public ILArgBuilder(TestILGenerator gen, Type delegateArgType, Type methodArgType)
         {
             this.gen = gen;
             this.delegateArgType = delegateArgType;
