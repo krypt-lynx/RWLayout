@@ -31,6 +31,28 @@ namespace RWLayout.alpha2.FastAccess
                     break;
             }
         }
+
+        public static void EmitLdarg(this TestILGenerator gen, byte argIndex)
+        {
+            switch (argIndex)
+            {
+                case 0:
+                    gen.Emit(OpCodes.Ldarg_0);
+                    break;
+                case 1:
+                    gen.Emit(OpCodes.Ldarg_1);
+                    break;
+                case 2:
+                    gen.Emit(OpCodes.Ldarg_2);
+                    break;
+                case 3:
+                    gen.Emit(OpCodes.Ldarg_3);
+                    break;
+                default:
+                    gen.Emit(OpCodes.Ldarg_S, argIndex);
+                    break;
+            }
+        }
     }
 
     public delegate TValue Getter<in TInstance, out TValue>(TInstance instance) where TInstance : class;

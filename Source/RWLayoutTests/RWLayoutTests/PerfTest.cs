@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RWLayoutTests
 {
-    [TestClass]
+    //[TestClass]
     public class PerfTest
     {
         public PerfTest()
@@ -186,7 +186,7 @@ namespace RWLayoutTests
             {
                 if (cache == null)
                 {
-                    cache = Dynamic.CreateConstructorCaller<T>();
+                    cache = Dynamic.ConstructorCaller<T>();
                 }
                 return cache();
             }
@@ -199,7 +199,7 @@ namespace RWLayoutTests
                 Func<object> ctor;
                 if (!cache.TryGetValue(type, out ctor))
                 {
-                    ctor = (Func<object>)Dynamic.CreateConstructorCaller(typeof(Func<object>), type.GetConstructor(Type.EmptyTypes));
+                    ctor = (Func<object>)Dynamic.ConstructorCaller(typeof(Func<object>), type.GetConstructor(Type.EmptyTypes));
                     cache[type] = ctor;
                 }
                 return ctor();
@@ -209,7 +209,7 @@ namespace RWLayoutTests
         [TestMethod]
         public void Ctor_2_RepeatILEmit()
         {
-            var ctor = Dynamic.CreateConstructorCaller<TargetClass>();
+            var ctor = Dynamic.ConstructorCaller<TargetClass>();
             for (int i = 0; i < repeats; i++)
             {
                 ctor();
@@ -240,7 +240,7 @@ namespace RWLayoutTests
         [TestMethod]
         public void Ctor_3_RepeatActivator()
         {
-            var ctor = Dynamic.CreateConstructorCaller<TargetClass>();
+            var ctor = Dynamic.ConstructorCaller<TargetClass>();
             for (int i = 0; i < repeats; i++)
             {
                 Activator.CreateInstance<TargetClass>();
