@@ -71,25 +71,40 @@ namespace RWLayout.alpha2.FastAccess
 
         public static Delegate CreateMethodCaller(Type delegateType, MethodInfo method)
         {
-            return CreateMethodCaller(
-                delegateType,
-                method,
-                method.ReturnType != typeof(void) ? method.ReturnType : null,
-                method.IsStatic ? null : (method.DeclaringType.IsValueType ? method.DeclaringType.MakeByRefType() : method.DeclaringType),
-                method.GetParameters().Select(x => x.ParameterType).ToArray());
-        }
+            // arguments checks
+            if (!typeof(Delegate).IsAssignableFrom(delegateType))
+            {
+                throw new ArgumentException("delegateType does not represents a delegate", nameof(delegateType));
+            }
 
-        public static Delegate CreateMethodCaller(Type delegateType, MethodInfo method, Type return_, Type this_, params Type[] args)
-        {
+            // read delegate info
+            var methodInfo = delegateType.GetMethod("Invoke");
+            var delegateArgs = methodInfo?.GetParameters().Select(x => x.ParameterType).ToArray() ?? Type.EmptyTypes;
+            var retType = methodInfo.ReturnType != typeof(void) ? methodInfo.ReturnType : null;
+
+            // read method info
+            var methodArgs = method.GetParameters().Select(x => x.ParameterType).ToArray();
+
+            if (delegateArgs.Length != methodArgs.Length)
+            {
+                throw new Exception("deletage's arguments count does not match method's arguments count");
+            }
+
+            //
+
+            Type this_ = method.IsStatic ? null : (method.DeclaringType.IsValueType ? method.DeclaringType.MakeByRefType() : method.DeclaringType);
+
             var arguments = Enumerable.Empty<Type>();
             if (this_ != null)
             {
                 arguments = arguments.Append(this_);
             }
-            arguments = arguments.Concat(args);
+            arguments = arguments.Concat(methodArgs);
 
-            DynamicMethod wrapper = new DynamicMethod($"method_{method.DeclaringType.Name}_{method.Name}", return_, arguments.ToArray(), typeof(Dynamic), true);
+            DynamicMethod wrapper = new DynamicMethod($"method_{method.DeclaringType.Name}_{method.Name}", retType, arguments.ToArray(), typeof(Dynamic), true);
             ILGenerator gen = wrapper.GetILGenerator();
+
+
 
             int argIndex = 0;
             if (this_ != null)
@@ -107,7 +122,7 @@ namespace RWLayout.alpha2.FastAccess
             }
 
 
-            for (int i = 0; i < args.Length; i++)
+            for (int i = 0; i < methodArgs.Length; i++)
             {
                 gen.EmitLdarg((byte)argIndex++);
             }

@@ -206,6 +206,7 @@ namespace RWLayout.alpha2.FastAccess
    
         public static Delegate ConstructorCaller(Type delegateType, ConstructorInfo constructor, Type instanceType)
         {
+            // arguments checks
             if (!typeof(Delegate).IsAssignableFrom(delegateType))
             {
                 throw new ArgumentException("delegateType does not represents a delegate", nameof(delegateType));
@@ -221,10 +222,12 @@ namespace RWLayout.alpha2.FastAccess
                 throw new ArgumentException("constructor is null, but instanceType is not a value type", nameof(instanceType));
             }
 
-
+            // read delegate info
             var methodInfo = delegateType.GetMethod("Invoke");
+            var delegateArgs = methodInfo.GetParameters().Select(x => x.ParameterType).ToArray() ?? Type.EmptyTypes;
+            var retType = methodInfo.ReturnType != typeof(void) ? methodInfo.ReturnType : null;
 
-            var delegateArgs = methodInfo?.GetParameters().Select(x => x.ParameterType).ToArray() ?? Type.EmptyTypes;
+            // read constructor info
             var ctorArgs = constructor?.GetParameters().Select(x => x.ParameterType).ToArray() ?? Type.EmptyTypes;
 
             if (delegateArgs.Length != ctorArgs.Length)
@@ -232,16 +235,19 @@ namespace RWLayout.alpha2.FastAccess
                 throw new Exception("deletage's arguments count does not match constructor's arguments count");
             }
 
-            instanceType = constructor?.DeclaringType ?? instanceType;
+            //
 
-            DynamicMethod wrapper = new DynamicMethod($"ctor_{instanceType.Name}_", instanceType, delegateArgs, typeof(Dynamic), true);
+            var targetType = constructor?.DeclaringType ?? instanceType;
+
+
+            DynamicMethod wrapper = new DynamicMethod($"ctor_{targetType.Name}_", retType, delegateArgs, typeof(Dynamic), true);
             TestILGenerator gen = new TestILGenerator(wrapper.GetILGenerator());
 
-            if (instanceType.IsValueType && ctorArgs.Length == 0)
+            if (targetType.IsValueType && ctorArgs.Length == 0)
             {
-                var _var = gen.DeclareLocal(instanceType);
+                var _var = gen.DeclareLocal(targetType);
                 gen.Emit(OpCodes.Ldloca_S, _var);
-                gen.Emit(OpCodes.Initobj, instanceType);
+                gen.Emit(OpCodes.Initobj, targetType);
                 gen.Emit(OpCodes.Ldloc_0);
             }
             else

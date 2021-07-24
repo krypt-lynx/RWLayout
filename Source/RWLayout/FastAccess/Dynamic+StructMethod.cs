@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace RWLayout.alpha2.FastAccess
 {
+    #region Delegates
+
     public delegate TResult ByRefFunc<TInstance, out TResult>(ref TInstance instance) where TInstance : struct;
     public delegate TResult ByRefFunc<TInstance, TArg0, out TResult>(ref TInstance instance, TArg0 arg0) where TInstance : struct;
     public delegate TResult ByRefFunc<TInstance, TArg0, TArg1, out TResult>(ref TInstance instance, TArg0 arg0, TArg1 arg1) where TInstance : struct;
@@ -20,6 +22,8 @@ namespace RWLayout.alpha2.FastAccess
     public delegate void ByRefAction<TInstance, TArg0, TArg1, TArg2>(ref TInstance instance, TArg0 arg0, TArg1 arg1, TArg2 arg2) where TInstance : struct;
     public delegate void ByRefAction<TInstance, TArg0, TArg1, TArg2, TArg3>(ref TInstance instance, TArg0 arg0, TArg1 arg1, TArg2 arg2, TArg3 arg3) where TInstance : struct;
     public delegate void ByRefAction<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4>(ref TInstance instance, TArg0 arg0, TArg1 arg1, TArg2 arg2, TArg3 arg3, TArg4 arg4) where TInstance : struct;
+
+    #endregion
 
     public partial class Dynamic
     {
