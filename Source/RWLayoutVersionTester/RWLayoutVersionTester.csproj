@@ -50,10 +50,20 @@
     <WarningLevel>4</WarningLevel>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '1.3|AnyCPU'">
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\1.3\Assemblies\</OutputPath>
+    <DefineConstants>TRACE;rw_1_3</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
   <Import Condition=" '$(Configuration)' == '1.1' " Project="..\dependences-1.1.csproj" />
   <Import Condition=" '$(Configuration)' == '1.2' " Project="..\dependences-1.2.csproj" />
-  <Import Condition=" '$(Configuration)' == 'Debug' " Project="..\dependences-1.2.csproj" />
-  <Import Condition=" '$(Configuration)' == 'Release' " Project="..\dependences-1.2.csproj" />
+  <Import Condition=" '$(Configuration)' == '1.3' " Project="..\dependences-1.3.csproj" />
+  <Import Condition=" '$(Configuration)' == 'Debug' " Project="..\dependences-1.3.csproj" />
+  <Import Condition=" '$(Configuration)' == 'Release' " Project="..\dependences-1.3.csproj" />
   <ItemGroup>
     <Reference Include="0Harmony">
       <Private>False</Private>

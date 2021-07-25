@@ -1,3 +1,6 @@
+0.1.14a
++ RimWorld 1.3 support
+
 0.1.13a
 + CTabView
 + FastAccess tools

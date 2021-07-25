@@ -16,9 +16,11 @@ namespace RWLayout.alpha2
         Hide
     }
 
+    [Obsolete("Use CListView instead")]
     public class CListingStandart : CElement
     {
         Listing_Standard listing = new Listing_Standard();
+
         Rect innerRect;
         Vector2 scrollPosition = Vector2.zero;
 
@@ -76,7 +78,12 @@ namespace RWLayout.alpha2
 
             if (showScrollBar)
             {
+#if rw_1_2_or_earlier
                 listing.BeginScrollView(BoundsRounded, ref scrollPosition, ref innerRect);
+#else
+                listing.Begin(BoundsRounded);
+#endif
+
             }
             else
             {
@@ -91,7 +98,11 @@ namespace RWLayout.alpha2
 
             if (showScrollBar)
             {
-                listing.EndScrollView(ref innerRect);
+#if rw_1_2_or_earlier
+                listing.EndScrollView(ref innerRect);                
+#else
+                listing.End();
+#endif
             }
             else
             {
