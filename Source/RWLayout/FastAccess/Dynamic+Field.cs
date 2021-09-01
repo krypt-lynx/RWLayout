@@ -48,11 +48,12 @@ namespace RWLayout.alpha2.FastAccess
         public static Getter<TInstance, TField> InstanceGetField<TInstance, TField>(FieldInfo field) where TInstance : class
         {
             DynamicMethod getter = new DynamicMethod($"get_{field.DeclaringType.Name}_{field.Name}", typeof(TField), new Type[] { typeof(TInstance) }, typeof(Dynamic), true);
-            ILGenerator gen = getter.GetILGenerator();
+            IILGenerator gen = getter.GetILGenerator().AsInterface();
 
-            gen.Emit(OpCodes.Ldarg_0);
-            gen.Emit(OpCodes.Ldfld, field);
-            gen.Emit(OpCodes.Ret);
+            gen
+                .Ldarg_0()
+                .Ldfld(field)
+                .Ret();
 
             return (Getter<TInstance, TField>)getter.CreateDelegate(typeof(Getter<TInstance, TField>));
         }
@@ -60,12 +61,13 @@ namespace RWLayout.alpha2.FastAccess
         public static Setter<TInstance, TField> InstanceSetField<TInstance, TField>(FieldInfo field) where TInstance : class
         {
             DynamicMethod getter = new DynamicMethod($"set_{field.DeclaringType.Name}_{field.Name}", null, new Type[] { typeof(TInstance), typeof(TField) }, typeof(Dynamic), true);
-            ILGenerator gen = getter.GetILGenerator();
+            IILGenerator gen = getter.GetILGenerator().AsInterface();
 
-            gen.Emit(OpCodes.Ldarg_0);
-            gen.Emit(OpCodes.Ldarg_1);
-            gen.Emit(OpCodes.Stfld, field);
-            gen.Emit(OpCodes.Ret);
+            gen
+                .Ldarg_0()
+                .Ldarg_1()
+                .Stfld(field)
+                .Ret();
 
             return (Setter<TInstance, TField>)getter.CreateDelegate(typeof(Setter<TInstance, TField>));
         }
@@ -74,11 +76,12 @@ namespace RWLayout.alpha2.FastAccess
         public static ByRefGetter<TInstance, TField> StructGetField<TInstance, TField>(FieldInfo field) where TInstance : struct
         {
             DynamicMethod getter = new DynamicMethod($"get_{field.DeclaringType.Name}_{field.Name}", typeof(TField), new Type[] { typeof(TInstance).MakeByRefType() }, typeof(Dynamic), true);
-            ILGenerator gen = getter.GetILGenerator();
+            IILGenerator gen = getter.GetILGenerator().AsInterface();
 
-            gen.Emit(OpCodes.Ldarg_0);
-            gen.Emit(OpCodes.Ldfld, field);
-            gen.Emit(OpCodes.Ret);
+            gen
+                .Ldarg_0()
+                .Ldfld(field)
+                .Ret();
 
             return (ByRefGetter<TInstance, TField>)getter.CreateDelegate(typeof(ByRefGetter<TInstance, TField>));
         }
@@ -86,12 +89,13 @@ namespace RWLayout.alpha2.FastAccess
         public static ByRefSetter<TInstance, TField> StructSetField<TInstance, TField>(FieldInfo field) where TInstance : struct
         {
             DynamicMethod getter = new DynamicMethod($"set_{field.DeclaringType.Name}_{field.Name}", null, new Type[] { typeof(TInstance).MakeByRefType(), typeof(TField) }, typeof(Dynamic), true);
-            ILGenerator gen = getter.GetILGenerator();
+            IILGenerator gen = getter.GetILGenerator().AsInterface();
 
-            gen.Emit(OpCodes.Ldarg_0);
-            gen.Emit(OpCodes.Ldarg_1);
-            gen.Emit(OpCodes.Stfld, field);
-            gen.Emit(OpCodes.Ret);
+            gen
+                .Ldarg_0()
+                .Ldarg_1()
+                .Stfld(field)
+                .Ret();
 
             return (ByRefSetter<TInstance, TField>)getter.CreateDelegate(typeof(ByRefSetter<TInstance, TField>));
         }
@@ -102,10 +106,11 @@ namespace RWLayout.alpha2.FastAccess
         public static Func<TField> StaticGetField<TField>(FieldInfo field)
         {
             DynamicMethod getter = new DynamicMethod($"get_{field.DeclaringType.Name}_{field.Name}", typeof(TField), new Type[] { }, typeof(Dynamic), true);
-            ILGenerator gen = getter.GetILGenerator();
+            IILGenerator gen = getter.GetILGenerator().AsInterface();
 
-            gen.Emit(OpCodes.Ldsfld, field);
-            gen.Emit(OpCodes.Ret);
+            gen
+                .Ldsfld(field)
+                .Ret();
 
             return (Func<TField>)getter.CreateDelegate(typeof(Func<TField>));
         }
@@ -113,11 +118,12 @@ namespace RWLayout.alpha2.FastAccess
         public static Action<TField> StaticSetField<TField>(FieldInfo field)
         {
             DynamicMethod getter = new DynamicMethod($"set_{field.DeclaringType.Name}_{field.Name}", null, new Type[] { typeof(TField) }, typeof(Dynamic), true);
-            ILGenerator gen = getter.GetILGenerator();
+            IILGenerator gen = getter.GetILGenerator().AsInterface();
 
-            gen.Emit(OpCodes.Ldarg_0);
-            gen.Emit(OpCodes.Stsfld, field);
-            gen.Emit(OpCodes.Ret);
+            gen
+                .Ldarg_0()
+                .Stsfld(field)
+                .Ret();
 
             return (Action<TField>)getter.CreateDelegate(typeof(Action<TField>));
         }

@@ -9,11 +9,11 @@ namespace RWLayout.alpha2.FastAccess
 {    
     class PassthroughILBuilder : ILArgBuilder
     {
-        public PassthroughILBuilder(TestILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType) { }
+        public PassthroughILBuilder(IILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType) { }
 
         public override void PassArg(byte argIndex)
         {
-            gen.EmitLdarg(argIndex);
+            gen.Ldarg(argIndex);
         }
 
         public static bool WillHandle(Type delegateArgType, Type methodArgType)
@@ -24,11 +24,11 @@ namespace RWLayout.alpha2.FastAccess
 
     class CastILBuilder : ILArgBuilder
     {
-        public CastILBuilder(TestILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType) { }
+        public CastILBuilder(IILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType) { }
 
         public override void PassArg(byte argIndex)
         {
-            gen.EmitLdarg(argIndex);
+            gen.Ldarg(argIndex);
             gen.Emit(OpCodes.Castclass, methodArgType);
         }
 
@@ -44,11 +44,11 @@ namespace RWLayout.alpha2.FastAccess
 
     class UnboxILBuilder : ILArgBuilder
     {
-        public UnboxILBuilder(TestILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType) { }
+        public UnboxILBuilder(IILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType) { }
 
         public override void PassArg(byte argIndex)
         {
-            gen.EmitLdarg(argIndex);
+            gen.Ldarg(argIndex);
             gen.Emit(OpCodes.Unbox_Any, methodArgType);
         }
 
@@ -63,7 +63,7 @@ namespace RWLayout.alpha2.FastAccess
 
     class ByRefClassILBuilder : ILArgBuilder
     {
-        public ByRefClassILBuilder(TestILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType)
+        public ByRefClassILBuilder(IILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType)
         {
             elementType = methodArgType.GetElementType();
         }
@@ -74,7 +74,7 @@ namespace RWLayout.alpha2.FastAccess
         public override void Prepare(byte argIndex)
         {
             local = gen.DeclareLocal(elementType);
-            gen.EmitLdarg(argIndex);
+            gen.Ldarg(argIndex);
             gen.Emit(OpCodes.Ldind_Ref);
             gen.Emit(OpCodes.Castclass, elementType);
             gen.Emit(OpCodes.Stloc, local);
@@ -87,7 +87,7 @@ namespace RWLayout.alpha2.FastAccess
 
         public override void Finalize_(byte argIndex)
         {
-            gen.EmitLdarg(argIndex);
+            gen.Ldarg(argIndex);
             gen.Emit(OpCodes.Ldloc, local);
             gen.Emit(OpCodes.Stind_Ref);
         }
@@ -104,7 +104,7 @@ namespace RWLayout.alpha2.FastAccess
 
     class ByRefValueTypeILBuilder : ILArgBuilder
     {
-        public ByRefValueTypeILBuilder(TestILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType)
+        public ByRefValueTypeILBuilder(IILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType)
         {
             elementType = methodArgType.GetElementType();
         }
@@ -115,7 +115,7 @@ namespace RWLayout.alpha2.FastAccess
         public override void Prepare(byte argIndex)
         {
             local = gen.DeclareLocal(elementType);
-            gen.EmitLdarg(argIndex);
+            gen.Ldarg(argIndex);
             gen.Emit(OpCodes.Ldind_Ref);
             gen.Emit(OpCodes.Unbox_Any, elementType);
             gen.Emit(OpCodes.Stloc, local);
@@ -128,7 +128,7 @@ namespace RWLayout.alpha2.FastAccess
 
         public override void Finalize_(byte argIndex)
         {
-            gen.EmitLdarg(argIndex);
+            gen.Ldarg(argIndex);
             gen.Emit(OpCodes.Ldloc, local);
             gen.Emit(OpCodes.Box, elementType);
             gen.Emit(OpCodes.Stind_Ref);
@@ -146,11 +146,11 @@ namespace RWLayout.alpha2.FastAccess
     
     abstract class ILArgBuilder
     {
-        protected TestILGenerator gen;
+        protected IILGenerator gen;
         protected Type delegateArgType;
         protected Type methodArgType;
 
-        public ILArgBuilder(TestILGenerator gen, Type delegateArgType, Type methodArgType)
+        public ILArgBuilder(IILGenerator gen, Type delegateArgType, Type methodArgType)
         {
             this.gen = gen;
             this.delegateArgType = delegateArgType;

@@ -18,7 +18,7 @@ namespace RWLayout.alpha2.FastAccess
                     { ByRefValueTypeILBuilder.WillHandle, typeof(ByRefValueTypeILBuilder) },
                 };
 
-        public static ILArgBuilder GetArgBuilder(TestILGenerator gen, Type delegateArg, Type targetArg) 
+        public static ILArgBuilder GetArgBuilder(IILGenerator gen, Type delegateArg, Type targetArg) 
         {
             foreach (var builder in ilBuilders)
             {

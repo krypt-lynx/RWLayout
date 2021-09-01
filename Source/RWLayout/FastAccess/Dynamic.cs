@@ -10,48 +10,28 @@ namespace RWLayout.alpha2.FastAccess
 {
     static class ILGeneratorExtensions
     {
-        public static void EmitLdarg(this ILGenerator gen, byte argIndex)
+        public static IILGenerator Ldarg(this IILGenerator gen, byte argIndex)
         {
             switch (argIndex)
             {
                 case 0:
-                    gen.Emit(OpCodes.Ldarg_0);
+                    gen.Ldarg_0();
                     break;
                 case 1:
-                    gen.Emit(OpCodes.Ldarg_1);
+                    gen.Ldarg_1();
                     break;
                 case 2:
-                    gen.Emit(OpCodes.Ldarg_2);
+                    gen.Ldarg_2();
                     break;
                 case 3:
-                    gen.Emit(OpCodes.Ldarg_3);
+                    gen.Ldarg_3();
                     break;
                 default:
-                    gen.Emit(OpCodes.Ldarg_S, argIndex);
+                    gen.Ldarg_S(argIndex);
                     break;
             }
-        }
 
-        public static void EmitLdarg(this TestILGenerator gen, byte argIndex)
-        {
-            switch (argIndex)
-            {
-                case 0:
-                    gen.Emit(OpCodes.Ldarg_0);
-                    break;
-                case 1:
-                    gen.Emit(OpCodes.Ldarg_1);
-                    break;
-                case 2:
-                    gen.Emit(OpCodes.Ldarg_2);
-                    break;
-                case 3:
-                    gen.Emit(OpCodes.Ldarg_3);
-                    break;
-                default:
-                    gen.Emit(OpCodes.Ldarg_S, argIndex);
-                    break;
-            }
+            return gen;
         }
     }
 
@@ -84,11 +64,7 @@ namespace RWLayout.alpha2.FastAccess
 
             // read method info
             var methodArgs = method.GetParameters().Select(x => x.ParameterType).ToArray();
-
-            if (delegateArgs.Length != methodArgs.Length)
-            {
-                throw new Exception("deletage's arguments count does not match method's arguments count");
-            }
+            var argsCount = methodArgs.Length;
 
             //
 
@@ -98,11 +74,17 @@ namespace RWLayout.alpha2.FastAccess
             if (this_ != null)
             {
                 arguments = arguments.Append(this_);
+                argsCount++;
             }
             arguments = arguments.Concat(methodArgs);
 
+            if (delegateArgs.Length != argsCount)
+            {
+                throw new Exception("deletage's arguments count does not match method's arguments count");
+            }
+
             DynamicMethod wrapper = new DynamicMethod($"method_{method.DeclaringType.Name}_{method.Name}", retType, arguments.ToArray(), typeof(Dynamic), true);
-            ILGenerator gen = wrapper.GetILGenerator();
+            IILGenerator gen = wrapper.GetILGenerator().AsInterface();
 
 
 
@@ -112,23 +94,24 @@ namespace RWLayout.alpha2.FastAccess
                 if (this_.IsValueType)
                 {
                     // Struct;
-                    gen.Emit(OpCodes.Ldarga_S, (byte)argIndex++);
+                    gen.Ldarga_S((byte)argIndex++);
                 }
                 else 
                 {
                     // Class; ref Struct;
-                    gen.EmitLdarg((byte)argIndex++);
+                    gen.Ldarg((byte)argIndex++);
                 }
             }
 
 
             for (int i = 0; i < methodArgs.Length; i++)
             {
-                gen.EmitLdarg((byte)argIndex++);
+                gen.Ldarg((byte)argIndex++);
             }
             
-            gen.Emit(OpCodes.Call, method);
-            gen.Emit(OpCodes.Ret);
+            gen
+                .Call(method)
+                .Ret();
 
             return wrapper.CreateDelegate(delegateType);
         }

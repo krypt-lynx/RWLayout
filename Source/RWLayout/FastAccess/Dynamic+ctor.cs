@@ -9,125 +9,7 @@ using System.Threading.Tasks;
 
 namespace RWLayout.alpha2.FastAccess
 {
-    class TestILGenerator
-    {
-        ILGenerator gen;
-        public ILGenerator Gen {
-            get
-            {
-                Debug.WriteLine("direct access to ILGenerator");
-                return gen;
-            }
-        }
 
-        public TestILGenerator(ILGenerator gen)
-        {
-            Debug.WriteLine($"new generator created");
-            this.gen = gen;
-        }
-
-        internal LocalBuilder DeclareLocal(Type localType)
-        {
-            Debug.WriteLine($"declare local: {localType?.Name}");
-            return gen.DeclareLocal(localType);
-        }
-
-        public virtual void Emit(OpCode opcode, string str)
-        {
-            Debug.WriteLine($"emit: {opcode} {str}");
-            gen.Emit(opcode, str);
-        }
-
-        public virtual void Emit(OpCode opcode, FieldInfo field)
-        {
-            Debug.WriteLine($"emit: {opcode} {field}");
-            gen.Emit(opcode, field);
-        }
-
-        public virtual void Emit(OpCode opcode, Label[] labels)
-        {
-            Debug.WriteLine($"emit: {opcode} {labels}"); // todo:
-            gen.Emit(opcode, labels);
-        }
-
-        public virtual void Emit(OpCode opcode, Label label)
-        {
-            Debug.WriteLine($"emit: {opcode} {label}");
-            gen.Emit(opcode, label);
-        }
-
-        public virtual void Emit(OpCode opcode, LocalBuilder local)
-        {
-            Debug.WriteLine($"emit: {opcode} {local}");
-            gen.Emit(opcode, local);
-        }
-
-        public virtual void Emit(OpCode opcode, float arg)
-        {
-            Debug.WriteLine($"emit: {opcode} {arg}");
-            gen.Emit(opcode, arg);
-        }
-
-        public virtual void Emit(OpCode opcode, byte arg)
-        {
-            Debug.WriteLine($"emit: {opcode} {arg}");
-            gen.Emit(opcode, arg);
-        }
-
-        public void Emit(OpCode opcode, sbyte arg)
-        {
-            Debug.WriteLine($"emit: {opcode} {arg}");
-            gen.Emit(opcode, arg);
-        }
-
-        public virtual void Emit(OpCode opcode, short arg)
-        {
-            Debug.WriteLine($"emit: {opcode} {arg}");
-            gen.Emit(opcode, arg);
-        }
-
-        public virtual void Emit(OpCode opcode, double arg)
-        {
-            Debug.WriteLine($"emit: {opcode} {arg}");
-            gen.Emit(opcode, arg);
-        }
-
-        public virtual void Emit(OpCode opcode, MethodInfo meth)
-        {
-            Debug.WriteLine($"emit: {opcode} {meth}");
-            gen.Emit(opcode, meth);
-        }
-
-        public virtual void Emit(OpCode opcode, int arg)
-        {
-            Debug.WriteLine($"emit: {opcode} {arg}");
-            gen.Emit(opcode, arg);
-        }
-
-        public virtual void Emit(OpCode opcode)
-        {
-            Debug.WriteLine($"emit: {opcode}");
-            gen.Emit(opcode);
-        }
-
-        public virtual void Emit(OpCode opcode, long arg)
-        {
-            Debug.WriteLine($"emit: {opcode} {arg}");
-            gen.Emit(opcode, arg);
-        }
-
-        public virtual void Emit(OpCode opcode, Type cls)
-        {
-            Debug.WriteLine($"emit: {opcode} {cls}");
-            gen.Emit(opcode, cls);
-        }
-
-        public virtual void Emit(OpCode opcode, ConstructorInfo con)
-        {
-            Debug.WriteLine($"emit: {opcode} {con}");
-            gen.Emit(opcode, con);
-        }
-    }
 
     public partial class Dynamic
     {
@@ -241,14 +123,12 @@ namespace RWLayout.alpha2.FastAccess
 
 
             DynamicMethod wrapper = new DynamicMethod($"ctor_{targetType.Name}_", retType, delegateArgs, typeof(Dynamic), true);
-            TestILGenerator gen = new TestILGenerator(wrapper.GetILGenerator());
+            IILGenerator gen = wrapper.GetILGenerator().AsInterface();
 
             if (targetType.IsValueType && ctorArgs.Length == 0)
             {
-                var _var = gen.DeclareLocal(targetType);
-                gen.Emit(OpCodes.Ldloca_S, _var);
-                gen.Emit(OpCodes.Initobj, targetType);
-                gen.Emit(OpCodes.Ldloc_0);
+                CreateInitValueType(targetType, gen);
+
             }
             else
             {
@@ -269,16 +149,24 @@ namespace RWLayout.alpha2.FastAccess
                     argBuilders[i].PassArg((byte)i);
                 }
 
-                gen.Emit(OpCodes.Newobj, constructor);
+                gen.Newobj(constructor);
 
                 for (int i = ctorArgs.Length - 1; i >= 0; i--)
                 {
                     argBuilders[i].Finalize_((byte)i);
                 }
             }
-            gen.Emit(OpCodes.Ret);
+            gen.Ret();
             return wrapper.CreateDelegate(delegateType);
         }
-      
+
+        private static void CreateInitValueType(Type targetType, IILGenerator gen)
+        {
+            var _var = gen.DeclareLocal(targetType);
+            gen
+                .Ldloca_S(_var)
+                .Initobj(targetType)
+                .Ldloc_0();
+        }
     }
 }

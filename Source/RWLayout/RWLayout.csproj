@@ -141,6 +141,8 @@
     <Compile Include="FastAccess\Dynamic+StaticVoidMethod.cs" />
     <Compile Include="FastAccess\Dynamic.cs" />
     <Compile Include="FastAccess\ILArgBuilder.cs" />
+    <Compile Include="FastAccess\ILGeneratorEmit.cs" />
+    <Compile Include="FastAccess\ILGeneratorInterface.cs" />
     <Compile Include="FastAccess\ILMethodBuilder.cs" />
     <Compile Include="Internal\Extensions.cs" />
     <Compile Include="Internal\LogHelper.cs" />
