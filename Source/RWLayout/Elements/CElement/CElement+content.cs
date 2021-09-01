@@ -68,14 +68,9 @@ namespace RWLayout.alpha2
             {
 
                 var clipping = Clipping;
-                var groupping = Groupping && !clipping;
                 if (clipping)
                 {
                     GUI.BeginClip(Frame);
-                }
-                if (groupping)
-                {
-                    GUI.BeginGroup(Frame);
                 }
 
                 DoContent();
@@ -85,10 +80,6 @@ namespace RWLayout.alpha2
                     element.DoElementContent();
                 }
 
-                if(groupping)
-                {
-                    GUI.EndGroup();
-                }
                 if (clipping)
                 {
                     GUI.EndClip();
@@ -125,10 +116,19 @@ namespace RWLayout.alpha2
         {
             if (DebugDraw)
             {
-                GuiTools.UsingColor(new Color(1, 0, 0, 0.2f), () => GuiTools.Box(Bounds, new EdgeInsets(1)));                
-                TooltipHandler.TipRegion(Bounds, $"{NamePrefix()}:\n" +
-                    $"Frame: {{x:{Frame.x} y:{Frame.y} w:{Frame.width} h:{Frame.height}}}\n" +
-                    $"Bounds: {{x:{Bounds.x} y:{Bounds.y} w:{Bounds.width} h:{Bounds.height}}}");
+                GuiTools.UsingColor(new Color(1, 0, 0, 0.2f), () => GuiTools.Box(Bounds, new EdgeInsets(1)));
+                // Tip Window is too small :(
+                /*if (Event.current.alt)
+                {
+                    TooltipHandler.TipRegion(Bounds, $"{NamePrefix()}:\n" +
+                        string.Join("\n", constraints.Select(x => x.ToString())));
+                }
+                else*/
+                {
+                    TooltipHandler.TipRegion(Bounds, $"{NamePrefix()}:\n" +
+                        $"Frame: {{x:{Frame.x} y:{Frame.y} w:{Frame.width} h:{Frame.height}}}\n" +
+                        $"Bounds: {{x:{Bounds.x} y:{Bounds.y} w:{Bounds.width} h:{Bounds.height}}}");
+                }
             }
 
             if (Tip != null)

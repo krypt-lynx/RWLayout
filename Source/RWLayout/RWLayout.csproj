@@ -100,6 +100,7 @@
     <Compile Include="Classes\Resource.cs" />
     <Compile Include="CMod.cs" />
     <Compile Include="Elements\Controls\CButtonImage.cs" />
+    <Compile Include="Elements\Controls\CButtonInvisible.cs" />
     <Compile Include="Elements\Controls\CButtonText.cs" />
     <Compile Include="Elements\Controls\CCheckbox.cs" />
     <Compile Include="Elements\Controls\CCheckboxLabeled.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="CWindow\CWindowRoot.cs" />
     <Compile Include="Elements\GuiHosts\CListingRow.cs" />
     <Compile Include="Elements\Controls\Obsolete\CListingStandart.cs" />
+    <Compile Include="FastAccess\Dynamic+ctor.cs" />
     <Compile Include="FastAccess\Dynamic+StructMethod.cs" />
     <Compile Include="FastAccess\Dynamic+Field.cs" />
     <Compile Include="FastAccess\Dynamic+InstanceRetMethod.cs" />
@@ -138,6 +140,8 @@
     <Compile Include="FastAccess\Dynamic+StaticRetMethod.cs" />
     <Compile Include="FastAccess\Dynamic+StaticVoidMethod.cs" />
     <Compile Include="FastAccess\Dynamic.cs" />
+    <Compile Include="FastAccess\ILArgBuilder.cs" />
+    <Compile Include="FastAccess\ILMethodBuilder.cs" />
     <Compile Include="Internal\Extensions.cs" />
     <Compile Include="Internal\LogHelper.cs" />
     <Compile Include="RWLayout.cs" />

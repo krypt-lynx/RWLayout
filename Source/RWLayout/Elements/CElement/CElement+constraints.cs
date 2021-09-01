@@ -20,6 +20,11 @@ namespace RWLayout.alpha2
             solver.AutoSolve = false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        private List<ClConstraint> constraints = new List<ClConstraint>();
+
         protected ClSimplexSolver solver;
         /// <summary>
         /// Cassowary Simplex Solver. Responsible for constraints resolving.
@@ -57,6 +62,7 @@ namespace RWLayout.alpha2
                 constraint.SetStrength(strength);
             }
 
+            constraints.Add(constraint);
             Solver.AddConstraint(constraint);
 
             SetNeedsUpdateLayout();
@@ -89,7 +95,7 @@ namespace RWLayout.alpha2
             //    throw new InvalidOperationException($"Constraint {constraint} in not added to {this}");
             //}
 
-            //constraints.Remove(constraint);
+            constraints.Remove(constraint);
             Solver?.RemoveConstraint(constraint);
             SetNeedsUpdateLayout();
             return this;
@@ -130,6 +136,7 @@ namespace RWLayout.alpha2
 
                 if (hasDetached)
                 {
+                    constraints.Remove(cn);
                     Solver.RemoveConstraint(cn);
                     if (!hasAttached)
                     {

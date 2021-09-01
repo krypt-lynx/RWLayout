@@ -14,19 +14,9 @@ namespace RWLayout.alpha2
     /// </summary>
     internal class CScrollContent : COwnedElement
     {
-        Func<ClSimplexSolver> getSolver;
-
-        public CScrollContent(Func<ClSimplexSolver> getSolver)
-        {
-            this.getSolver = getSolver;
-        }
-
-        protected override ClSimplexSolver Solver
-        {
-            get
-            {
-                return getSolver();
-            }
+        public override CElement Parent {
+            get => base.Parent ?? Owner;
+            protected set => base.Parent = value;
         }
 
         public IEnumerable<ClVariable> exposeAnchors()
@@ -110,7 +100,7 @@ namespace RWLayout.alpha2
 
         public CScrollView()
         {
-            content = new CScrollContent(() => Solver);
+            content = new CScrollContent();
             content.Owner = this;
             content.AddConstraint(Content.left ^ 0, ClStrength.Required);
             content.AddConstraint(Content.top ^ 0, ClStrength.Required);

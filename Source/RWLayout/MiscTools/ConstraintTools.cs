@@ -43,6 +43,105 @@ namespace RWLayout.alpha2
         public Func<EdgeInsets, double> TrailingInset;
         public Func<EdgeInsets, double> SideAInset;
         public Func<EdgeInsets, double> SideBInset;
+
+        public Func<EdgeConstraints, ClLinearExpression> LeadingExpression;
+        public Func<EdgeConstraints, ClLinearExpression> TrailingExpression;
+        public Func<EdgeConstraints, ClLinearExpression> SideAExpression;
+        public Func<EdgeConstraints, ClLinearExpression> SideBExpression;
+
+        public ClLinearExpression GetLeadingExpression(StackOptions options)
+        {
+            if (options.EdgeConstraints != null)
+            {
+                return LeadingExpression(options.EdgeConstraints) ?? LeadingInset(options.Insets);
+            }
+            else {
+                return LeadingInset(options.Insets);
+            }
+        }
+        public ClLinearExpression GetTrailingExpression(StackOptions options)
+        {
+            if (options.EdgeConstraints != null)
+            {
+                return TrailingExpression(options.EdgeConstraints) ?? TrailingInset(options.Insets);
+            }
+            else
+            {
+                return TrailingInset(options.Insets);
+            }
+        }
+        public ClLinearExpression GetSideAExpression(StackOptions options)
+        {
+            if (options.EdgeConstraints != null)
+            {
+                return SideAExpression(options.EdgeConstraints) ?? SideAInset(options.Insets);
+            }
+            else
+            {
+                return SideAInset(options.Insets);
+            }
+        }
+        public ClLinearExpression GetSideBExpression(StackOptions options)
+        {
+            if (options.EdgeConstraints != null)
+            {
+                return SideBExpression(options.EdgeConstraints) ?? SideBInset(options.Insets);
+            }
+            else
+            {
+                return SideBInset(options.Insets);
+            }
+        }
+    }
+
+    public class EdgeConstraints
+    {
+
+        /// <summary>
+        /// top expression
+        /// </summary>
+        public ClLinearExpression Top;
+        /// <summary>
+        /// right expression
+        /// </summary>
+        public ClLinearExpression Right;
+        /// <summary>
+        /// bottom expression
+        /// </summary>
+        public ClLinearExpression Bottom;
+        /// <summary>
+        /// left expression
+        /// </summary>
+        public ClLinearExpression Left;
+
+        public EdgeConstraints()
+        {
+
+        }
+
+        public EdgeConstraints(ClLinearExpression top = null, ClLinearExpression right = null, ClLinearExpression bottom = null, ClLinearExpression left = null)
+        {
+            Top = top;
+            Right = right;
+            Bottom = bottom;
+            Left = left;
+        }
+
+        public EdgeConstraints(double margin)
+        {
+            Top = margin;
+            Right = margin;
+            Bottom = margin;
+            Left = margin;
+        }
+
+        public EdgeConstraints(EdgeInsets insets)
+        {
+            Top = insets.Top;
+            Right = insets.Right;
+            Bottom = insets.Bottom;
+            Left = insets.Left;
+        }
     }
 
     public struct StackOptions
@@ -54,9 +153,9 @@ namespace RWLayout.alpha2
         public EdgeInsets Insets;
         public double Spacing;
 
-
         public bool IntrinsicIfNotSet;
-        public bool AlignToCenter; // todo: implement
+        public bool AlignToCenter;
+        public EdgeConstraints EdgeConstraints;
 
         public static StackOptions Default = new StackOptions
         {
@@ -71,27 +170,28 @@ namespace RWLayout.alpha2
 
         [Obsolete("This method is present for binary compatibility only")]
         public static StackOptions Create(
-            bool constrainStart,
-            bool constrainSides,
-            bool constrainEnd,
-            ClStrength strength,
-            EdgeInsets? insets,
-            bool intrinsicIfNotSet)
+            bool constrainStart, bool constrainSides, bool constrainEnd,
+            ClStrength strength, EdgeInsets? insets, bool intrinsicIfNotSet)
         {
-            return Create(constrainStart, constrainSides, constrainEnd, strength, insets, intrinsicIfNotSet, false, 0);
+            return Create(constrainStart, constrainSides, constrainEnd, strength, insets, intrinsicIfNotSet, false, 0, null);
         }
 
         [Obsolete("This method is present for binary compatibility only")]
         public static StackOptions Create(
-            bool constrainStart,
-            bool constrainSides,
-            bool constrainEnd,
-            ClStrength strength,
-            EdgeInsets? insets,
-            bool intrinsicIfNotSet,
+            bool constrainStart, bool constrainSides, bool constrainEnd,
+            ClStrength strength, EdgeInsets? insets, bool intrinsicIfNotSet,
             bool alignToCenter)
         {
-            return Create(constrainStart, constrainSides, constrainEnd, strength, insets, intrinsicIfNotSet, alignToCenter, 0);
+            return Create(constrainStart, constrainSides, constrainEnd, strength, insets, intrinsicIfNotSet, alignToCenter, 0, null);
+        }
+
+        [Obsolete("This method is present for binary compatibility only")]
+        public static StackOptions Create(
+            bool constrainStart, bool constrainSides, bool constrainEnd,
+            ClStrength strength, EdgeInsets? insets, bool intrinsicIfNotSet,
+            bool alignToCenter, double spacing)
+        {
+            return Create(constrainStart, constrainSides, constrainEnd, strength, insets, intrinsicIfNotSet, alignToCenter, spacing, null);
         }
 
         public static StackOptions Create(
@@ -102,7 +202,8 @@ namespace RWLayout.alpha2
             EdgeInsets? insets = null,
             bool intrinsicIfNotSet = false,
             bool alignToCenter = false,
-            double spacing = 0)
+            double spacing = 0, 
+            EdgeConstraints edgeConstraints = null)
         {
             var options = new StackOptions();
             options.ConstrainStart = constrainStart;
@@ -113,6 +214,7 @@ namespace RWLayout.alpha2
             options.IntrinsicIfNotSet = intrinsicIfNotSet;
             options.AlignToCenter = alignToCenter;
             options.Spacing = spacing;
+            options.EdgeConstraints = edgeConstraints;
 
             return options;
         }
@@ -135,6 +237,10 @@ namespace RWLayout.alpha2
             TrailingInset = x => x.Right,
             SideAInset = x => x.Top,
             SideBInset = x => x.Bottom,
+            LeadingExpression = x => x.Left,
+            TrailingExpression = x => x.Right,
+            SideAExpression = x => x.Top,
+            SideBExpression = x => x.Bottom,
         };
         private static AnchorMapper toLeft = new AnchorMapper
         {
@@ -151,6 +257,10 @@ namespace RWLayout.alpha2
             TrailingInset = x => x.Left,
             SideAInset = x => x.Bottom,
             SideBInset = x => x.Top,
+            LeadingExpression = x => x.Right,
+            TrailingExpression = x => x.Left,
+            SideAExpression = x => x.Bottom,
+            SideBExpression = x => x.Top,
         };
         private static AnchorMapper toBottom = new AnchorMapper
         {
@@ -167,6 +277,10 @@ namespace RWLayout.alpha2
             TrailingInset = x => x.Bottom,
             SideAInset = x => x.Left,
             SideBInset = x => x.Right,
+            LeadingExpression = x => x.Top,
+            TrailingExpression = x => x.Bottom,
+            SideAExpression = x => x.Left,
+            SideBExpression = x => x.Right,
         };
         private static AnchorMapper toTop = new AnchorMapper
         {
@@ -183,6 +297,10 @@ namespace RWLayout.alpha2
             TrailingInset = x => x.Top,
             SideAInset = x => x.Right,
             SideBInset = x => x.Left,
+            LeadingExpression = x => x.Bottom,
+            TrailingExpression = x => x.Top,
+            SideAExpression = x => x.Right,
+            SideBExpression = x => x.Left,
         };
 
         private static ClLinearExpression toLinearExpression(object obj)
@@ -371,7 +489,7 @@ namespace RWLayout.alpha2
 
         private static void Stack(CElement parent, AnchorMapper mapper, StackOptions options, IEnumerable items)
         {
-            ClLinearExpression trailing = mapper.Leading(parent) + mapper.LeadingInset(options.Insets) * mapper.multipler;
+            ClLinearExpression trailing = mapper.Leading(parent) + mapper.GetLeadingExpression(options) * mapper.multipler;
             bool isFirst = true;
             foreach (var item in items)
             {
@@ -417,8 +535,8 @@ namespace RWLayout.alpha2
                     if (options.ConstrainSides)
                     {
                         parent.AddConstraints(options.Strength,
-                            mapper.SideA(child) ^ mapper.SideA(parent) + mapper.SideAInset(options.Insets) * mapper.multipler,
-                            mapper.SideB(child) ^ mapper.SideB(parent) - mapper.SideBInset(options.Insets) * mapper.multipler
+                            mapper.SideA(child) ^ mapper.SideA(parent) + mapper.GetSideAExpression(options) * mapper.multipler,
+                            mapper.SideB(child) ^ mapper.SideB(parent) - mapper.GetSideBExpression(options) * mapper.multipler
                         );
                     }
                     if (options.AlignToCenter)
@@ -437,7 +555,7 @@ namespace RWLayout.alpha2
 
             if (options.ConstrainEnd)
             {
-                parent.AddConstraint(trailing + mapper.TrailingInset(options.Insets) * mapper.multipler ^ mapper.Trailing(parent), options.Strength);
+                parent.AddConstraint(trailing + mapper.GetTrailingExpression(options) * mapper.multipler ^ mapper.Trailing(parent), options.Strength);
             }
         }
     }

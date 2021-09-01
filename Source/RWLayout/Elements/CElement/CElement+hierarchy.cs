@@ -165,6 +165,7 @@ namespace RWLayout.alpha2
             elements.Insert(0, element);
             SetNeedsUpdateLayout();
         }
+
         public void MoveToPosition(CElement element, int position)
         {
             if (position < 0 && position >= elements.Count())
@@ -183,7 +184,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// Parent view if this view
         /// </summary>
-        public CElement Parent
+        public virtual CElement Parent
         {
             get => parent_?.Target;
             protected set => parent_ = new Verse.WeakReference<CElement>(value); 
@@ -192,7 +193,7 @@ namespace RWLayout.alpha2
         /// <summary>
         /// current view trees' root view
         /// </summary>
-        public CElement Root
+        public virtual CElement Root
         {
             get {
                 var parent = Parent;

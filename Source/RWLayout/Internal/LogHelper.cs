@@ -17,7 +17,8 @@ namespace RWLayout.alpha2
 
     public static class LogHelper
     {
-        public static void Log(this string str, MessageType type = MessageType.Verbose)
+        // cannot make it public because of mod prefix used
+        internal static void Log(this string str, MessageType type = MessageType.Verbose)
         {
             str = $"[RWL] {str}";
             switch (type)

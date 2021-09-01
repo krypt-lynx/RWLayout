@@ -187,7 +187,7 @@ namespace RWLayout.alpha2
         /// <remarks>Created getter wrapper is bound to type of object owning the prorerty. Func object argument must be of this type or of one of its subclasses</remarks>
         private static Func<object, T> CreateGetPropertyValueDelegate<T>(PropertyInfo prop)
         {
-            DynamicMethod getter = new DynamicMethod($"get_{prop.DeclaringType.Name}_{prop.Name}", typeof(T), new Type[] { typeof(object) }, true);
+            DynamicMethod getter = new DynamicMethod($"get_{prop.DeclaringType.Name}_{prop.Name}", typeof(T), new Type[] { typeof(object) }, typeof(GenReflection), true);
             MethodInfo method = prop.GetGetMethod(true);
             ILGenerator gen = getter.GetILGenerator();
 
@@ -228,7 +228,7 @@ namespace RWLayout.alpha2
         /// <remarks>Created getter is bound to type of object owning the field. Func object argument must be of this type or of one of its subclasses</remarks>
         private static Func<object, T> CreateGetFieldValueDelegate<T>(FieldInfo field)
         {
-            DynamicMethod getter = new DynamicMethod($"get_{field.DeclaringType.Name}_{field.Name}", typeof(T), new Type[] { typeof(object) }, true);
+            DynamicMethod getter = new DynamicMethod($"get_{field.DeclaringType.Name}_{field.Name}", typeof(T), new Type[] { typeof(object) }, typeof(GenReflection), true);
             ILGenerator gen = getter.GetILGenerator();
 
 
@@ -289,7 +289,7 @@ namespace RWLayout.alpha2
         /// <remarks>Created setter wrapper is bound to type of object owning the prorerty. Action object argument must be of this type or of one of its subclasses</remarks>
         private static Action<object, T> CreateSetPropertyValueDelegate<T>(PropertyInfo prop)
         {
-            DynamicMethod getter = new DynamicMethod($"set_{prop.DeclaringType.Name}_{prop.Name}", null, new Type[] { typeof(object), typeof(T) }, true);
+            DynamicMethod getter = new DynamicMethod($"set_{prop.DeclaringType.Name}_{prop.Name}", null, new Type[] { typeof(object), typeof(T) }, typeof(GenReflection), true);
             MethodInfo method = prop.GetSetMethod(true);
             ILGenerator gen = getter.GetILGenerator();
 
@@ -327,7 +327,7 @@ namespace RWLayout.alpha2
         /// <remarks>Created setter is bound to type of object owning the field. Action object argument must be of this type or of one of its subclasses</remarks>
         private static Action<object, T> CreateSetFieldValueDelegate<T>(FieldInfo field)
         {
-            DynamicMethod getter = new DynamicMethod($"set_{field.DeclaringType.Name}_{field.Name}", null, new Type[] { typeof(object), typeof(T) }, true);
+            DynamicMethod getter = new DynamicMethod($"set_{field.DeclaringType.Name}_{field.Name}", null, new Type[] { typeof(object), typeof(T) }, typeof(GenReflection), true);
             ILGenerator gen = getter.GetILGenerator();
 
             if (field.IsStatic)
