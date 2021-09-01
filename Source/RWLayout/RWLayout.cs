@@ -113,7 +113,7 @@ namespace RWLayout.alpha2
             try
             {
                 using (Stream stream = Assembly.GetExecutingAssembly()
-                        .GetManifestResourceStream("git.txt")) // can I use manifest resources with matching names in differenct assemblies?
+                        .GetManifestResourceStream("git.txt"))
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     versionInfo = reader.ReadToEnd()?.TrimEndNewlines();

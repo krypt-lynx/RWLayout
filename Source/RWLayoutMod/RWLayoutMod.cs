@@ -18,12 +18,14 @@ namespace RWLayoutMod
 
         public bool patchLog = false;
         public bool patchWindowResize = false;
+        public bool patchLoadPatches = true;
 
         public override void ExposeData()
         {
-            Scribe_Values.Look(ref layoutDebug, "layoutDebug", false);
-            Scribe_Values.Look(ref patchLog, "patchLog", false);
-            Scribe_Values.Look(ref patchWindowResize, "patchWindowResize", false);
+            Scribe_Values.Look(ref layoutDebug, nameof(layoutDebug), false);
+            Scribe_Values.Look(ref patchLog, nameof(patchLog), false);
+            Scribe_Values.Look(ref patchWindowResize, nameof(patchWindowResize), false);
+            Scribe_Values.Look(ref patchLoadPatches, nameof(patchLoadPatches), true);
 
             CElement.DebugDraw = layoutDebug;
 
@@ -54,7 +56,7 @@ namespace RWLayoutMod
         public static string GetLibVersionString()
         {
             string libVersionString = null;
-
+             
             var type = GenTypes.GetTypeInAnyAssembly("RWLayout.alpha2.RWLayoutInfo");
             if (type != null)
             {
@@ -95,17 +97,19 @@ namespace RWLayoutMod
             // missing null checks in Log class
             if (settings.patchLog)
             {
-                harmony.Patch(AccessTools.Constructor(typeof(LogMessage), new Type[] { typeof(string) }),
-                    prefix: new HarmonyMethod(typeof(MiscFixes), nameof(MiscFixes.LogMessage_ctor_string_prefix)));
-                harmony.Patch(AccessTools.Constructor(typeof(LogMessage), new Type[] { typeof(LogMessageType), typeof(string), typeof(string) }),
-                    prefix: new HarmonyMethod(typeof(MiscFixes), nameof(MiscFixes.LogMessage_ctor_LogMessageType_string_string_prefix)));
+                MiscFixes.PatchLogMessage(harmony);
             }
 
             // window resizing issues
             if (settings.patchWindowResize)
             {
-                harmony.Patch(AccessTools.Method(typeof(WindowResizer), nameof(WindowResizer.DoResizeControl)),
-                    postfix: new HarmonyMethod(typeof(MiscFixes), nameof(MiscFixes.DoResizeControl_postfix)));
+                MiscFixes.PatchDoResizeControl(harmony);
+            }
+
+            // malforned xml patch crash
+            if (settings.patchLoadPatches)
+            {
+                MiscFixes.TryPatchLoadPatches(harmony);
             }
         }
 

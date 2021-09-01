@@ -1,0 +1,239 @@
+opcode: ldstr
+type: String
+Loading all patches
+opcode: call
+type: MethodInfo
+static System.Void Verse.DeepProfiler::Start(System.String label)
+opcode: ldarg.0
+opcode: newobj
+type: ConstructorInfo
+System.Void System.Collections.Generic.List`1<Verse.PatchOperation>::.ctor()
+opcode: stfld
+type: FieldInfo
+System.Collections.Generic.List`1[Verse.PatchOperation] patches
+opcode: ldarg.0
+opcode: ldc.i4.0
+opcode: stfld
+type: FieldInfo
+System.Boolean loadedAnyPatches
+opcode: ldarg.0
+opcode: ldstr
+type: String
+Patches/
+opcode: ldnull
+opcode: call
+type: MethodInfo
+static Verse.LoadableXmlAsset[] Verse.DirectXmlLoader::XmlAssetsInModFolder(Verse.ModContentPack mod, System.String folderPath, System.Collections.Generic.List`1<System.String> foldersToLoadDebug)
+opcode: call
+type: MethodInfo
+static System.Collections.Generic.List`1<Verse.LoadableXmlAsset> System.Linq.Enumerable::ToList(System.Collections.Generic.IEnumerable`1<Verse.LoadableXmlAsset> source)
+opcode: stloc.0
+opcode: ldc.i4.0
+opcode: stloc.1
+opcode: br
+type: Label
+lbl0
+opcode: ldloc.0
+labels: lbl1
+opcode: ldloc.1
+opcode: callvirt
+type: MethodInfo
+virtual Verse.LoadableXmlAsset System.Collections.Generic.List`1<Verse.LoadableXmlAsset>::get_Item(System.Int32 index)
+opcode: ldfld
+type: FieldInfo
+System.Xml.XmlDocument xmlDoc
+opcode: callvirt
+type: MethodInfo
+System.Xml.XmlElement System.Xml.XmlDocument::get_DocumentElement()
+opcode: stloc.2
+opcode: ldloc.2
+opcode: callvirt
+type: MethodInfo
+abstract virtual System.String System.Xml.XmlNode::get_Name()
+opcode: ldstr
+type: String
+Patch
+opcode: call
+type: MethodInfo
+static System.Boolean System.String::op_Inequality(System.String a, System.String b)
+opcode: brfalse.s
+type: Label
+lbl2
+opcode: ldstr
+type: String
+Unexpected document element in patch XML; got {0}, expected 'Patch'
+opcode: ldloc.2
+opcode: callvirt
+type: MethodInfo
+abstract virtual System.String System.Xml.XmlNode::get_Name()
+opcode: call
+type: MethodInfo
+static System.String System.String::Format(System.String format, System.Object arg0)
+opcode: call
+type: MethodInfo
+static System.Void Verse.Log::Error(System.String text)
+opcode: br
+type: Label
+lbl3
+opcode: ldloc.2
+labels: lbl2
+opcode: callvirt
+type: MethodInfo
+virtual System.Xml.XmlNodeList System.Xml.XmlNode::get_ChildNodes()
+opcode: callvirt
+type: MethodInfo
+abstract virtual System.Collections.IEnumerator System.Xml.XmlNodeList::GetEnumerator()
+opcode: stloc.3
+opcode: br.s
+type: Label
+lbl4
+blocks:
+BeginExceptionBlock;System.Object
+opcode: ldloc.3
+labels: lbl5
+opcode: callvirt
+type: MethodInfo
+abstract virtual System.Object System.Collections.IEnumerator::get_Current()
+opcode: castclass
+type: Type
+System.Xml.XmlNode
+opcode: stloc.s
+type: Local
+4/System.Xml.XmlNode/False
+opcode: ldloc.s
+type: Local
+4/System.Xml.XmlNode/False
+opcode: callvirt
+type: MethodInfo
+abstract virtual System.Xml.XmlNodeType System.Xml.XmlNode::get_NodeType()
+opcode: ldc.i4.1
+opcode: bne.un.s
+type: Label
+lbl6
+opcode: ldloc.s
+type: Local
+4/System.Xml.XmlNode/False
+opcode: callvirt
+type: MethodInfo
+abstract virtual System.String System.Xml.XmlNode::get_Name()
+opcode: ldstr
+type: String
+Operation
+opcode: call
+type: MethodInfo
+static System.Boolean System.String::op_Inequality(System.String a, System.String b)
+opcode: brfalse.s
+type: Label
+lbl7
+opcode: ldstr
+type: String
+Unexpected element in patch XML; got {0}, expected 'Operation'
+opcode: ldloc.s
+type: Local
+4/System.Xml.XmlNode/False
+opcode: callvirt
+type: MethodInfo
+abstract virtual System.String System.Xml.XmlNode::get_Name()
+opcode: call
+type: MethodInfo
+static System.String System.String::Format(System.String format, System.Object arg0)
+opcode: call
+type: MethodInfo
+static System.Void Verse.Log::Error(System.String text)
+opcode: br.s
+type: Label
+lbl8
+opcode: ldloc.s
+type: Local
+4/System.Xml.XmlNode/False
+labels: lbl7
+opcode: ldc.i4.0
+opcode: call
+type: MethodInfo
+static Verse.PatchOperation Verse.DirectXmlToObject::ObjectFromXml(System.Xml.XmlNode xmlRoot, System.Boolean doPostLoad)
+opcode: stloc.s
+type: Local
+5/Verse.PatchOperation/False
+opcode: ldloc.s
+type: Local
+5/Verse.PatchOperation/False
+opcode: ldloc.0
+opcode: ldloc.1
+opcode: callvirt
+type: MethodInfo
+virtual Verse.LoadableXmlAsset System.Collections.Generic.List`1<Verse.LoadableXmlAsset>::get_Item(System.Int32 index)
+opcode: callvirt
+type: MethodInfo
+System.String Verse.LoadableXmlAsset::get_FullFilePath()
+opcode: stfld
+type: FieldInfo
+System.String sourceFile
+opcode: ldarg.0
+opcode: ldfld
+type: FieldInfo
+System.Collections.Generic.List`1[Verse.PatchOperation] patches
+opcode: ldloc.s
+type: Local
+5/Verse.PatchOperation/False
+opcode: callvirt
+type: MethodInfo
+virtual System.Void System.Collections.Generic.List`1<Verse.PatchOperation>::Add(Verse.PatchOperation item)
+opcode: ldarg.0
+opcode: ldc.i4.1
+opcode: stfld
+type: FieldInfo
+System.Boolean loadedAnyPatches
+opcode: ldloc.3
+labels: lbl4|lbl6|lbl8
+opcode: callvirt
+type: MethodInfo
+abstract virtual System.Boolean System.Collections.IEnumerator::MoveNext()
+opcode: brtrue.s
+type: Label
+lbl5
+opcode: leave.s
+type: Label
+lbl9
+opcode: ldloc.3
+blocks:
+BeginFinallyBlock;System.Object
+opcode: isinst
+type: Type
+System.IDisposable
+opcode: stloc.s
+type: Local
+6/System.IDisposable/False
+opcode: ldloc.s
+type: Local
+6/System.IDisposable/False
+opcode: brfalse.s
+type: Label
+lbl10
+opcode: ldloc.s
+type: Local
+6/System.IDisposable/False
+opcode: callvirt
+type: MethodInfo
+abstract virtual System.Void System.IDisposable::Dispose()
+opcode: endfinally
+labels: lbl10
+blocks:
+EndExceptionBlock;System.Object
+opcode: ldloc.1
+labels: lbl3|lbl9
+opcode: ldc.i4.1
+opcode: add
+opcode: stloc.1
+opcode: ldloc.1
+labels: lbl0
+opcode: ldloc.0
+opcode: callvirt
+type: MethodInfo
+virtual System.Int32 System.Collections.Generic.List`1<Verse.LoadableXmlAsset>::get_Count()
+opcode: blt
+type: Label
+lbl1
+opcode: call
+type: MethodInfo
+static System.Void Verse.DeepProfiler::End()
+opcode: ret

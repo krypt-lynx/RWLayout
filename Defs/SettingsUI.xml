@@ -51,6 +51,13 @@
 							<Checked bind="rwsettings.PatchAllActiveAssemblies" />
 						</properties>
 					</CCheckboxLabeled>
+					<CCheckboxLabeled Id="xmlpa">
+						<properties>
+							<Title>Patch handling of malformed xml patches (requires restart)</Title>
+							<Tip>Prevents crash with cunsiquent mod list reset if xml patch containing malformed xml in encountered. Mods will be loaded, invalid patch will be ignored instead</Tip>
+							<Checked bind="settings.patchLoadPatches" />
+						</properties>
+					</CCheckboxLabeled>
 					<CLabel Id="noexamples">
 						<properties>
 							<Title>Examples was moved to separate mod</Title>
@@ -58,18 +65,20 @@
 					</CLabel>
 				</subviews>
 				<constraints>
-					<constraint strength="strong">dlayout.top == root.top</constraint>
+					<constraint>dlayout.top == root.top</constraint>
 					<constraint>vlogging.top == dlayout.bottom+2</constraint>
 					<constraint>lognull.top == vlogging.bottom+10</constraint>
 					<constraint>sticky.top == lognull.bottom+2</constraint>
 					<constraint>aaass.top == sticky.bottom+2</constraint>
-					<constraint>noexamples.top == aaass.bottom+20</constraint>
+					<constraint>xmlpa.top == aaass.bottom+2</constraint>
+					<constraint>noexamples.top == xmlpa.bottom+20</constraint>
 					
 					<constraint>dlayout.height == dlayout.intrinsicHeight</constraint>
 					<constraint>vlogging.height == vlogging.intrinsicHeight</constraint>
 					<constraint>lognull.height == lognull.intrinsicHeight</constraint>
 					<constraint>sticky.height == sticky.intrinsicHeight</constraint>
 					<constraint>aaass.height == aaass.intrinsicHeight</constraint>
+					<constraint>xmlpa.height == xmlpa.intrinsicHeight</constraint>
 					<constraint>noexamples.height == noexamples.intrinsicHeight</constraint>
 
 					<constraint>dlayout.left == root.left</constraint>
@@ -77,6 +86,7 @@
 					<constraint>lognull.left == root.left</constraint>
 					<constraint>sticky.left == root.left</constraint>
 					<constraint>aaass.left == root.left</constraint>
+					<constraint>xmlpa.left == root.left</constraint>
 					<constraint>noexamples.left == root.left</constraint>
 
 					<constraint>dlayout.right == root.right</constraint>
@@ -84,6 +94,7 @@
 					<constraint>lognull.right == root.right</constraint>
 					<constraint>sticky.right == root.right</constraint>
 					<constraint>aaass.right == root.right</constraint>
+					<constraint>xmlpa.right == root.right</constraint>
 					<constraint>noexamples.right == root.right</constraint>
 				</constraints>
 			</CElement>
