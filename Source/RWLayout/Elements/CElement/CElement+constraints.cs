@@ -75,7 +75,7 @@ namespace RWLayout.alpha2
         /// </summary>
         private void ValidateVariables(ClConstraint constraint)
         {
-            HashSet<ClVariable> anchors = Root.allAnchors().ToHashSet();
+            HashSet<ClVariable> anchors = new HashSet<ClVariable>(Root.allAnchors());
             foreach (var var in constraint.Expression.Terms.Keys)
             {
                 if (!anchors.Contains(var))
@@ -109,7 +109,7 @@ namespace RWLayout.alpha2
         private List<ClConstraint> ShearConstraints(CElement element)
         {
             var cns = Solver.AllConstraints();
-            var detachedAnchors = element.allAnchors().ToHashSet();
+            var detachedAnchors = new HashSet<ClVariable>(element.allAnchors());
             var movedConstraints = new List<ClConstraint>();
 
             foreach (var cn in cns)

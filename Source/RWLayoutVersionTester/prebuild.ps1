@@ -7,7 +7,7 @@ Echo "Target directory: $TargetDir"
 if (($ProjectDir -eq $null) -or
 	($TargetDir -eq $null))
 {
-	Echo "Paths not set; exiting"
+	Echo "Paths are not set; exiting"
 	exit
 }
 

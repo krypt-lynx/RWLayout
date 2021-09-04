@@ -118,7 +118,7 @@ namespace RWLayoutMod
             Instance = this;
             isDevBuild = PackageIdOfMine.EndsWith(".dev");
 
-            var name = Assembly.GetExecutingAssembly().GetName().Name;
+            var name = MethodBase.GetCurrentMethod().DeclaringType.Namespace;
 
             try
             {

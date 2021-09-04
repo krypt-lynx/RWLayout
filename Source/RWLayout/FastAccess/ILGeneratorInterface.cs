@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace RWLayout.alpha2.FastAccess
 {
-    interface IILGenerator
+    public interface IILGenerator
     {
 
         public ILGenerator Instance { get; }
@@ -467,7 +467,8 @@ namespace RWLayout.alpha2.FastAccess
         //
         //   parameterTypes:
         //     The types of the required arguments to the instruction.
-        void EmitCalli(OpCode opcode, CallingConvention unmanagedCallConv, Type returnType, Type[] parameterTypes);
+        //void EmitCalli(OpCode opcode, CallingConvention unmanagedCallConv, Type returnType, Type[] parameterTypes);
+
         //
         // Summary:
         //     Emits the Microsoft intermediate language (MSIL) to call Overload:System.Console.WriteLine
@@ -550,33 +551,6 @@ namespace RWLayout.alpha2.FastAccess
         //     loc represents an invalid index into the label array. -or- An index for loc has
         //     already been defined.
         void MarkLabel(Label loc);
-        //
-        // Summary:
-        //     Marks a sequence point in the Microsoft intermediate language (MSIL) stream.
-        //
-        // Parameters:
-        //   document:
-        //     The document for which the sequence point is being defined.
-        //
-        //   startLine:
-        //     The line where the sequence point begins.
-        //
-        //   startColumn:
-        //     The column in the line where the sequence point begins.
-        //
-        //   endLine:
-        //     The line where the sequence point ends.
-        //
-        //   endColumn:
-        //     The column in the line where the sequence point ends.
-        //
-        // Exceptions:
-        //   T:System.ArgumentOutOfRangeException:
-        //     startLine or endLine is <= 0.
-        //
-        //   T:System.NotSupportedException:
-        //     This System.Reflection.Emit.ILGenerator belongs to a System.Reflection.Emit.DynamicMethod.
-        void MarkSequencePoint(ISymbolDocumentWriter document, int startLine, int startColumn, int endLine, int endColumn);
         //
         // Summary:
         //     Emits an instruction to throw an exception.
@@ -681,8 +655,8 @@ namespace RWLayout.alpha2.FastAccess
         public void EmitCall(OpCode opcode, MethodInfo methodInfo, Type[] optionalParameterTypes) => Instance.EmitCall(opcode, methodInfo, optionalParameterTypes);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void EmitCalli(OpCode opcode, CallingConventions callingConvention, Type returnType, Type[] parameterTypes, Type[] optionalParameterTypes) => Instance.EmitCalli(opcode, callingConvention, returnType, parameterTypes, optionalParameterTypes);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void EmitCalli(OpCode opcode, CallingConvention unmanagedCallConv, Type returnType, Type[] parameterTypes) => Instance.EmitCalli(opcode, unmanagedCallConv, returnType, parameterTypes);
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //public void EmitCalli(OpCode opcode, CallingConvention unmanagedCallConv, Type returnType, Type[] parameterTypes) => Instance.EmitCalli(opcode, unmanagedCallConv, returnType, parameterTypes);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void EmitWriteLine(string value) => Instance.EmitWriteLine(value);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -695,8 +669,6 @@ namespace RWLayout.alpha2.FastAccess
         public void EndScope() => Instance.EndScope();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void MarkLabel(Label loc) => Instance.MarkLabel(loc);
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void MarkSequencePoint(ISymbolDocumentWriter document, int startLine, int startColumn, int endLine, int endColumn) => Instance.MarkSequencePoint(document, startLine, startColumn, endLine, endColumn);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ThrowException(Type excType) => Instance.ThrowException(excType);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -747,7 +719,7 @@ namespace RWLayout.alpha2.FastAccess
         public void Emit(OpCode opcode, ConstructorInfo con) { Debug.WriteLine($"emit: {opcode} {con}"); Instance.Emit(opcode, con); }
         public void EmitCall(OpCode opcode, MethodInfo methodInfo, Type[] optionalParameterTypes) { Debug.WriteLine($"emit call: {opcode} {methodInfo} {string.Join(";", (IEnumerable<Type>)optionalParameterTypes)}"); Instance.EmitCall(opcode, methodInfo, optionalParameterTypes); }
         public void EmitCalli(OpCode opcode, CallingConventions callingConvention, Type returnType, Type[] parameterTypes, Type[] optionalParameterTypes) { Debug.WriteLine($"emit call i: {opcode} {callingConvention} {returnType} {string.Join(";", (IEnumerable<Type>)parameterTypes)} {string.Join(";", (IEnumerable<Type>)optionalParameterTypes)}"); Instance.EmitCalli(opcode, callingConvention, returnType, parameterTypes, optionalParameterTypes); }
-        public void EmitCalli(OpCode opcode, CallingConvention unmanagedCallConv, Type returnType, Type[] parameterTypes) { Debug.WriteLine($"emit call i: {opcode} {unmanagedCallConv} {returnType} {string.Join(";", (IEnumerable<Type>)parameterTypes)}"); Instance.EmitCalli(opcode, unmanagedCallConv, returnType, parameterTypes); }
+        //public void EmitCalli(OpCode opcode, CallingConvention unmanagedCallConv, Type returnType, Type[] parameterTypes) { Debug.WriteLine($"emit call i: {opcode} {unmanagedCallConv} {returnType} {string.Join(";", (IEnumerable<Type>)parameterTypes)}"); Instance.EmitCalli(opcode, unmanagedCallConv, returnType, parameterTypes); }
         public void EmitWriteLine(string value) { Debug.WriteLine($"emit writeline: {value}"); Instance.EmitWriteLine(value); }
         public void EmitWriteLine(FieldInfo fld) { Debug.WriteLine($"emit writeline: {fld}"); Instance.EmitWriteLine(fld); }
         public void EmitWriteLine(LocalBuilder localBuilder) { Debug.WriteLine($"emit writeline: {localBuilder}"); Instance.EmitWriteLine(localBuilder); }
@@ -756,7 +728,6 @@ namespace RWLayout.alpha2.FastAccess
         public void EndExceptionBlock() => Instance.EndExceptionBlock();
         public void EndScope() => Instance.EndScope();
         public void MarkLabel(Label loc) => Instance.MarkLabel(loc);
-        public void MarkSequencePoint(ISymbolDocumentWriter document, int startLine, int startColumn, int endLine, int endColumn) => Instance.MarkSequencePoint(document, startLine, startColumn, endLine, endColumn);
         public void ThrowException(Type excType) => Instance.ThrowException(excType);
         public void UsingNamespace(string usingNamespace) => Instance.UsingNamespace(usingNamespace);    }
 }

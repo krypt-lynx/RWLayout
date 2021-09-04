@@ -42,11 +42,15 @@ namespace RWLayoutVersionTester
                 }
                 catch
                 {
-                    libVersionString = null;
+                    libVersionString = "Exception was thrown";
                 }
+            } 
+            else
+            {
+                libVersionString = "Assembly is not loaded";
             }
 
-            return libVersionString ?? "unknown";
+            return libVersionString ?? "Assembly is not loaded or have different version api";
         }
 
         public RWLayoutVersionTester(ModContentPack content) : base(content)
@@ -96,10 +100,10 @@ namespace RWLayoutVersionTester
         {
             Instance = this;
 
-            var name = Assembly.GetExecutingAssembly().GetName().Name;
-
             try
             {
+                var name = MethodBase.GetCurrentMethod().DeclaringType.Namespace;
+
                 using (Stream stream = Assembly.GetExecutingAssembly()
                           .GetManifestResourceStream(name + ".git.txt"))
                 using (StreamReader reader = new StreamReader(stream))
@@ -109,7 +113,7 @@ namespace RWLayoutVersionTester
             }
             catch
             {
-                commitInfo = null;
+                commitInfo = "failed to load version information";
             }
         }
     }

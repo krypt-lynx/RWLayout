@@ -106,14 +106,13 @@ namespace RWLayout.alpha2
         public static string VersionInfo => versionInfo;
 
         private static void ReadVersionInfo()
-        {
-          
-            var name = Assembly.GetExecutingAssembly().GetName().Name;
-
+        {          
             try
             {
+                var name = MethodBase.GetCurrentMethod().DeclaringType.Namespace;
+
                 using (Stream stream = Assembly.GetExecutingAssembly()
-                        .GetManifestResourceStream("git.txt"))
+                        .GetManifestResourceStream(name + ".git.txt"))
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     versionInfo = reader.ReadToEnd()?.TrimEndNewlines();
@@ -121,7 +120,7 @@ namespace RWLayout.alpha2
             }
             catch
             {
-                versionInfo = "missing";
+                versionInfo = "failed to load version information";
             }
         }
     }

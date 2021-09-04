@@ -1,69 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{120E555E-8B0C-4AAE-8FEF-7A9E643DC0FB}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RWLayoutMod</RootNamespace>
-    <AssemblyName>RWLayoutMod</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <TargetFramework>net48</TargetFramework>
     <LangVersion>8.0</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Configurations>Debug;Release;rw1.1;rw1.2;rw1.3</Configurations>
+    <ProjectGuid>{120E555E-8B0C-4AAE-8FEF-7A9E643DC0FB}</ProjectGuid>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\1.3\Assemblies\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;rw_1_3</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AssemblyName>0RWLayoutMod</AssemblyName>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\1.3\Assemblies\</OutputPath>
-    <DefineConstants>TRACE;rw_1_3</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.1|AnyCPU' ">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\1.1\Assemblies\</OutputPath>
-    <DefineConstants>TRACE;rw_1_1</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.2|AnyCPU' ">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\1.2\Assemblies\</OutputPath>
-    <DefineConstants>TRACE;rw_1_2</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '1.3|AnyCPU'">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\1.3\Assemblies\</OutputPath>
-    <DefineConstants>TRACE;rw_1_3</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <Import Condition=" '$(Configuration)' == '1.1' " Project="..\dependences-1.1.csproj" />
-  <Import Condition=" '$(Configuration)' == '1.2' " Project="..\dependences-1.2.csproj" />
-  <Import Condition=" '$(Configuration)' == '1.3' " Project="..\dependences-1.3.csproj" />
-  <Import Condition=" '$(Configuration)' == 'Debug' " Project="..\dependences-1.3.csproj" />
-  <Import Condition=" '$(Configuration)' == 'Release' " Project="..\dependences-1.3.csproj" />
+
+  <Import Project="..\configuration-selector.csproj" />
+    
+  <ItemGroup>
+    <ProjectReference Include="..\RWLayout\RWLayout.csproj" />
+    <ProjectReference Include="D:\Repo\Cassowary.net\Cassowary\Cassowary.csproj" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="0Harmony">
       <Private>False</Private>
@@ -71,18 +26,7 @@
     <Reference Include="Assembly-CSharp">
       <Private>False</Private>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp">
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
@@ -98,37 +42,19 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="ILSerializer.cs" />
-    <Compile Include="MiscFixes.cs" />
-    <Compile Include="RWLayoutMod.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TranspilerHelpers.cs" />
+    <None Remove="git.txt" />
+    <None Remove="IL_LoadPatches.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="git.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RWLayout\RWLayout.csproj">
-      <Project>{859869af-24c5-4aba-a111-f95a794ed7a3}</Project>
-      <Name>RWLayout</Name>
-    </ProjectReference>
-    <ProjectReference Include="D:\Repo\Cassowary.net\Cassowary\Cassowary.csproj">
-      <Project>{f01578a3-ba19-47e6-b333-40e41158658b}</Project>
-      <Name>Cassowary</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="prebuild.ps1" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="IL_LoadPatches.txt" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-	  set ProjectDir=$(ProjectDir)
-	  set TargetDir=$(TargetDir)
-	  PowerShell -NoProfile -ExecutionPolicy Bypass -Command "&amp; ""$(ProjectDir)prebuild.ps1\"" "</PreBuildEvent>
-  </PropertyGroup>
+
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="set ProjectDir=$(ProjectDir)&#xD;&#xA;set TargetDir=$(TargetDir)&#xD;&#xA;PowerShell -NoProfile -ExecutionPolicy Bypass -Command &quot;&amp; \&quot;&quot;$(ProjectDir)prebuild.ps1\&quot;&quot;&quot;" />
+  </Target>
+
 </Project>

@@ -1,85 +1,36 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{859869AF-24C5-4ABA-A111-F95A794ED7A3}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RWLayout.alpha2</RootNamespace>
-    <AssemblyName>0RWLayout</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <TargetFramework>net48</TargetFramework>
     <LangVersion>8.0</LangVersion>
-    <DocumentationFile>bin\Debug\0RWLayout.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Configurations>Debug;Release;rw1.1;rw1.2;rw1.3</Configurations>
+    <ProjectGuid>{41F3E32E-2FED-4A8E-9E5F-59019AE48D69}</ProjectGuid>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;rw_1_3;rw_1_1_or_later;rw_1_2_or_later;rw_1_3_or_later;rw_1_3_or_earlier</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AssemblyName>0RWLayout</AssemblyName>
+    <RootNamespace>RWLayout.alpha2</RootNamespace>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;rw_1_3;rw_1_1_or_later;rw_1_2_or_later;rw_1_3_or_later;rw_1_3_or_earlier</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
+
+  <Import Project="..\configuration-selector.csproj" />
+  
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.1|AnyCPU' ">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;rw_1_1;rw_1_1_or_later;rw_1_1_or_earlier;rw_1_2_or_earlier;rw_1_3_or_earlier</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == '1.2|AnyCPU' ">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;rw_1_2;rw_1_1_or_later;rw_1_2_or_later;rw_1_2_or_earlier;rw_1_3_or_earlier</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '1.3|AnyCPU'">
-    <DebugType>portable</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;rw_1_3;rw_1_1_or_later;rw_1_2_or_later;rw_1_3_or_later;rw_1_3_or_earlier</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <Import Condition=" '$(Configuration)' == '1.1' " Project="..\dependences-1.1.csproj" />
-  <Import Condition=" '$(Configuration)' == '1.2' " Project="..\dependences-1.2.csproj" />
-  <Import Condition=" '$(Configuration)' == '1.3' " Project="..\dependences-1.3.csproj" />
-  <Import Condition=" '$(Configuration)' == 'Debug' " Project="..\dependences-1.3.csproj" />
-  <Import Condition=" '$(Configuration)' == 'Release' " Project="..\dependences-1.3.csproj" />
+
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
-      <Private>False</Private>
-    </Reference>
+    <ProjectReference Include="D:\Repo\Cassowary.net\Cassowary\Cassowary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="0Harmony">
       <Private>False</Private>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <Reference Include="Assembly-CSharp">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine">
       <Private>False</Private>
     </Reference>
@@ -96,90 +47,16 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Classes\Resource.cs" />
-    <Compile Include="CMod.cs" />
-    <Compile Include="Elements\Controls\CButtonImage.cs" />
-    <Compile Include="Elements\Controls\CButtonInvisible.cs" />
-    <Compile Include="Elements\Controls\CButtonText.cs" />
-    <Compile Include="Elements\Controls\CCheckbox.cs" />
-    <Compile Include="Elements\Controls\CCheckboxLabeled.cs" />
-    <Compile Include="Elements\Controls\CFrame.cs" />
-    <Compile Include="Elements\Controls\CListView_vNext.cs" />
-    <Compile Include="Elements\Controls\CScrollView.cs" />
-    <Compile Include="Elements\Controls\CImage.cs" />
-    <Compile Include="CWindow\CWindow.cs" />
-    <Compile Include="CWindow\CWindowResizer.cs" />
-    <Compile Include="Elements\CElement\CElement+anchors.cs" />
-    <Compile Include="Elements\CElement\CElement+constraints.cs" />
-    <Compile Include="Elements\CElement\CElement+content.cs" />
-    <Compile Include="Elements\CElement\CElement+debug.cs" />
-    <Compile Include="Elements\CElement\CElement+events.cs" />
-    <Compile Include="Elements\CElement\CElement+hierarchy.cs" />
-    <Compile Include="Elements\CElement\CElement.cs" />
-    <Compile Include="Elements\Controls\Obsolete\CButton.cs" />
-    <Compile Include="Elements\CTabsView.cs" />
-    <Compile Include="Elements\CTextuteElement.cs" />
-    <Compile Include="Elements\CTintedElement.cs" />
-    <Compile Include="Elements\GuiHosts\CElementHost.cs" />
-    <Compile Include="Elements\GuiHosts\CGuiRoot.cs" />
-    <Compile Include="Elements\Controls\Obsolete\CCheckBox.cs" />
-    <Compile Include="Elements\Controls\CLabel.cs" />
-    <Compile Include="Elements\Controls\CListView.cs" />
-    <Compile Include="Elements\CTitledElement.cs" />
-    <Compile Include="Elements\Controls\CWidget.cs" />
-    <Compile Include="CWindow\CWindowRoot.cs" />
-    <Compile Include="Elements\GuiHosts\CListingRow.cs" />
-    <Compile Include="Elements\Controls\Obsolete\CListingStandart.cs" />
-    <Compile Include="FastAccess\Dynamic+ctor.cs" />
-    <Compile Include="FastAccess\Dynamic+StructMethod.cs" />
-    <Compile Include="FastAccess\Dynamic+Field.cs" />
-    <Compile Include="FastAccess\Dynamic+InstanceRetMethod.cs" />
-    <Compile Include="FastAccess\Dynamic+InstanceVoidMethod.cs" />
-    <Compile Include="FastAccess\Dynamic+Property.cs" />
-    <Compile Include="FastAccess\Dynamic+StaticRetMethod.cs" />
-    <Compile Include="FastAccess\Dynamic+StaticVoidMethod.cs" />
-    <Compile Include="FastAccess\Dynamic.cs" />
-    <Compile Include="FastAccess\ILArgBuilder.cs" />
-    <Compile Include="FastAccess\ILGeneratorEmit.cs" />
-    <Compile Include="FastAccess\ILGeneratorInterface.cs" />
-    <Compile Include="FastAccess\ILMethodBuilder.cs" />
-    <Compile Include="Internal\Extensions.cs" />
-    <Compile Include="Internal\LogHelper.cs" />
-    <Compile Include="RWLayout.cs" />
-    <Compile Include="RWLayoutHarmonyPatches.cs" />
-    <Compile Include="MiscTools\ConstraintTools.cs" />
-    <Compile Include="Classes\EdgeInsets.cs" />
-    <Compile Include="MiscTools\GUIStyleExtension.cs" />
-    <Compile Include="MiscTools\GuiTools+Drawing.cs" />
-    <Compile Include="MiscTools\GuiTools+Text.cs" />
-    <Compile Include="MiscTools\GuiTools+Geometry.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serialization\Bindable.cs" />
-    <Compile Include="Serialization\PropertyWriter.cs" />
-    <Compile Include="Serialization\ConstraintParser.cs" />
-    <Compile Include="Serialization\GenReflection.cs" />
-    <Compile Include="Serialization\Binder.cs" />
-    <Compile Include="Serialization\LayoutDef.cs" />
+    <None Remove="git.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\Repo\Cassowary.net\Cassowary\Cassowary.csproj">
-      <Project>{f01578a3-ba19-47e6-b333-40e41158658b}</Project>
-      <Name>Cassowary</Name>
-    </ProjectReference>
+    <EmbeddedResource Include="git.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="git.txt">
-      <LogicalName>git.txt</LogicalName>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="prebuild.ps1" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>set ProjectDir=$(ProjectDir)
-	  set TargetDir=$(TargetDir)
-	  PowerShell -NoProfile -ExecutionPolicy Bypass -Command "&amp; ""$(ProjectDir)prebuild.ps1\"" "</PreBuildEvent>
-  </PropertyGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="set ProjectDir=$(ProjectDir)&#xD;&#xA;set TargetDir=$(TargetDir)&#xD;&#xA;PowerShell -NoProfile -ExecutionPolicy Bypass -Command &quot;&amp; \&quot;&quot;$(ProjectDir)prebuild.ps1\&quot;&quot;&quot;" />
+  </Target>
+
 </Project>

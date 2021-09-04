@@ -7,9 +7,9 @@
 	<build>
 		<solution>..\Source\RWLayout.sln</solution>
 		<configurations>
-			<configuration>1.1</configuration>
-			<configuration>1.2</configuration>
-			<configuration>1.3</configuration>
+			<configuration>rw1.1</configuration>
+			<configuration>rw1.2</configuration>
+			<configuration>rw1.3</configuration>
 		</configurations>
 	</build>
 	<archive>

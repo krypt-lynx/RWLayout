@@ -113,7 +113,7 @@ namespace RWLayoutMod
 
             var assetLocal = generator.DeclareLocal(typeof(LoadableXmlAsset));
             var docLocal = generator.DeclareLocal(typeof(System.Xml.XmlDocument));
-            var elseLabel = generator.DefineLabel();
+            Label elseLabel = generator.DefineLabel();
             var continueLabel = generator.DefineLabel();
 
             bool patchOnXmlDocAccess = true;
