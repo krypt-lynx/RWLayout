@@ -2,9 +2,9 @@
 <Project>
 	<PropertyGroup>
 		<AssemblySearchPaths>
-			F:\RWModBuild\1.3\Managed;
-			F:\games\RimWorld\Mods\Dev\RWLayout_dev\Dependencies\1.3\;
-			F:\games\RimWorld\Mods\Dev\RWLayout_dev\Dependencies\;
+			C:\I\RWModBuild\1.3\Managed;
+			C:\I\games\RimWorld\Mods\Dev\RWLayout_dev\Dependencies\1.3\;
+			C:\I\games\RimWorld\Mods\Dev\RWLayout_dev\Dependencies\;
 			$(AssemblySearchPaths)
 		</AssemblySearchPaths>
 	</PropertyGroup>

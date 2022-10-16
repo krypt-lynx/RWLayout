@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <LangVersion>8.0</LangVersion>
-    <Configurations>Debug;Release;rw1.1;rw1.2;rw1.3</Configurations>
+    <Configurations>Debug;Release;rw1.1;rw1.2;rw1.3;rw1.4</Configurations>
     <ProjectGuid>{41F3E32E-2FED-4A8E-9E5F-59019AE48D69}</ProjectGuid>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>

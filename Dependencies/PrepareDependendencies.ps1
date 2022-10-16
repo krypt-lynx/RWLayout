@@ -2,7 +2,7 @@
 
 $appId = 294100
 $modIds = @(2009463077)
-$gameVersions = @("1.1", "1.2", "1.3")
+$gameVersions = @("1.1", "1.2", "1.3", "1.4")
 
 #yes, the only purpose is to download Harmony
 #yes, it is possible to install nuget package instead
@@ -35,7 +35,7 @@ if (-Not (Test-Path $steamcmd)) {
 
 Echo "Downloading mods..."
 
-$steamCmdArgs = @("+login anonymous", "+force_install_dir $cache")
+$steamCmdArgs = @("+force_install_dir $cache", "+login anonymous")
 $steamCmdArgs += foreach ($modId in $modIds) {
 	"+workshop_download_item $appId $modId"
 }

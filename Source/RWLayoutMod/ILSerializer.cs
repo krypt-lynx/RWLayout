@@ -65,6 +65,28 @@ namespace RWLayoutMod
             node.WriteLine($"opcode: {opcode}");
         }
 
+        static Dictionary<Type, OperandType> OpTypeForType = new Dictionary<Type, OperandType>
+        {
+            {  typeof(string), OperandType.String },
+            {  typeof(Type), OperandType.Type },
+            {  typeof(ConstructorInfo), OperandType.ConstructorInfo },
+            {  typeof(MethodInfo), OperandType.MethodInfo },
+            {  typeof(FieldInfo), OperandType.FieldInfo },
+            {  typeof(Label), OperandType.Label },
+            {  typeof(LocalBuilder), OperandType.Local },
+        };
+
+        static Dictionary<OperandType, Action<TextWriter, object>> writerForOpType = new Dictionary<OperandType, Action<TextWriter, object>>
+        {
+            { OperandType.String, (n, o) => { n.WriteLine(o); } },
+            { OperandType.Type, (n, o) => { n.WriteLine(((Type)o).FullName); } },
+            { OperandType.ConstructorInfo, (n, o) => { WriteMethod(n, (ConstructorInfo)o); } },
+            { OperandType.MethodInfo, (n, o) => { WriteMethod(n, (MethodInfo)o); } },
+            { OperandType.FieldInfo, (n, o) => { WriteField(n, (FieldInfo)o); } },
+            { OperandType.Label, (n, o) => { n.WriteLine(GetLabelName((Label)o)); } },
+            { OperandType.Local, (n, o) => { WriteLocal(n, (LocalBuilder)o); } },
+        };
+
         private static void WriteOperand(TextWriter node, object operand)
         {
             if (operand == null)
@@ -72,50 +94,32 @@ namespace RWLayoutMod
                 return;
             }
 
-            if (operand is String)
+            OperandType opType = GetOpType(operand);
+            if (opType != OperandType.Unknown)
             {
-                WriteOperandType(node, OperandType.String);
-                node.WriteLine((String)operand);
-            }
-            else if (operand is Type)
-            {
-                WriteOperandType(node, OperandType.Type);
-                node.WriteLine(((Type)operand).FullName);
-            }
-
-            else if (operand is ConstructorInfo)
-            {
-                WriteOperandType(node, OperandType.ConstructorInfo);
-                var ctor = (ConstructorInfo)operand;
-                WriteMethod(node, ctor);
-            }
-            else if (operand is MethodInfo)
-            {
-                WriteOperandType(node, OperandType.MethodInfo);
-                var method = (MethodInfo)operand;
-                WriteMethod(node, method);
-            }
-            else if (operand is FieldInfo)
-            {
-                WriteOperandType(node, OperandType.FieldInfo);
-                var field = (FieldInfo)operand;
-                WriteField(node, field);
-            }
-
-            else if (operand is Label)
-            {
-                WriteOperandType(node, OperandType.Label);
-                node.WriteLine(GetLabelName((Label)operand));
-            }
-            else if (operand is LocalBuilder)
-            {
-                WriteOperandType(node, OperandType.Local);
-                WriteLocal(node, (LocalBuilder)operand);
+                WriteOperandType(node, opType);
+                writerForOpType[opType](node, operand);
             }
             else
             {
                 node.WriteLine($"unknown operand type: {operand.GetType().FullName}");
             }
+        }
+
+        private static OperandType GetOpType(object operand)
+        {
+            OperandType opType = OperandType.Unknown;
+            var lookupType = operand.GetType();
+            while (lookupType != null)
+            {
+                if (OpTypeForType.TryGetValue(lookupType, out opType))
+                {
+                    break;
+                }
+                lookupType = lookupType.BaseType;
+            }
+
+            return opType;
         }
 
         private static void WriteMethod(TextWriter operandNode, MethodBase method)

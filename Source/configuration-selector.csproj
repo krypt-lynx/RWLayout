@@ -2,33 +2,40 @@
 <Project>
  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <Optimize>false</Optimize>
-    <OutputPath>../../1.3/Assemblies</OutputPath>
-    <DefineConstants>TRACE;DEBUG;rw_1_3;rw_1_1_or_later;rw_1_2_or_later;rw_1_3_or_later;rw_1_3_or_earlier</DefineConstants>
+    <OutputPath>../../1.4/Assemblies</OutputPath>
+    <DefineConstants>TRACE;DEBUG;rw_1_4;rw_1_1_or_later;rw_1_2_or_later;rw_1_3_or_later;rw_1_4_or_later;rw_1_4_or_earlier</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <Optimize>true</Optimize>
-    <OutputPath>../../1.3/Assemblies</OutputPath>
-    <DefineConstants>TRACE;rw_1_3;rw_1_1_or_later;rw_1_2_or_later;rw_1_3_or_later;rw_1_3_or_earlier</DefineConstants>
+    <OutputPath>../../1.4/Assemblies</OutputPath>
+    <DefineConstants>TRACE;rw_1_4;rw_1_1_or_later;rw_1_2_or_later;rw_1_3_or_later;rw_1_4_or_later;rw_1_4_or_earlier</DefineConstants>
   </PropertyGroup>
+  
   <PropertyGroup Condition=" '$(Configuration)' == 'rw1.1' ">
     <Optimize>true</Optimize>
     <OutputPath>../../1.1/Assemblies</OutputPath>
-    <DefineConstants>TRACE;rw_1_1;rw_1_1_or_later;rw_1_1_or_earlier;rw_1_2_or_earlier;rw_1_3_or_earlier</DefineConstants>
+    <DefineConstants>TRACE;rw_1_1;rw_1_1_or_later;rw_1_1_or_earlier;rw_1_2_or_earlier;rw_1_3_or_earlier;rw_1_4_or_earlier</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'rw1.2' ">
     <Optimize>true</Optimize>
     <OutputPath>../../1.2/Assemblies</OutputPath>
-    <DefineConstants>TRACE;rw_1_2;rw_1_1_or_later;rw_1_2_or_later;rw_1_2_or_earlier;rw_1_3_or_earlier</DefineConstants>
+    <DefineConstants>TRACE;rw_1_2;rw_1_1_or_later;rw_1_2_or_later;rw_1_2_or_earlier;rw_1_3_or_earlier;rw_1_4_or_earlier</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'rw1.3'">
     <Optimize>true</Optimize>
     <OutputPath>../../1.3/Assemblies</OutputPath>
-    <DefineConstants>TRACE;rw_1_3;rw_1_1_or_later;rw_1_2_or_later;rw_1_3_or_later;rw_1_3_or_earlier</DefineConstants>
+    <DefineConstants>TRACE;rw_1_3;rw_1_1_or_later;rw_1_2_or_later;rw_1_3_or_later;rw_1_3_or_earlier;rw_1_4_or_earlier</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'rw1.4'">
+    <Optimize>true</Optimize>
+    <OutputPath>../../1.4/Assemblies</OutputPath>
+    <DefineConstants>TRACE;rw_1_4;rw_1_1_or_later;rw_1_2_or_later;rw_1_3_or_later;rw_1_4_or_later;rw_1_4_or_earlier</DefineConstants>
   </PropertyGroup>
 
   <Import Condition=" '$(Configuration)' == 'rw1.1' " Project="dependences-1.1.csproj" />
   <Import Condition=" '$(Configuration)' == 'rw1.2' " Project="dependences-1.2.csproj" />
   <Import Condition=" '$(Configuration)' == 'rw1.3' " Project="dependences-1.3.csproj" />
-  <Import Condition=" '$(Configuration)' == 'Debug' " Project="dependences-1.3.csproj" />
-  <Import Condition=" '$(Configuration)' == 'Release' " Project="dependences-1.3.csproj" />
+  <Import Condition=" '$(Configuration)' == 'rw1.4' " Project="dependences-1.4.csproj" />
+  <Import Condition=" '$(Configuration)' == 'Debug' " Project="dependences-1.4.csproj" />
+  <Import Condition=" '$(Configuration)' == 'Release' " Project="dependences-1.4.csproj" />
 </Project>

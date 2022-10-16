@@ -83,7 +83,6 @@ namespace RWLayout.alpha2
 #else
                 listing.Begin(BoundsRounded);
 #endif
-
             }
             else
             {

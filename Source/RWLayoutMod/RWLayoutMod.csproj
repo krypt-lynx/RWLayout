@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <LangVersion>8.0</LangVersion>
-    <Configurations>Debug;Release;rw1.1;rw1.2;rw1.3</Configurations>
+    <Configurations>Debug;Release;rw1.1;rw1.2;rw1.3;rw1.4</Configurations>
     <ProjectGuid>{120E555E-8B0C-4AAE-8FEF-7A9E643DC0FB}</ProjectGuid>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
