@@ -50,6 +50,9 @@ namespace RWLayout.alpha2
                 harmony.Patch(AccessTools.PropertyGetter(typeof(GenTypes), "AllActiveAssemblies"),
                     postfix: new HarmonyMethod(typeof(GetTypesAllActiveAssembliesFix), nameof(GetTypesAllActiveAssembliesFix.GenTypes_AllActiveAssemblies_postfix)));
 
+#if rw_1_4_or_later
+                typeof(GenTypes).GetField("allTypesCached", BindingFlags.Static | BindingFlags.NonPublic).SetValue(null, null);
+#endif
 
                 // testing 
                 $"testing GenTypes.AllActiveAssemblies patch...".Log();
