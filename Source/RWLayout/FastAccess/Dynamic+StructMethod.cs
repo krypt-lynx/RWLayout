@@ -30,36 +30,60 @@ namespace RWLayout.alpha2.FastAccess
         public static ByRefFunc<TInstance, TResult> StructRetMethod<TInstance, TResult>(string methodName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : struct
         {
             var method = typeof(TInstance).GetMethod(methodName, bindingAttr);
+            if (method == null)
+            {
+                throw new MemberNotFoundException(methodName, typeof(TInstance));
+            }
             return StructRetMethod<TInstance, TResult>(method);
         }
 
         public static ByRefFunc<TInstance, TArg0, TResult> StructRetMethod<TInstance, TArg0, TResult>(string methodName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : struct
         {
             var method = typeof(TInstance).GetMethod(methodName, bindingAttr);
+            if (method == null)
+            {
+                throw new MemberNotFoundException(methodName, typeof(TInstance));
+            }
             return StructRetMethod<TInstance, TArg0, TResult>(method);
         }
 
         public static ByRefFunc<TInstance, TArg0, TArg1, TResult> StructRetMethod<TInstance, TArg0, TArg1, TResult>(string methodName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : struct
         {
             var method = typeof(TInstance).GetMethod(methodName, bindingAttr);
+            if (method == null)
+            {
+                throw new MemberNotFoundException(methodName, typeof(TInstance));
+            }
             return StructRetMethod<TInstance, TArg0, TArg1, TResult>(method);
         }
 
         public static ByRefFunc<TInstance, TArg0, TArg1, TArg2, TResult> StructRetMethod<TInstance, TArg0, TArg1, TArg2, TResult>(string methodName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : struct
         {
             var method = typeof(TInstance).GetMethod(methodName, bindingAttr);
+            if (method == null)
+            {
+                throw new MemberNotFoundException(methodName, typeof(TInstance));
+            }
             return StructRetMethod<TInstance, TArg0, TArg1, TArg2, TResult>(method);
         }
 
         public static ByRefFunc<TInstance, TArg0, TArg1, TArg2, TArg3, TResult> StructRetMethod<TInstance, TArg0, TArg1, TArg2, TArg3, TResult>(string methodName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : struct
         {
             var method = typeof(TInstance).GetMethod(methodName, bindingAttr);
+            if (method == null)
+            {
+                throw new MemberNotFoundException(methodName, typeof(TInstance));
+            }
             return StructRetMethod<TInstance, TArg0, TArg1, TArg2, TArg3, TResult>(method);
         }
 
         public static ByRefFunc<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4, TResult> StructRetMethod<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4, TResult>(string methodName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : struct
         {
             var method = typeof(TInstance).GetMethod(methodName, bindingAttr);
+            if (method == null)
+            {
+                throw new MemberNotFoundException(methodName, typeof(TInstance));
+            }
             return StructRetMethod<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4, TResult>(method);
         }
 

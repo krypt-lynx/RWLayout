@@ -132,6 +132,11 @@ namespace RWLayoutTests.FastAccess
             Assert.AreEqual("6", call3(test, 1, 2, 3));
             Assert.AreEqual("10", call4(test, 1, 2, 3, 4));
             Assert.AreEqual("15", call5(test, 1, 2, 3, 4, 5));
+
+            Assert.ThrowsException<MemberNotFoundException>(() =>
+            {
+                var callE = Dynamic.InstanceRetMethod<TestClass, string>("NonExistant");
+            }, "Method \"NonExistant\" is not found in type \"RWLayoutTests.FastAccess.FastAccess_ClassInstance + TestClass\"");
         }
 
         [TestMethod]

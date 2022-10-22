@@ -133,7 +133,7 @@ namespace RWLayout.alpha2
 
             if (Tip != null)
             {
-                TooltipHandler.TipRegion(BoundsRounded, Tip.Value);
+                TooltipHandler.TipRegion(BoundsRounded, DebugDraw ? $"{NamePrefix()}\n{Tip.Value}" : Tip.Value);
             }
         }
     }

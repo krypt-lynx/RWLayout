@@ -16,32 +16,62 @@ namespace RWLayout.alpha2.FastAccess
     {
         public static Getter<TInstance, TProperty> InstanceGetProperty<TInstance, TProperty>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : class
         {
-            return InstanceGetProperty<TInstance, TProperty>(typeof(TInstance).GetProperty(fieldName, bindingAttr));
+            var prop = typeof(TInstance).GetProperty(fieldName, bindingAttr);
+            if (prop == null)
+            {
+                throw new MemberNotFoundException(fieldName, typeof(TInstance));
+            }
+            return InstanceGetProperty<TInstance, TProperty>(prop);
         }
 
         public static Setter<TInstance, TProperty> InstanceSetProperty<TInstance, TProperty>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : class
         {
-            return InstanceSetProperty<TInstance, TProperty>(typeof(TInstance).GetProperty(fieldName, bindingAttr));
+            var prop = typeof(TInstance).GetProperty(fieldName, bindingAttr);
+            if (prop == null)
+            {
+                throw new MemberNotFoundException(fieldName, typeof(TInstance));
+            }
+            return InstanceSetProperty<TInstance, TProperty>(prop);
         }
 
         public static Func<TProperty> StaticGetProperty<TInstance, TProperty>(string fieldName, BindingFlags bindingAttr = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
         {
-            return StaticGetProperty<TProperty>(typeof(TInstance).GetProperty(fieldName, bindingAttr));
+            var prop = typeof(TInstance).GetProperty(fieldName, bindingAttr);
+            if (prop == null)
+            {
+                throw new MemberNotFoundException(fieldName, typeof(TInstance));
+            }
+            return StaticGetProperty<TProperty>(prop);
         }
 
         public static Action<TProperty> StaticSetProperty<TInstance, TProperty>(string fieldName, BindingFlags bindingAttr = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
         {
-            return StaticSetProperty<TProperty>(typeof(TInstance).GetProperty(fieldName, bindingAttr));
+            var prop = typeof(TInstance).GetProperty(fieldName, bindingAttr);
+            if (prop == null)
+            {
+                throw new MemberNotFoundException(fieldName, typeof(TInstance));
+            }
+            return StaticSetProperty<TProperty>(prop);
         }
 
         public static ByRefGetter<TInstance, TProperty> StructGetProperty<TInstance, TProperty>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : struct
         {
-            return StructGetProperty<TInstance, TProperty>(typeof(TInstance).GetProperty(fieldName, bindingAttr));
+            var prop = typeof(TInstance).GetProperty(fieldName, bindingAttr);
+            if (prop == null)
+            {
+                throw new MemberNotFoundException(fieldName, typeof(TInstance));
+            }
+            return StructGetProperty<TInstance, TProperty>(prop);
         }
 
         public static ByRefSetter<TInstance, TProperty> StructSetProperty<TInstance, TProperty>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : struct
         {
-            return StructSetProperty<TInstance, TProperty>(typeof(TInstance).GetProperty(fieldName, bindingAttr));
+            var prop = typeof(TInstance).GetProperty(fieldName, bindingAttr);
+            if (prop == null)
+            {
+                throw new MemberNotFoundException(fieldName, typeof(TInstance));
+            }
+            return StructSetProperty<TInstance, TProperty>(prop);
         }
 
 

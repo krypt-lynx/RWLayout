@@ -12,36 +12,60 @@ namespace RWLayout.alpha2.FastAccess
         public static Action<TInstance> InstanceVoidMethod<TInstance>(string methodName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : class
         {
             var method = typeof(TInstance).GetMethod(methodName, bindingAttr);
+            if (method == null)
+            {
+                throw new MemberNotFoundException(methodName, typeof(TInstance));
+            }
             return InstanceVoidMethod<TInstance>(method);
         }
 
         public static Action<TInstance, TArg0> InstanceVoidMethod<TInstance, TArg0>(string methodName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : class
         {
             var method = typeof(TInstance).GetMethod(methodName, bindingAttr);
+            if (method == null)
+            {
+                throw new MemberNotFoundException(methodName, typeof(TInstance));
+            }
             return InstanceVoidMethod<TInstance, TArg0>(method);
         }
 
         public static Action<TInstance, TArg0, TArg1> InstanceVoidMethod<TInstance, TArg0, TArg1>(string methodName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : class
         {
             var method = typeof(TInstance).GetMethod(methodName, bindingAttr);
+            if (method == null)
+            {
+                throw new MemberNotFoundException(methodName, typeof(TInstance));
+            }
             return InstanceVoidMethod<TInstance, TArg0, TArg1>(method);
         }
 
         public static Action<TInstance, TArg0, TArg1, TArg2> InstanceVoidMethod<TInstance, TArg0, TArg1, TArg2>(string methodName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : class
         {
             var method = typeof(TInstance).GetMethod(methodName, bindingAttr);
+            if (method == null)
+            {
+                throw new MemberNotFoundException(methodName, typeof(TInstance));
+            }
             return InstanceVoidMethod<TInstance, TArg0, TArg1, TArg2>(method);
         }
 
         public static Action<TInstance, TArg0, TArg1, TArg2, TArg3> InstanceVoidMethod<TInstance, TArg0, TArg1, TArg2, TArg3>(string methodName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : class
         {
             var method = typeof(TInstance).GetMethod(methodName, bindingAttr);
+            if (method == null)
+            {
+                throw new MemberNotFoundException(methodName, typeof(TInstance));
+            }
             return InstanceVoidMethod<TInstance, TArg0, TArg1, TArg2, TArg3>(method);
         }
 
         public static Action<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4> InstanceVoidMethod<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4>(string methodName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : class
         {
             var method = typeof(TInstance).GetMethod(methodName, bindingAttr);
+            if (method == null)
+            {
+                throw new MemberNotFoundException(methodName, typeof(TInstance));
+            }
             return InstanceVoidMethod<TInstance, TArg0, TArg1, TArg2, TArg3, TArg4>(method);
         }
 

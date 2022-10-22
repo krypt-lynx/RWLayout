@@ -22,6 +22,10 @@ namespace RWLayout.alpha2.FastAccess
             else
             {
                 var constructor = typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { }, null);
+                if (constructor == null)
+                {
+                    throw new MemberNotFoundException(".ctor", typeof(T));
+                }
                 return (Func<T>)ConstructorCaller(typeof(Func<T>), constructor);
             }
         }
@@ -29,30 +33,50 @@ namespace RWLayout.alpha2.FastAccess
         public static Func<TArg0, T> ConstructorCaller<T, TArg0>()
         {
             var constructor = typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(TArg0) }, null);
+            if (constructor == null)
+            {
+                throw new MemberNotFoundException(".ctor", typeof(T));
+            }
             return (Func<TArg0, T>)ConstructorCaller(typeof(Func<TArg0, T>), constructor);
         }
 
         public static Func<TArg0, TArg1, T> ConstructorCaller<T, TArg0, TArg1>()
         {
             var constructor = typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(TArg0), typeof(TArg1) }, null);
+            if (constructor == null)
+            {
+                throw new MemberNotFoundException(".ctor", typeof(T));
+            }
             return (Func<TArg0, TArg1, T>)ConstructorCaller(typeof(Func<TArg0, TArg1, T>), constructor);
         }
 
         public static Func<TArg0, TArg1, TArg2, T> ConstructorCaller<T, TArg0, TArg1, TArg2>()
         {
             var constructor = typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(TArg0), typeof(TArg1), typeof(TArg2) }, null);
+            if (constructor == null)
+            {
+                throw new MemberNotFoundException(".ctor", typeof(T));
+            }
             return (Func<TArg0, TArg1, TArg2, T>)ConstructorCaller(typeof(Func<TArg0, TArg1, TArg2, T>), constructor);
         }
 
         public static Func<TArg0, TArg1, TArg2, TArg3, T> ConstructorCaller<T, TArg0, TArg1, TArg2, TArg3>()
         {
             var constructor = typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(TArg0), typeof(TArg1), typeof(TArg2), typeof(TArg3) }, null);
+            if (constructor == null)
+            {
+                throw new MemberNotFoundException(".ctor", typeof(T));
+            }
             return (Func<TArg0, TArg1, TArg2, TArg3, T>)ConstructorCaller(typeof(Func<TArg0, TArg1, TArg2, TArg3, T>), constructor);
         }
 
         public static Func<TArg0, TArg1, TArg2, TArg3, TArg4, T> ConstructorCaller<T, TArg0, TArg1, TArg2, TArg3, TArg4>()
         {
             var constructor = typeof(T).GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(TArg0), typeof(TArg1), typeof(TArg2), typeof(TArg3), typeof(TArg4) }, null);
+            if (constructor == null)
+            {
+                throw new MemberNotFoundException(".ctor", typeof(T));
+            }
             return (Func<TArg0, TArg1, TArg2, TArg3, TArg4, T>)ConstructorCaller(typeof(Func<TArg0, TArg1, TArg2, TArg3, TArg4, T>), constructor);
         }
 
@@ -67,7 +91,10 @@ namespace RWLayout.alpha2.FastAccess
 
             var instanceType = methodInfo.ReturnType;
             var constructor = instanceType.GetConstructor(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, methodInfo.GetParameters().Select(x => x.ParameterType).ToArray(), null);
-
+            if (constructor == null)
+            {
+                throw new MemberNotFoundException(".ctor", typeof(TDelegate)); // todo: proper type for error message
+            }
             return (TDelegate)ConstructorCaller(typeof(TDelegate), constructor);
         }
 

@@ -69,7 +69,18 @@ if ($version -eq "") {
 }
 
 $output = $outputFormat -f $version
-$mod = $rw + '\Mods\' + $internalPath
+
+$mod = Join-Path $rw 'Mods'
+
+$modRedirect = [IO.Path]::Combine($mod, 'DeployRedirect.xml')
+if (Test-Path $modRedirect)
+{
+	$redirect = (Select-Xml -Path $modRedirect -XPath '/redirect' | Select-Object -ExpandProperty Node).innerText
+	$mod = Join-Path $mod $redirect
+	$mod = (Get-Item $mod).FullName
+}
+
+$mod = Join-Path $mod $internalPath
 
 Pop-Location
 

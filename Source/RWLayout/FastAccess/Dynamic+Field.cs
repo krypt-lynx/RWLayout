@@ -12,35 +12,65 @@ namespace RWLayout.alpha2.FastAccess
     {
         public static Getter<TInstance, TField> InstanceGetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : class
         {
-            return InstanceGetField<TInstance, TField>(typeof(TInstance).GetField(fieldName, bindingAttr));
+            var field = typeof(TInstance).GetField(fieldName, bindingAttr);
+            if (field == null)
+            {
+                throw new MemberNotFoundException(fieldName, typeof(TInstance));
+            }
+            return InstanceGetField<TInstance, TField>(field);
         }
 
         public static Setter<TInstance, TField> InstanceSetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : class
         {
-            return InstanceSetField<TInstance, TField>(typeof(TInstance).GetField(fieldName, bindingAttr));
+            var field = typeof(TInstance).GetField(fieldName, bindingAttr);
+            if (field == null)
+            {
+                throw new MemberNotFoundException(fieldName, typeof(TInstance));
+            }
+            return InstanceSetField<TInstance, TField>(field);
         }
 
 
         public static ByRefGetter<TInstance, TField> StructGetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : struct
         {
-            return StructGetField<TInstance, TField>(typeof(TInstance).GetField(fieldName, bindingAttr));
+            var field = typeof(TInstance).GetField(fieldName, bindingAttr);
+            if (field == null)
+            {
+                throw new MemberNotFoundException(fieldName, typeof(TInstance));
+            }
+            return StructGetField<TInstance, TField>(field);
         }
 
         public static ByRefSetter<TInstance, TField> StructSetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TInstance : struct
         {
-            return StructSetField<TInstance, TField>(typeof(TInstance).GetField(fieldName, bindingAttr));
+            var field = typeof(TInstance).GetField(fieldName, bindingAttr);
+            if (field == null)
+            {
+                throw new MemberNotFoundException(fieldName, typeof(TInstance));
+            }
+            return StructSetField<TInstance, TField>(field);
         }
 
 
 
         public static Func<TField> StaticGetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
         {
-            return StaticGetField<TField>(typeof(TInstance).GetField(fieldName, bindingAttr));
+            var field = typeof(TInstance).GetField(fieldName, bindingAttr);
+            if (field == null)
+            {
+                throw new MemberNotFoundException(fieldName, typeof(TInstance));
+            }
+            return StaticGetField<TField>(field);
         }
 
         public static Action<TField> StaticSetField<TInstance, TField>(string fieldName, BindingFlags bindingAttr = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
         {
-            return StaticSetField<TField>(typeof(TInstance).GetField(fieldName, bindingAttr));
+            var field = typeof(TInstance).GetField(fieldName, bindingAttr);
+            if (field == null)
+            {
+                throw new MemberNotFoundException(fieldName, typeof(TInstance));
+            }
+            return StaticSetField<TField>(field);
         }
 
 
