@@ -83,7 +83,7 @@ namespace RWLayout.alpha2.FastAccess
                 throw new Exception("deletage's arguments count does not match method's arguments count");
             }
 
-            DynamicMethod wrapper = new DynamicMethod($"method_{method.DeclaringType.Name}_{method.Name}", retType, arguments.ToArray(), typeof(Dynamic), true);
+            DynamicMethod wrapper = new DynamicMethod($"method_{method.DeclaringType.Name}_{method.Name}", retType, arguments.ToArray(), method.DeclaringType, true);
             IILGenerator gen = wrapper.GetILGenerator().AsInterface();
 
 

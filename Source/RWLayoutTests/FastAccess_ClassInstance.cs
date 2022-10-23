@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RWLayout.alpha2.FastAccess;
 
@@ -17,6 +18,10 @@ namespace RWLayoutTests.FastAccess
             public string testProperty = "property";
             private string property { set => testProperty = value; get => testProperty; }
 
+            protected virtual string VirtualRetMethod()
+            {
+                return "base";
+            }
 
             private string RetMethod0()
             {
@@ -70,6 +75,14 @@ namespace RWLayoutTests.FastAccess
             private void VoidMethod5(int arg0, int arg1, int arg2, int arg3, int arg4)
             {
                 testValue = (arg0 + arg1 + arg2 + arg3 + arg4).ToString();
+            }
+        }
+
+        class TestSubclass : TestClass
+        {
+            protected override string VirtualRetMethod()
+            {
+                return "subclass";
             }
         }
 
@@ -164,5 +177,12 @@ namespace RWLayoutTests.FastAccess
             Assert.AreEqual("15", test.testValue);
         }
 
+      /*  [TestMethod]
+        public void CallOverride()
+        {
+            var test = new TestSubclass();
+            var call1 = Dynamic.InstanceRetMethod<TestClass, string>("VirtualRetMethod");
+            var call2 = Dynamic.CreateMethodCaller<Func<TestClass, string>>(typeof(TestSubclass).GetMethod("VirtualRetMethod", BindingFlags.Instance | BindingFlags.NonPublic));
+        }*/
     }
 }
