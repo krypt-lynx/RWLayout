@@ -1,3 +1,6 @@
+0.1.17a
+* FastAccess callvirt opcode for virtual methods (behold, icons in Grouped Pawns Lists how have valid color!)
+
 0.1.16a
 + FastAccess propper error messaging
 
@@ -15,7 +18,6 @@
 * faster bindings
 * layout deserialization fixes
 * support for multiple objects in layoutDef
-
 
 0.1.12a
 *fix of "RWLayout_ModSettings already has short hash." message
