@@ -176,13 +176,14 @@ namespace RWLayoutTests.FastAccess
             call5(test, 1, 2, 3, 4, 5);
             Assert.AreEqual("15", test.testValue);
         }
-
-      /*  [TestMethod]
-        public void CallOverride()
-        {
+        
+        [TestMethod]
+        public void CallVirtual()
+        {            
             var test = new TestSubclass();
-            var call1 = Dynamic.InstanceRetMethod<TestClass, string>("VirtualRetMethod");
-            var call2 = Dynamic.CreateMethodCaller<Func<TestClass, string>>(typeof(TestSubclass).GetMethod("VirtualRetMethod", BindingFlags.Instance | BindingFlags.NonPublic));
-        }*/
+            var call = Dynamic.InstanceRetMethod<TestClass, string>("VirtualRetMethod");
+
+            Assert.AreEqual("subclass", call(test));            
+        }
     }
 }
