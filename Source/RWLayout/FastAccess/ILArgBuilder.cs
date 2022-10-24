@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace RWLayout.alpha2.FastAccess
-{    
+{
     class PassthroughILBuilder : ILArgBuilder
     {
         public PassthroughILBuilder(IILGenerator gen, Type delegateArgType, Type methodArgType) : base(gen, delegateArgType, methodArgType) { }
@@ -143,7 +143,7 @@ namespace RWLayout.alpha2.FastAccess
                 delegateArgType.GetElementType() == typeof(object);
         }
     }
-    
+
     abstract class ILArgBuilder
     {
         protected IILGenerator gen;

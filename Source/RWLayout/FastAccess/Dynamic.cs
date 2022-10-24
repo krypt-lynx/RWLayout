@@ -57,61 +57,73 @@ namespace RWLayout.alpha2.FastAccess
                 throw new ArgumentException("delegateType does not represents a delegate", nameof(delegateType));
             }
 
-            // read delegate info
             var methodInfo = delegateType.GetMethod("Invoke");
-            var delegateArgs = methodInfo?.GetParameters().Select(x => x.ParameterType).ToArray() ?? Type.EmptyTypes;
+            var delegateArgs = methodInfo.GetParameters().Select(x => x.ParameterType).ToArray() ?? Type.EmptyTypes;
             var retType = methodInfo.ReturnType != typeof(void) ? methodInfo.ReturnType : null;
 
-            // read method info
-            var methodArgs = method.GetParameters().Select(x => x.ParameterType).ToArray();
-            var argsCount = methodArgs.Length;
-
-            //
-
-            Type this_ = method.IsStatic ? null : (method.DeclaringType.IsValueType ? method.DeclaringType.MakeByRefType() : method.DeclaringType);
-
-            var arguments = Enumerable.Empty<Type>();
-            if (this_ != null)
+            Type[] methodArgs;
+            
+            var args = method.GetParameters().Select(x => x.ParameterType);
+            if (method.IsStatic)
             {
-                arguments = arguments.Append(this_);
-                argsCount++;
+                methodArgs = args.ToArray();
             }
-            arguments = arguments.Concat(methodArgs);
-
-            if (delegateArgs.Length != argsCount)
+            else
             {
-                throw new Exception("deletage's arguments count does not match method's arguments count");
+                Type declType;
+                if (method.DeclaringType.IsValueType)
+                {
+                    declType = method.DeclaringType.MakeByRefType();
+                } 
+                else
+                {
+                    declType = method.DeclaringType;
+                }
+                methodArgs = Enumerable.Concat(declType.Yield(), args).ToArray();
             }
 
-            DynamicMethod wrapper = new DynamicMethod($"method_{method.DeclaringType.Name}_{method.Name}", retType, arguments.ToArray(), method.DeclaringType, true);
+            if (delegateArgs.Length != methodArgs.Length)
+            {
+                throw new Exception("deletage's arguments count does not match constructor's arguments count");
+            }
+
+            var targetType = method.DeclaringType;
+
+            DynamicMethod wrapper = new DynamicMethod($"method_{targetType.Name}_{method.Name}_", retType, delegateArgs, targetType, true);
             IILGenerator gen = wrapper.GetILGenerator().AsInterface();
 
-
-
-            int argIndex = 0;
-            if (this_ != null)
-            {
-                if (this_.IsValueType)
-                {
-                    // Struct;
-                    gen.Ldarga_S((byte)argIndex++);
-                }
-                else 
-                {
-                    // Class; ref Struct;
-                    gen.Ldarg((byte)argIndex++);
-                }
-            }
-
+            List<ILArgBuilder> argBuilders = new List<ILArgBuilder>();
 
             for (int i = 0; i < methodArgs.Length; i++)
             {
-                gen.Ldarg((byte)argIndex++);
+                argBuilders.Add(ILMethodBuilder.GetArgBuilder(gen, delegateArgs[i], methodArgs[i]));
             }
-            
-            gen
-                .Call(method)
-                .Ret();
+
+            for (int i = 0; i < methodArgs.Length; i++)
+            {
+                argBuilders[i].Prepare((byte)i);
+            }
+
+            for (int i = 0; i < methodArgs.Length; i++)
+            {
+                argBuilders[i].PassArg((byte)i);
+            }
+
+            if (method.IsVirtual)
+            {
+                gen.Callvirt(method);
+            } 
+            else
+            {
+                gen.Call(method);
+            }
+
+            for (int i = methodArgs.Length - 1; i >= 0; i--)
+            {
+                argBuilders[i].Finalize_((byte)i);
+            }
+
+            gen.Ret();
 
             return wrapper.CreateDelegate(delegateType);
         }
